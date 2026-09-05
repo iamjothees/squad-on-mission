@@ -13,3 +13,63 @@
         font-size: 14px;
     }
 }
+@import "tom-select/dist/css/tom-select.default.css";
+
+/* TomSelect Tailwind & Dark Mode Overrides */
+
+/* --- BASE TAILWIND FIXES --- */
+.ts-wrapper.multi .ts-control {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    /* --- DARK MODE EXPLICIT FIXES --- */
+    .ts-wrapper .ts-control {
+        background-color: transparent !important;
+        color: #f3f4f6 !important;
+    }
+
+    /* Selected Tags (Items) in Dark Mode */
+    .ts-wrapper.multi .ts-control > div.item {
+        background-color: #374151 !important; /* bg-gray-700 */
+        color: #f3f4f6 !important; /* text-gray-100 */
+        border: 1px solid #4b5563 !important; /* border-gray-600 */
+        border-radius: 0.375rem !important;
+    }
+
+    /* Dropdown Container */
+    .ts-dropdown {
+        background-color: #1f2937 !important; /* bg-gray-800 */
+        border: 1px solid #374151 !important; /* border-gray-700 */
+        border-radius: 0.375rem !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+        color: #f3f4f6 !important;
+    }
+
+    /* Dropdown Options */
+    .ts-dropdown .option,
+    .ts-dropdown .create,
+    .ts-dropdown .no-results {
+        color: #d1d5db !important; /* text-gray-300 */
+        background-color: transparent !important;
+    }
+
+    /* Dropdown Options Hover/Active */
+    .ts-dropdown .option:hover,
+    .ts-dropdown .option.active,
+    .ts-dropdown .create:hover,
+    .ts-dropdown .create.active {
+        background-color: #374151 !important; /* bg-gray-700 */
+        color: #ffffff !important;
+    }
+
+    /* Input typing text */
+    .ts-control input {
+        color: #f3f4f6 !important; /* text-gray-100 */
+    }
+
+    
+}

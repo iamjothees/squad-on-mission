@@ -33,7 +33,16 @@
                         @forelse($projects as $project)
                             <tr class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-gray-500 dark:text-gray-400">{{ $project->id }}</td>
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-800 dark:text-gray-200 font-medium">{{ $project->name }}</td>
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
+                                    <div class="text-gray-800 dark:text-gray-200 font-medium">{{ $project->name }}</div>
+                                    @if($project->tags->isNotEmpty())
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            @foreach($project->tags as $tag)
+                                                <span class="inline-block px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] rounded-sm">{{ $tag->name }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $project->client_name ?? '-' }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
                                     <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold {{ $project->status->colorClass() }}">

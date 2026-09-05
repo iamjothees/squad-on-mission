@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ $title ?? config('app.name') }}</title>
+        <link rel="icon" href="{{ asset('assets/logo.png') }}" type="image/png">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
@@ -13,7 +14,8 @@
         <aside class="hidden md:flex md:flex-shrink-0 border-r border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
             <div class="flex flex-col w-52">
                 <div class="flex flex-col flex-1 h-0 overflow-y-auto">
-                    <div class="flex items-center h-14 px-4 border-b border-gray-300 dark:border-gray-800 shrink-0 bg-white dark:bg-gray-950">
+                    <div class="flex items-center gap-2 h-14 px-4 border-b border-gray-300 dark:border-gray-800 shrink-0 bg-white dark:bg-gray-950">
+                        <img src="{{ asset('assets/logo.png') }}" alt="{{ config('app.name') }} Logo" class="h-8 w-auto">
                         <span class="font-bold text-gray-800 dark:text-white tracking-tight truncate">{{ config('app.name') }}</span>
                     </div>
                     <nav class="flex-1 p-2 space-y-0.5 bg-gray-50 dark:bg-gray-900">
@@ -24,8 +26,8 @@
                         <a href="{{ route('projects.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             Projects
                         </a>
-                        <a href="#" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
-                            Settings
+                        <a href="{{ route('tasks.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            Tasks
                         </a>
                         <a href="#" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             Reports

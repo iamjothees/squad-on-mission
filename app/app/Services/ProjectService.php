@@ -21,7 +21,13 @@ class ProjectService
      */
     public function createProject(array $data): Project
     {
-        return Project::create($data);
+        $project = Project::create($data);
+        
+        if (isset($data['tags'])) {
+            $project->syncTags($data['tags']);
+        }
+        
+        return $project;
     }
 
     /**
@@ -30,6 +36,11 @@ class ProjectService
     public function updateProject(Project $project, array $data): Project
     {
         $project->update($data);
+        
+        if (isset($data['tags'])) {
+            $project->syncTags($data['tags']);
+        }
+        
         return $project;
     }
 

@@ -60,6 +60,16 @@
                     </div>
 
                     <div class="space-y-1.5 md:col-span-2">
+                        <label for="tags" class="block font-semibold text-gray-700 dark:text-gray-300">Tags</label>
+                        <x-form.select id="tags" name="tags[]" multiple="true" class="w-full">
+    @foreach(\App\Models\Tag::orderBy('name')->get() as $tag)
+        <option value="{{ $tag->name }}" {{ (is_array(old('tags')) && in_array($tag->name, old('tags'))) ? 'selected' : '' }}>{{ $tag->name }}</option>
+    @endforeach
+</x-form.select>
+                        @error('tags') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5 md:col-span-2">
                         <label for="description" class="block font-semibold text-gray-700 dark:text-gray-300">Description / Scope</label>
                         <textarea id="description" name="description" rows="4" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">{{ old('description') }}</textarea>
                         @error('description') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
