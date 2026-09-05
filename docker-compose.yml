@@ -1,0 +1,40 @@
+services:
+  app:
+    container_name: 
+    image: som:latest
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - 80:80
+      - 5173:5173
+    working_dir: /var/www/html
+    networks:
+      - tunnel_net
+  db:
+    container_name: som-db
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: som
+      MYSQL_USER: som
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - tunnel_net
+  # cloudflare-tunnel:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: cloudflared_tunnel
+  #   restart: unless-stopped
+  #   environment:
+  #     - TUNNEL_TOKEN=eyJhIjoiMzgxY2JmZTc2ZWFhMGRhNjY3YjdjZWEyYjdlNGIwNTIiLCJ0IjoiMDkxN2UzNjMtNDNkNS00Zjg0LWJhNjAtNGRlYTk1ZDY1YzUzIiwicyI6IlpUaGtZV0ZrTkdZdE1tSTNOUzAwTkRoa0xUZ3lOVFV0TVRVd05qVmxaVFkzTnpkaCJ9
+  #   command: tunnel --no-autoupdate run
+  #   networks:
+  #     - tunnel_net
+networks:
+  tunnel_net:
+    driver: bridge
+volumes:
+  db-data:
