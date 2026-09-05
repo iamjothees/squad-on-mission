@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('components.⚡dashboard');
+    return view('dashboard');
 })->name('dashboard');
 
 Route::get('/about', function () {
-    return view('components.⚡about');
+    return view('about');
 })->name('about');

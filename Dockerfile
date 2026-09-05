@@ -7,6 +7,6 @@ RUN source $NVM_DIR/nvm.sh \
     && nvm use default
 
 # Ensure Node 22 is used for npm commands
-ENV PATH="/usr/local/nvm/versions/node/v22.22.0/bin:${PATH}"
+ENV PATH="/usr/local/nvm/versions/node/v22.23.2/bin:${PATH}"
 
 EXPOSE 5173
