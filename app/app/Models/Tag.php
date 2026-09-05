@@ -10,7 +10,11 @@ class Tag extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'slug', 'color'];
+
+    protected $casts = [
+        'color' => \App\Enums\TagColor::class,
+    ];
 
     public static function boot()
     {

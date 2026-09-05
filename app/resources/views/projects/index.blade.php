@@ -38,7 +38,7 @@
                                     @if($project->tags->isNotEmpty())
                                         <div class="flex flex-wrap gap-1 mt-1">
                                             @foreach($project->tags as $tag)
-                                                <span class="inline-block px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] rounded-sm">{{ $tag->name }}</span>
+                                                <span class="inline-block px-1.5 py-0.5 text-[10px] rounded-sm font-semibold shadow-sm {{ $tag->color ? $tag->color->bgClass() : 'bg-gray-100 dark:bg-gray-800' }} {{ $tag->color ? $tag->color->textClass() : 'text-gray-500 dark:text-gray-400' }}">{{ $tag->name }}</span>
                                             @endforeach
                                         </div>
                                     @endif
