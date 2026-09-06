@@ -50,22 +50,33 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $project->budget ? '₹' . number_format($project->budget, 2) : '-' }}</td>
-                                <td class="px-4 py-2.5 text-right space-x-2">
-                                    <a href="{{ route('projects.edit', $project) }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
-                                    
-                                    @if($project->status !== \App\Enums\ProjectStatus::ARCHIVED)
-                                    <form action="{{ route('projects.archive', $project) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="text-yellow-600 dark:text-yellow-400 hover:underline">Archive</button>
-                                    </form>
-                                    @endif
+                                <td class="px-4 py-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Project', id: {{ $project->id }} })" class="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors" title="Start Timer">
+                                            <x-lucide-play class="w-4 h-4 fill-current" />
+                                        </button>
+                                        <a href="{{ route('projects.edit', $project) }}" wire:navigate class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="Edit">
+                                            <x-lucide-pencil class="w-4 h-4" />
+                                        </a>
+                                        
+                                        @if($project->status !== \App\Enums\ProjectStatus::ARCHIVED)
+                                        <form action="{{ route('projects.archive', $project) }}" method="POST" class="inline m-0 p-0">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="p-1.5 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 rounded transition-colors" title="Archive">
+                                                <x-lucide-archive class="w-4 h-4" />
+                                            </button>
+                                        </form>
+                                        @endif
 
-                                    <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:underline">Delete</button>
-                                    </form>
+                                        <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline m-0 p-0" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors" title="Delete">
+                                                <x-lucide-trash-2 class="w-4 h-4" />
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

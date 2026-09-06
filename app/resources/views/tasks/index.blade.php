@@ -62,25 +62,34 @@
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
                                     {{ $task->due_date ? $task->due_date->format('M d, Y') : '-' }}
                                 </td>
-                                <td class="px-4 py-2.5 text-right space-x-2">
-                                    @if($task->status !== \App\Enums\TaskStatus::DONE)
-                                    <form action="{{ route('tasks.complete', $task) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="text-green-600 dark:text-green-400 hover:underline">Done</button>
-                                    </form>
-                                    @endif
-                                    
-                                    
-                                    <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Task', id: {{ $task->id }} })" class="text-indigo-600 dark:text-indigo-400 hover:underline">Start</button>
-                                    
-                                    <a href="{{ route('tasks.edit', $task) }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
-                                    
-                                    <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('Delete this task?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:underline">Del</button>
-                                    </form>
+                                <td class="px-4 py-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        @if($task->status !== \App\Enums\TaskStatus::DONE)
+                                        <form action="{{ route('tasks.complete', $task) }}" method="POST" class="inline m-0 p-0">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="p-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded transition-colors" title="Mark as Done">
+                                                <x-lucide-check-circle class="w-4 h-4" />
+                                            </button>
+                                        </form>
+                                        @endif
+                                        
+                                        <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Task', id: {{ $task->id }} })" class="p-1.5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors" title="Start Timer">
+                                            <x-lucide-play class="w-4 h-4 fill-current" />
+                                        </button>
+                                        
+                                        <a href="{{ route('tasks.edit', $task) }}" wire:navigate class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="Edit">
+                                            <x-lucide-pencil class="w-4 h-4" />
+                                        </a>
+                                        
+                                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="inline m-0 p-0" onsubmit="return confirm('Delete this task?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors" title="Delete">
+                                                <x-lucide-trash-2 class="w-4 h-4" />
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

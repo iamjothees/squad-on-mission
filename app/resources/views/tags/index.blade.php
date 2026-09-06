@@ -45,18 +45,26 @@
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-center font-mono">
                                     {{ $tag->projects_count + $tag->tasks_count }}
                                 </td>
-                                <td class="px-4 py-2.5 text-right space-x-2">
-                                    <a href="{{ route('tags.edit', $tag) }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
-                                    
-                                    @if(($tag->projects_count + $tag->tasks_count) == 0)
-                                        <form action="{{ route('tags.destroy', $tag) }}" method="POST" class="inline" onsubmit="return confirm('Delete this unused tag?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 dark:text-red-400 hover:underline">Del</button>
-                                        </form>
-                                    @else
-                                        <span class="text-gray-400 dark:text-gray-600 cursor-not-allowed" title="Tag is in use">Del</span>
-                                    @endif
+                                <td class="px-4 py-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <a href="{{ route('tags.edit', $tag) }}" wire:navigate class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="Edit">
+                                            <x-lucide-pencil class="w-4 h-4" />
+                                        </a>
+                                        
+                                        @if(($tag->projects_count + $tag->tasks_count) == 0)
+                                            <form action="{{ route('tags.destroy', $tag) }}" method="POST" class="inline m-0 p-0" onsubmit="return confirm('Delete this unused tag?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors" title="Delete">
+                                                    <x-lucide-trash-2 class="w-4 h-4" />
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button type="button" disabled class="p-1.5 text-gray-400 dark:text-gray-600 cursor-not-allowed" title="Cannot delete: Tag is in use">
+                                                <x-lucide-trash-2 class="w-4 h-4" />
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
