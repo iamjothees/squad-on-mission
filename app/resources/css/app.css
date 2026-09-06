@@ -80,7 +80,29 @@
     color: inherit !important;
 }
 
+.ts-wrapper.single .ts-control{
+    background-image: none !important;
+}
+
 /* Fix dropdown parent body positioning z-index */
 .ts-dropdown {
     z-index: 9999 !important;
+}
+
+/* Force wrapper to be correct colors and override any TomSelect injected inline styles */
+.ts-wrapper {
+    background-color: #f9fafb !important; /* bg-gray-50 */
+    border-color: #d1d5db !important; /* border-gray-300 */
+}
+
+@media (prefers-color-scheme: dark) {
+    .ts-wrapper {
+        background-color: #111827 !important; /* bg-gray-900 */
+        border-color: #374151 !important; /* border-gray-700 */
+    }
+    
+    .ts-wrapper .ts-control {
+        background-color: transparent !important;
+        color: #f3f4f6 !important;
+    }
 }
