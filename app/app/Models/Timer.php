@@ -11,6 +11,7 @@ class Timer extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'timerable_id',
         'timerable_type',
         'purpose',

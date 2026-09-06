@@ -10,7 +10,8 @@ return new class extends Migration
     {
         Schema::create('timers', function (Blueprint $table) {
             $table->id();
-            $table->morphs('timerable');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->nullableMorphs('timerable');
             $table->string('purpose')->nullable();
             $table->integer('accumulated_seconds')->default(0);
             $table->boolean('is_running')->default(false);

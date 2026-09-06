@@ -17,8 +17,9 @@ class GlobalTimer extends Component
         
         if (!$timer) {
             $timer = Timer::create([
-                'timerable_type' => 'App\Models\User', // Dummy attachment
-                'timerable_id' => 1,
+                'user_id' => 1,
+                'timerable_type' => null,
+                'timerable_id' => null,
                 'purpose' => 'global_focus',
                 'accumulated_seconds' => 0,
                 'is_running' => false,
@@ -45,6 +46,7 @@ class GlobalTimer extends Component
             
         if (!$timer) {
             $timer = Timer::create([
+                'user_id' => 1,
                 'timerable_type' => $type,
                 'timerable_id' => $id,
                 'purpose' => 'task_tracking',
@@ -136,8 +138,9 @@ class GlobalTimer extends Component
 
         // Restart with a fresh global dummy timer so the UI resets (PAUSED)
         $newTimer = Timer::create([
-            'timerable_type' => 'App\\Models\\User',
-            'timerable_id' => 1,
+            'user_id' => 1,
+            'timerable_type' => null,
+            'timerable_id' => null,
             'purpose' => 'global_focus',
             'accumulated_seconds' => 0,
             'is_running' => false,

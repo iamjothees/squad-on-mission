@@ -1,24 +1,65 @@
 <x-layouts.app title="Timer Details">
-    <div class="flex flex-col gap-4 max-w-4xl mx-auto w-full">
-        <div class="flex justify-between items-center bg-white dark:bg-gray-950 p-4 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
-            <div>
-                <h1 class="font-bold text-gray-800 dark:text-white text-lg">
-                    Timer Log for 
-                    @if($timer->timerable)
-                        <span class="text-indigo-600 dark:text-indigo-400">{{ $timer->timerable->title ?? $timer->timerable->name ?? 'Entity' }}</span>
+    <div class="flex flex-col gap-4 w-full">
+        <div class="bg-white dark:bg-gray-950 p-4 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="font-bold text-gray-800 dark:text-white text-lg">
+                        Timer Log for 
+                        @if($timer->timerable)
+                            <span class="text-indigo-600 dark:text-indigo-400">{{ $timer->timerable->title ?? $timer->timerable->name ?? 'Entity' }}</span>
+                        @else
+                            Global Timer
+                        @endif
+                    </h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Accumulated Time: @php
+                            $elapsed = $timer->is_running && $timer->last_started_at 
+                                ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) 
+                                : 0;
+                            $totalSeconds = $timer->accumulated_seconds + $elapsed;
+                        @endphp
+                        {{ gmdate("H:i:s", $totalSeconds) }}</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <form action="{{ route('timers.assign', $timer) }}" method="POST" class="flex items-center gap-2">
+                        @csrf
+                        @method('PATCH')
+                        <select name="timerable" class="w-48 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" required>
+                            <option value="">Select Task or Project...</option>
+                            <optgroup label="Tasks">
+                                @foreach($tasks as $task)
+                                    <option value="task:{{ $task->id }}" @selected($timer->timerable_type === \App\Models\Task::class && $timer->timerable_id == $task->id)>{{ Str::limit($task->title, 50) }}</option>
+                                @endforeach
+                            </optgroup>
+                            <optgroup label="Projects">
+                                @foreach($projects as $project)
+                                    <option value="project:{{ $project->id }}" @selected($timer->timerable_type === \App\Models\Project::class && $timer->timerable_id == $project->id)>{{ Str::limit($project->name, 50) }}</option>
+                                @endforeach
+                            </optgroup>
+                        </select>
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors">
+                            Assign
+                        </button>
+                    </form>
+                    
+                    @if($timer->is_running)
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Currently Running</span>
                     @else
-                        Global Timer
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">Stopped</span>
                     @endif
-                </h1>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Accumulated Time: {{ gmdate("H:i:s", $timer->accumulated_seconds) }}</p>
+                </div>
             </div>
-            <div>
-                @if($timer->is_running)
-                    <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Currently Running</span>
-                @else
-                    <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">Stopped</span>
-                @endif
-            </div>
+            
+            @if(session('success'))
+                <div class="mt-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-2.5 rounded-md text-sm font-medium">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-2.5 rounded-md text-sm font-medium">
+                    {{ session('error') }}
+                </div>
+            @endif
         </div>
 
         <div class="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-950 p-5">
@@ -52,7 +93,10 @@
                                     @if($log->stopped_at)
                                         {{ gmdate("H:i:s", $log->duration_seconds) }}
                                     @else
-                                        -
+                                        @php
+                                            $logElapsed = floor((floor(microtime(true) * 1000) - $log->started_at) / 1000);
+                                        @endphp
+                                        {{ gmdate("H:i:s", $logElapsed) }}
                                     @endif
                                 </td>
                             </tr>
