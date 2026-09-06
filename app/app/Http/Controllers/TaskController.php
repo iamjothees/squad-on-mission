@@ -16,10 +16,13 @@ class TaskController extends Controller
         protected TaskService $taskService
     ) {}
 
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $tasks = $this->taskService->getAllTasks();
-        return view('tasks.index', compact('tasks'));
+        $filters = $request->only(['search', 'status', 'project_id', 'tags']);
+        $tasks = $this->taskService->getAllTasks($filters);
+        $projects = \App\Models\Project::orderBy('name')->get();
+        $tags = \App\Models\Tag::orderBy('name')->get();
+        return view('tasks.index', compact('tasks', 'projects', 'tags'));
     }
 
     public function create()

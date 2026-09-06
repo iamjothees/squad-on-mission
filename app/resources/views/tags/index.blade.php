@@ -1,13 +1,34 @@
 <x-layouts.app title="Tag Management">
-    <div class="flex flex-col gap-4">
-        <div class="flex justify-between items-center bg-white dark:bg-gray-950 p-4 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+    <div class="flex flex-col gap-5">
+        <!-- Page Header -->
+        <div class="flex justify-between items-center">
             <div>
                 <h1 class="font-bold text-gray-800 dark:text-white text-lg">Tag Management</h1>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Organize and customize tags used across the system.</p>
             </div>
         </div>
 
-        @if (session('success'))
+        <!-- Top Action Bar -->
+        <form action="{{ route('tags.index') }}" method="GET" id="filter-form">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <!-- Search -->
+                <div class="relative flex-1 max-w-md">
+                    <x-lucide-search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search tags by name..." onblur="this.form.submit()" class="w-full pl-9 pr-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-full text-sm text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm transition-all">
+                </div>
+            </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="flex flex-wrap items-center gap-3">
+                @if(request()->has('search') && request('search'))
+                    <a href="{{ route('tags.index') }}" wire:navigate class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium px-2 py-1.5 transition-colors">
+                        <x-lucide-x class="w-3.5 h-3.5" /> Clear all
+                    </a>
+                @endif
+            </div>
+        </form>
+@if (session('success'))
             <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-2.5 rounded-md text-sm font-medium">
                 {{ session('success') }}
             </div>

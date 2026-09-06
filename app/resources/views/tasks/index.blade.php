@@ -1,16 +1,79 @@
 <x-layouts.app title="Tasks">
-    <div class="flex flex-col gap-4">
-        <div class="flex justify-between items-center bg-white dark:bg-gray-950 p-4 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm">
+    <div class="flex flex-col gap-5">
+        <!-- Page Header -->
+        <div class="flex justify-between items-center">
             <div>
                 <h1 class="font-bold text-gray-800 dark:text-white text-lg">Productivity Tracker</h1>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Stay on top of your missions and daily tasks.</p>
             </div>
-            <a href="{{ route('tasks.create') }}" wire:navigate class="bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-700 dark:hover:bg-white transition-colors">
+            <a href="{{ route('tasks.create') }}" wire:navigate class="bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-700 dark:hover:bg-white transition-colors shadow-sm">
                 + New Task
             </a>
         </div>
 
-        @if (session('success'))
+        <!-- Top Action Bar -->
+        <form action="{{ route('tasks.index') }}" method="GET" id="filter-form">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <!-- Search -->
+                <div class="relative flex-1 max-w-md">
+                    <x-lucide-search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search tasks..." onblur="this.form.submit()" class="w-full pl-9 pr-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-full text-sm text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm transition-all">
+                </div>
+            </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Project Filter -->
+                @php
+                    $projectOptions = [];
+                    foreach($projects as $p) {
+                        $projectOptions[$p->id] = $p->name;
+                    }
+                @endphp
+                <x-filter-dropdown 
+                    name="project_id" 
+                    label="Project" 
+                    :options="$projectOptions" 
+                    :selected="request('project_id', [])" 
+                />
+
+                <!-- Status Filter -->
+                @php
+                    $statusOptions = [];
+                    foreach(\App\Enums\TaskStatus::cases() as $status) {
+                        $statusOptions[$status->value] = $status->label();
+                    }
+                @endphp
+                <x-filter-dropdown 
+                    name="status" 
+                    label="Status" 
+                    :options="$statusOptions" 
+                    :selected="request('status', [])" 
+                />
+
+                <!-- Tags Filter -->
+                @php
+                    $tagOptions = [];
+                    foreach($tags as $t) {
+                        $tagOptions[$t->id] = $t->name;
+                    }
+                @endphp
+                <x-filter-dropdown 
+                    name="tags" 
+                    label="Tags" 
+                    :options="$tagOptions" 
+                    :selected="request('tags', [])" 
+                />
+
+                @if(request()->hasAny(['search', 'status', 'project_id', 'tags']) && (request('search') || request('status') || request('project_id') || request('tags')))
+                    <a href="{{ route('tasks.index') }}" wire:navigate class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium px-2 py-1.5 transition-colors">
+                        <x-lucide-x class="w-3.5 h-3.5" /> Clear all
+                    </a>
+                @endif
+            </div>
+        </form>
+@if (session('success'))
             <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-2.5 rounded-md text-sm font-medium">
                 {{ session('success') }}
             </div>

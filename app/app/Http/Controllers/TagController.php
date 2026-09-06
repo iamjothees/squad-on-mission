@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $tags = Tag::withCount(['projects', 'tasks'])->orderBy('name')->get();
+        $search = $request->input('search');
+        $tags = Tag::withCount(['projects', 'tasks'])
+            ->when($search, function($q, $s) {
+                $q->where('name', 'like', '%'.$s.'%');
+            })
+            ->orderBy('name')
+            ->get();
         return view('tags.index', compact('tags'));
     }
 

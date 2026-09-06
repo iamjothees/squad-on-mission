@@ -11,9 +11,28 @@ class ProjectService
     /**
      * Get all projects, ordered by latest.
      */
-    public function getAllProjects()
+    public function getAllProjects(array $filters = [])
     {
-        return Project::latest()->get();
+        return Project::query()
+            ->when($filters['search'] ?? null, function ($query, $search) {
+                $query->where('name', 'like', '%'.$search.'%')
+                      ->orWhere('client_name', 'like', '%'.$search.'%');
+            })
+            ->when($filters['status'] ?? null, function ($query, $status) {
+                if (is_array($status)) {
+                    $query->whereIn('status', $status);
+                } else {
+                    $query->where('status', $status);
+                }
+            })
+            ->when($filters['tags'] ?? null, function ($query, $tags) {
+                if (!is_array($tags)) $tags = [$tags];
+                $query->whereHas('tags', function ($q) use ($tags) {
+                    $q->whereIn('tags.id', $tags);
+                });
+            })
+            ->latest()
+            ->get();
     }
 
     /**

@@ -14,10 +14,12 @@ class ProjectController extends Controller
         protected ProjectService $projectService
     ) {}
 
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $projects = $this->projectService->getAllProjects();
-        return view('projects.index', compact('projects'));
+        $filters = $request->only(['search', 'status', 'tags']);
+        $projects = $this->projectService->getAllProjects($filters);
+        $tags = \App\Models\Tag::orderBy('name')->get();
+        return view('projects.index', compact('projects', 'tags'));
     }
 
     public function create()
