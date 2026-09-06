@@ -17,16 +17,24 @@ class Timer extends Model
         'accumulated_seconds',
         'is_running',
         'last_started_at',
+        'completed_at',
     ];
 
     protected $casts = [
         'is_running' => 'boolean',
         'accumulated_seconds' => 'integer',
         'last_started_at' => 'integer',
+        'completed_at' => 'datetime',
     ];
 
     public function timerable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+
+    public function logs()
+    {
+        return $this->hasMany(TimerLog::class);
     }
 }

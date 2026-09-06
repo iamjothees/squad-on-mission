@@ -71,6 +71,9 @@
                                     </form>
                                     @endif
                                     
+                                    
+                                    <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Task', id: {{ $task->id }} })" class="text-indigo-600 dark:text-indigo-400 hover:underline">Start</button>
+                                    
                                     <a href="{{ route('tasks.edit', $task) }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
                                     
                                     <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('Delete this task?');">

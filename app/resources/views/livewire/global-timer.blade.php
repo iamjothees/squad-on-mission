@@ -1,11 +1,13 @@
 <div class="fixed bottom-6 right-6 z-[9999]" wire:ignore>
     <div x-data="globalTimerData(@js($timerId), @js($initialState))" 
+         
+            @timer-switched.window="switchTimer($event.detail)"
          class="bg-gray-900 text-white shadow-xl rounded-full px-5 py-3 flex items-center gap-4 hover:shadow-2xl transition-all border border-gray-700">
         
         <!-- Timer Display -->
-        <div class="font-mono text-xl font-bold tracking-wider tabular-nums w-24 text-center" x-text="formattedTime">
+        <a :href="'/timers/' + activeTimerId" class="font-mono text-xl font-bold tracking-wider tabular-nums w-24 text-center hover:text-indigo-400 transition-colors" x-text="formattedTime" title="View Logs">
             00:00:00
-        </div>
+        </a>
 
         <!-- Divider -->
         <div class="w-px h-6 bg-gray-700"></div>
@@ -28,7 +30,7 @@
             </button>
 
             <!-- Stop Button -->
-            <button @click="stop" 
+            <button wire:click="stopTimer" 
                     x-show="formattedTime !== '00:00:00' || isRunning"
                     class="w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400 bg-red-500 hover:bg-red-600 text-white" style="display: none;">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -46,14 +48,29 @@
             timerInstance: null,
             formattedTime: '00:00:00',
             isRunning: initialState.is_running,
+            activeTimerId: timerId,
 
-            init() {
-                // Initialize the robust vanilla JS class we created
+            
+            switchTimer(detail) {
+                this.destroy();
+                let timerId = detail.timerId;
+                this.activeTimerId = timerId;
+                let initialState = detail.initialState;
+                this.isRunning = initialState.is_running;
+                this.initTimer(timerId, initialState);
+            },
+            
+            initTimer(timerId, initialState) {
                 this.timerInstance = new window.Timer(timerId, initialState, (seconds, isRunning) => {
                     this.isRunning = isRunning;
                     this.formatSeconds(seconds);
                 });
             },
+
+            init() {
+                this.initTimer(timerId, initialState);
+            },
+
 
             formatSeconds(totalSeconds) {
                 const hours = Math.floor(totalSeconds / 3600);

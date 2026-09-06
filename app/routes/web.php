@@ -39,3 +39,4 @@ Route::delete('/tags/{tag}', [\App\Http\Controllers\TagController::class, 'destr
 use App\Http\Controllers\Api\TimerController;
 Route::post('/api/timers/{timer}', [TimerController::class, 'update']);
 Route::post('/api/timers/{timer}/stop', [TimerController::class, 'stop']);
+Route::get('/timers/{timer}', [\App\Http\Controllers\TimerViewController::class, 'show'])->name('timers.show');
