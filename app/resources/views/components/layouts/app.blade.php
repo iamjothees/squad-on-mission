@@ -72,6 +72,7 @@
             </main>
         </div>
 
+        <livewire:global-timer />
         @livewireScripts
     </body>
 </html>

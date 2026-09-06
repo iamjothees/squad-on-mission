@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: 
+    container_name: som
     image: som:latest
     volumes:
       - ./app:/var/www/html
@@ -8,6 +8,17 @@ services:
       - 80:80
       - 5173:5173
     working_dir: /var/www/html
+    networks:
+      - tunnel_net
+  reverb:
+    container_name: som-reverb
+    image: som:latest
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - 8080:8080
+    working_dir: /var/www/html
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
     networks:
       - tunnel_net
   db:

@@ -35,3 +35,7 @@ Route::get('/tags', [\App\Http\Controllers\TagController::class, 'index'])->name
 Route::get('/tags/{tag}/edit', [\App\Http\Controllers\TagController::class, 'edit'])->name('tags.edit');
 Route::put('/tags/{tag}', [\App\Http\Controllers\TagController::class, 'update'])->name('tags.update');
 Route::delete('/tags/{tag}', [\App\Http\Controllers\TagController::class, 'destroy'])->name('tags.destroy');
+
+use App\Http\Controllers\Api\TimerController;
+Route::post('/api/timers/{timer}', [TimerController::class, 'update']);
+Route::post('/api/timers/{timer}/stop', [TimerController::class, 'stop']);
