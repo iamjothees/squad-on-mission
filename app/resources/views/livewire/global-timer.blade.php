@@ -19,23 +19,17 @@
                     :class="isRunning ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'">
                 
                 <!-- Play Icon -->
-                <svg x-show="!isRunning" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path>
-                </svg>
+                <x-lucide-play x-show="!isRunning" class="w-5 h-5 ml-0.5 fill-current" />
                 
                 <!-- Pause Icon -->
-                <svg x-show="isRunning" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
-                    <path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"></path>
-                </svg>
+                <x-lucide-pause x-show="isRunning" class="w-5 h-5 fill-current" style="display: none;" />
             </button>
 
             <!-- Stop Button -->
             <button wire:click="stopTimer" 
                     x-show="formattedTime !== '00:00:00' || isRunning"
                     class="w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400 bg-red-500 hover:bg-red-600 text-white" style="display: none;">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <rect x="5" y="5" width="10" height="10"></rect>
-                </svg>
+                <x-lucide-square class="w-4 h-4 fill-current" />
             </button>
         </div>
     </div>

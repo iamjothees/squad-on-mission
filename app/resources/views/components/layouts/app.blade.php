@@ -26,9 +26,7 @@
             <div class="absolute top-0 right-0 -mr-12 pt-2 md:hidden" x-show="sidebarOpen" style="display: none;">
                 <button @click="sidebarOpen = false" type="button" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span class="sr-only">Close sidebar</span>
-                    <svg class="h-6 w-6 text-white" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <x-lucide-x class="w-6 h-6 text-white" />
                 </button>
             </div>
 
@@ -39,20 +37,25 @@
                     </div>
                     <nav class="flex-1 p-2 space-y-0.5 bg-gray-50 dark:bg-gray-900">
                         <a href="/" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-layout-dashboard class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Dashboard
                         </a>
                         <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Modules</div>
                         <a href="{{ route('projects.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-folder class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Projects
                         </a>
                         <a href="{{ route('tasks.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-check-square class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Tasks
                         </a>
                         <a href="{{ route('tags.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-tag class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Tags
                         </a>
                         <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">System</div>
                         <a href="/about" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-info class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             About
                         </a>
                     </nav>
@@ -66,9 +69,7 @@
                 <!-- Mobile menu button -->
                 <button @click="sidebarOpen = true" type="button" class="px-4 text-gray-500 border-r border-gray-300 dark:border-gray-800 md:hidden hover:text-gray-900 dark:hover:text-white focus:outline-none transition-colors">
                     <span class="sr-only">Open sidebar</span>
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
-                    </svg>
+                    <x-lucide-menu class="w-5 h-5" />
                 </button>
                 
                 <div class="flex justify-between flex-1 px-5 items-center">
