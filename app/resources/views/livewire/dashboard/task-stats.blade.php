@@ -4,7 +4,7 @@
         <x-lucide-check-square class="w-4 h-4 text-green-500" />
     </div>
     
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $open }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">Open</div>
@@ -20,6 +20,11 @@
         <div>
             <div class="text-2xl font-bold {{ $overdue > 0 ? 'text-red-600 dark:text-red-500' : 'text-gray-900 dark:text-white' }}">{{ $overdue }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">Overdue</div>
+
+        <div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $noDueDate }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">No Due Date</div>
         </div>
     </div>
+</div>
 </div>

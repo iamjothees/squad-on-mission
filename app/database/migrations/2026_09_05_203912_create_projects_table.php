@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('status')->default('planning'); // planning, active, completed, on_hold, canceled
-            $table->string('client_name')->nullable();
+            $table->foreignId('client_id')->nullable()->constrained()->nullOnDelete();
             $table->decimal('budget', 12, 2)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

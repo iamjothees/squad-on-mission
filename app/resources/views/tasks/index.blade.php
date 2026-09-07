@@ -88,7 +88,7 @@
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Task</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-48">Project</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Priority</th>
-                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Status</th>
+                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-40">Status</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Due Date</th>
                             <th class="px-4 py-3 font-semibold w-32 text-right">Actions</th>
                         </tr>
@@ -110,7 +110,14 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
-                                    {{ $task->project ? $task->project->name : 'No Project' }}
+                                    <div class="relative group cursor-help w-40" x-data>
+                                        <div class="truncate">
+                                            {{ $task->project ? $task->project->name : 'No Project' }}
+                                        </div>
+                                        <div class="absolute left-0 bottom-full mb-1 hidden group-hover:block bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs rounded px-2 py-1 whitespace-nowrap z-50 shadow-lg pointer-events-none">
+                                            {{ $task->project ? $task->project->name : 'No Project' }}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
                                     <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold {{ $task->priority->colorClass() }}">
@@ -118,24 +125,27 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
-                                    <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold {{ $task->status->colorClass() }}">
-                                        {{ $task->status->label() }}
-                                    </span>
+                                    <div class="flex items-center justify-between group">
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold {{ $task->status->colorClass() }}">
+                                            {{ $task->status->label() }}
+                                        </span>
+                                        @if($task->status !== \App\Enums\TaskStatus::DONE)
+                                        <form action="{{ route('tasks.next-status', $task) }}" method="POST" class="inline m-0 p-0">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="p-1 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Move to Next Status">
+                                                <x-lucide-arrow-right class="w-3.5 h-3.5" />
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
                                     {{ $task->due_date ? $task->due_date->format('M d, Y') : '-' }}
                                 </td>
                                 <td class="px-4 py-2.5 text-right">
                                     <div class="flex items-center justify-end gap-1">
-                                        @if($task->status !== \App\Enums\TaskStatus::DONE)
-                                        <form action="{{ route('tasks.complete', $task) }}" method="POST" class="inline m-0 p-0">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="p-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded transition-colors" title="Mark as Done">
-                                                <x-lucide-check-circle class="w-4 h-4" />
-                                            </button>
-                                        </form>
-                                        @endif
+                                        
                                         
                                         <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Task', id: {{ $task->id }} })" class="p-1.5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors" title="Start Timer">
                                             <x-lucide-play class="w-4 h-4 fill-current" />

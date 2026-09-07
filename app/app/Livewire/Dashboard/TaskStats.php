@@ -22,6 +22,8 @@ class TaskStats extends Component
             ->where('due_date', '<', now())
             ->count();
 
-        return view('livewire.dashboard.task-stats', compact('total', 'open', 'dueSoon', 'overdue'));
+        $noDueDate = $tasks->where('status', '!=', TaskStatus::DONE)->whereNull('due_date')->count();
+
+        return view('livewire.dashboard.task-stats', compact('total', 'open', 'dueSoon', 'overdue', 'noDueDate'));
     }
 }

@@ -92,7 +92,7 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $project->client_name ?? '-' }}</td>
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $project->client ? $project->client->name : '-' }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
                                     <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold {{ $project->status->colorClass() }}">
                                         {{ $project->status->label() }}

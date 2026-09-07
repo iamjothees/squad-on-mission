@@ -3,23 +3,30 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Client;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Seed SELF client
+        Client::firstOrCreate(
+            ['id' => 1],
+            [
+                'name' => 'SELF',
+                'company' => 'Internal',
+                'notes' => 'This is the internal SELF client. Cannot be deleted.',
+            ]
+        );
+
+        if (app()->environment('local')) {
+            $this->call(DevSeeder::class);
+        }
     }
 }

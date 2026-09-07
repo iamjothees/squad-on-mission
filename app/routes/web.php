@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
@@ -11,6 +12,9 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return view('about');
 })->name('about');
+
+// Clients
+Route::resource('clients', ClientController::class)->except(['show']);
 
 // Projects
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
@@ -29,6 +33,7 @@ Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.e
 Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
 Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
+Route::patch('/tasks/{task}/next-status', [TaskController::class, 'nextStatus'])->name('tasks.next-status');
 
 // Tags
 Route::get('/tags', [\App\Http\Controllers\TagController::class, 'index'])->name('tags.index');

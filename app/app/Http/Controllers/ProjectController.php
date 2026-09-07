@@ -24,7 +24,7 @@ class ProjectController extends Controller
 
     public function create()
     {
-        return view('projects.create');
+        $clients = \App\Models\Client::orderBy('name')->get(); return view('projects.create', compact('clients'));
     }
 
     public function store(Request $request)
@@ -35,7 +35,7 @@ class ProjectController extends Controller
             'status' => ['required', new Enum(ProjectStatus::class)],
             'tags' => 'nullable|array',
             'tags.*' => 'string|max:255',
-            'client_name' => 'nullable|string|max:255',
+            'client_id' => 'nullable|exists:clients,id',
             'budget' => 'nullable|numeric|min:0',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -48,7 +48,7 @@ class ProjectController extends Controller
 
     public function edit(Project $project)
     {
-        return view('projects.edit', compact('project'));
+        $clients = \App\Models\Client::orderBy('name')->get(); return view('projects.edit', compact('project', 'clients'));
     }
 
     public function update(Request $request, Project $project)
@@ -59,7 +59,7 @@ class ProjectController extends Controller
             'status' => ['required', new Enum(ProjectStatus::class)],
             'tags' => 'nullable|array',
             'tags.*' => 'string|max:255',
-            'client_name' => 'nullable|string|max:255',
+            'client_id' => 'nullable|exists:clients,id',
             'budget' => 'nullable|numeric|min:0',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',

@@ -79,6 +79,26 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 
+    
+    public function nextStatus(Task $task)
+    {
+        $statusOrder = [
+            \App\Enums\TaskStatus::TODO->value,
+            \App\Enums\TaskStatus::IN_PROGRESS->value,
+            \App\Enums\TaskStatus::REVIEW->value,
+            \App\Enums\TaskStatus::DONE->value,
+        ];
+        
+        $currentIndex = array_search($task->status->value, $statusOrder);
+        
+        if ($currentIndex !== false && isset($statusOrder[$currentIndex + 1])) {
+            $task->update(['status' => $statusOrder[$currentIndex + 1]]);
+        }
+        
+        return back()->with('success', 'Task status updated.');
+    }
+
+
     public function complete(Task $task)
     {
         $this->taskService->completeTask($task);

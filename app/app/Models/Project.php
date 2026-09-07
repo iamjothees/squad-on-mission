@@ -15,7 +15,7 @@ class Project extends Model
         'name',
         'description',
         'status',
-        'client_name',
+        'client_id',
         'budget',
         'start_date',
         'end_date',
@@ -27,4 +27,10 @@ class Project extends Model
         'end_date' => 'date',
         'status' => \App\Enums\ProjectStatus::class,
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
 }
