@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use App\Services\ClientService;
 
 class ClientController extends Controller
 {
-    public function index(Request $request)
+    protected ClientService $clientService;
+
+    public function __construct(ClientService $clientService)
     {
-        $query = Client::query();
-        
-        if ($search = $request->input('search')) {
-            $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('company', 'like', "%{$search}%");
-        }
-        
-        $clients = $query->orderBy('name')->get();
+        $this->clientService = $clientService;
+    }
+
+    public function index()
+    {
+        $clients = $this->clientService->getAllClients();
         return view('clients.index', compact('clients'));
     }
 
@@ -30,16 +31,16 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:50',
             'company' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
-        Client::create($validated);
+        $this->clientService->createClient($validated);
+
         return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
-    
     public function show(Client $client)
     {
         return view('clients.show', compact('client'));
@@ -47,30 +48,38 @@ class ClientController extends Controller
 
     public function edit(Client $client)
     {
-        if ($client->id === 1) { return redirect()->route('clients.index')->with('error', 'The SELF client cannot be edited.'); }
+        if ($client->id === 1) {
+            return redirect()->route('clients.index')->with('error', 'The primary SELF client cannot be modified.');
+        }
         return view('clients.edit', compact('client'));
     }
 
     public function update(Request $request, Client $client)
     {
-        if ($client->id === 1) { return redirect()->route('clients.index')->with('error', 'The SELF client cannot be edited.'); }
+        if ($client->id === 1) {
+            return redirect()->route('clients.index')->with('error', 'The primary SELF client cannot be modified.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:50',
             'company' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
-        $client->update($validated);
-        if (isset($validated['name'])) app(\App\Services\EntityKeyService::class)->generateClientKey($client);
+        $this->clientService->updateClient($client, $validated);
+
         return redirect()->route('clients.index')->with('success', 'Client updated successfully.');
     }
 
     public function destroy(Client $client)
     {
-        if ($client->id === 1) { return redirect()->route('clients.index')->with('error', 'The SELF client cannot be deleted.'); }
-        $client->delete();
-        return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
+        try {
+            $this->clientService->deleteClient($client);
+            return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('clients.index')->with('error', $e->getMessage());
+        }
     }
 }

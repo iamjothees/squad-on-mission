@@ -86,4 +86,33 @@ class TaskService
     {
         return $this->updateTask($task, ['status' => TaskStatus::DONE->value]);
     }
+
+    /**
+     * Delete a task.
+     */
+    public function deleteTask(Task $task): void
+    {
+        $task->delete();
+    }
+
+    /**
+     * Move task to next logical status.
+     */
+    public function nextStatus(Task $task): Task
+    {
+        $statusOrder = [
+            TaskStatus::TODO->value,
+            TaskStatus::IN_PROGRESS->value,
+            TaskStatus::REVIEW->value,
+            TaskStatus::DONE->value,
+        ];
+        
+        $currentIndex = array_search($task->status->value, $statusOrder);
+        
+        if ($currentIndex !== false && isset($statusOrder[$currentIndex + 1])) {
+            return $this->updateTask($task, ['status' => $statusOrder[$currentIndex + 1]]);
+        }
+        
+        return $task;
+    }
 }

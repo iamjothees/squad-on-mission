@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\Project;
 use App\Enums\TaskStatus;
 use App\Enums\TaskPriority;
-use App\Services\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
+use App\Services\TaskService;
+use App\Services\ProjectService;
 
 class TaskController extends Controller
 {
-    public function __construct(
-        protected TaskService $taskService
-    ) {}
+    protected TaskService $taskService;
+    protected ProjectService $projectService;
 
-    public function index(\Illuminate\Http\Request $request)
+    public function __construct(TaskService $taskService, ProjectService $projectService)
     {
-        $filters = $request->only(['search', 'status', 'project_id', 'tags']);
-        $tasks = $this->taskService->getAllTasks($filters);
-        $projects = \App\Models\Project::orderBy('name')->get();
+        $this->taskService = $taskService;
+        $this->projectService = $projectService;
+    }
+
+    public function index(Request $request)
+    {
+        $tasks = $this->taskService->getAllTasks($request->all());
+        $projects = $this->projectService->getActiveProjectsList();
         $tags = \App\Models\Tag::orderBy('name')->get();
         return view('tasks.index', compact('tasks', 'projects', 'tags'));
     }
 
     public function create()
     {
-        $projects = Project::where('status', '!=', 'archived')->orderBy('name')->get();
+        $projects = $this->projectService->getActiveProjectsList();
         return view('tasks.create', compact('projects'));
     }
 
@@ -49,9 +53,14 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }
 
+    public function show(Task $task)
+    {
+        return view('tasks.show', compact('task'));
+    }
+
     public function edit(Task $task)
     {
-        $projects = Project::where('status', '!=', 'archived')->orderBy('name')->get();
+        $projects = $this->projectService->getActiveProjectsList();
         return view('tasks.edit', compact('task', 'projects'));
     }
 
@@ -73,41 +82,21 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
 
-    public function destroy(Task $task)
+    public function complete(Task $task)
     {
-        $task->delete();
-        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
-    }
-
-    
-    
-    public function show(Task $task)
-    {
-        return view('tasks.show', compact('task'));
+        $this->taskService->completeTask($task);
+        return back()->with('success', 'Task marked as done.');
     }
 
     public function nextStatus(Task $task)
     {
-        $statusOrder = [
-            TaskStatus::TODO->value,
-            TaskStatus::IN_PROGRESS->value,
-            TaskStatus::REVIEW->value,
-            TaskStatus::DONE->value,
-        ];
-        
-        $currentIndex = array_search($task->status->value, $statusOrder);
-        
-        if ($currentIndex !== false && isset($statusOrder[$currentIndex + 1])) {
-            $task->update(['status' => $statusOrder[$currentIndex + 1]]);
-        }
-        
+        $this->taskService->nextStatus($task);
         return back()->with('success', 'Task status updated.');
     }
 
-
-    public function complete(Task $task)
+    public function destroy(Task $task)
     {
-        $this->taskService->completeTask($task);
-        return redirect()->route('tasks.index')->with('success', 'Task marked as complete!');
+        $this->taskService->deleteTask($task);
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 }
