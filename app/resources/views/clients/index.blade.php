@@ -45,14 +45,14 @@
                     </thead>
                     <tbody class="text-sm">
                         @forelse($clients as $client)
-                            <tr class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                            <tr x-data @click="if(window.Livewire) { Livewire.navigate('{{ route('clients.show', $client) }}') } else { window.location.href = '{{ route('clients.show', $client) }}' }" class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer">
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-800 dark:text-gray-200 font-medium">{{ $client->name }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $client->company ?? '-' }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
                                     <div class="text-xs">{{ $client->email }}</div>
                                     <div class="text-xs">{{ $client->phone }}</div>
                                 </td>
-                                <td class="px-4 py-2.5 text-right">
+                                <td class="px-4 py-2.5 text-right" @click.stop>
                                     <div class="flex items-center justify-end gap-1">
                                         @if($client->id !== 1)
                                         <a href="{{ route('clients.edit', $client) }}" wire:navigate class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="Edit">

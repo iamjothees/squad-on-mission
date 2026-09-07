@@ -48,6 +48,7 @@ class TaskService
     public function createTask(array $data): Task
     {
         $task = Task::create($data);
+        app(\App\Services\EntityKeyService::class)->generateTaskKey($task);
         
         if (isset($data['tags'])) {
             $task->syncTags($data['tags']);
@@ -62,6 +63,7 @@ class TaskService
     public function updateTask(Task $task, array $data): Task
     {
         $task->update($data);
+        if (array_key_exists('project_id', $data)) app(\App\Services\EntityKeyService::class)->generateTaskKey($task);
         
         if (isset($data['tags'])) {
             $task->syncTags($data['tags']);

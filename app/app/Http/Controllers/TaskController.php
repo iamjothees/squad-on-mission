@@ -80,13 +80,19 @@ class TaskController extends Controller
     }
 
     
+    
+    public function show(Task $task)
+    {
+        return view('tasks.show', compact('task'));
+    }
+
     public function nextStatus(Task $task)
     {
         $statusOrder = [
-            \App\Enums\TaskStatus::TODO->value,
-            \App\Enums\TaskStatus::IN_PROGRESS->value,
-            \App\Enums\TaskStatus::REVIEW->value,
-            \App\Enums\TaskStatus::DONE->value,
+            TaskStatus::TODO->value,
+            TaskStatus::IN_PROGRESS->value,
+            TaskStatus::REVIEW->value,
+            TaskStatus::DONE->value,
         ];
         
         $currentIndex = array_search($task->status->value, $statusOrder);

@@ -23,9 +23,14 @@
                     </div>
 
                     <div class="space-y-1.5">
-                        <label for="client_name" class="block font-semibold text-gray-700 dark:text-gray-300">Client Name</label>
-                        <input type="text" id="client_name" name="client_name" value="{{ old('client_name', $project->client_name) }}" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
-                        @error('client_name') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                        <label for="client_id" class="block font-semibold text-gray-700 dark:text-gray-300">Client</label>
+                        <select id="client_id" name="client_id" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
+                            <option value="">No Client (Internal)</option>
+                            @foreach($clients as $client)
+                                <option value="{{ $client->id }}" @selected(old('client_id', $project->client_id) == $client->id)>{{ $client->name }} ({{ $client->key }})</option>
+                            @endforeach
+                        </select>
+                        @error('client_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">

@@ -84,7 +84,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-16">ID</th>
+                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Key</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Task</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-48">Project</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Priority</th>
@@ -95,8 +95,8 @@
                     </thead>
                     <tbody class="text-sm">
                         @forelse($tasks as $task)
-                            <tr class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors {{ $task->status === \App\Enums\TaskStatus::DONE ? 'opacity-60' : '' }}">
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-gray-500 dark:text-gray-400">{{ $task->id }}</td>
+                            <tr x-data @click="if(window.Livewire) { Livewire.navigate('{{ route('tasks.show', $task) }}') } else { window.location.href = '{{ route('tasks.show', $task) }}' }" class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer {{ $task->status === \App\Enums\TaskStatus::DONE ? 'opacity-60' : '' }}">
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-xs text-gray-500 dark:text-gray-400">{{ $task->key }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
                                     <div class="font-medium text-gray-800 dark:text-gray-200 {{ $task->status === \App\Enums\TaskStatus::DONE ? 'line-through text-gray-500 dark:text-gray-500' : '' }}">
                                         {{ $task->title }}
@@ -130,7 +130,7 @@
                                             {{ $task->status->label() }}
                                         </span>
                                         @if($task->status !== \App\Enums\TaskStatus::DONE)
-                                        <form action="{{ route('tasks.next-status', $task) }}" method="POST" class="inline m-0 p-0">
+                                        <form action="{{ route('tasks.next-status', $task) }}" method="POST" class="inline m-0 p-0" @click.stop>
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="p-1 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded transition-colors" title="Move to Next Status">
@@ -143,7 +143,7 @@
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
                                     {{ $task->due_date ? $task->due_date->format('M d, Y') : '-' }}
                                 </td>
-                                <td class="px-4 py-2.5 text-right">
+                                <td class="px-4 py-2.5 text-right" @click.stop>
                                     <div class="flex items-center justify-end gap-1">
                                         
                                         

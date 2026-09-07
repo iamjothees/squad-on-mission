@@ -70,7 +70,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-16">ID</th>
+                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-24">Key</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Project Name</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Client</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Status</th>
@@ -80,8 +80,8 @@
                     </thead>
                     <tbody class="text-sm">
                         @forelse($projects as $project)
-                            <tr class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-gray-500 dark:text-gray-400">{{ $project->id }}</td>
+                            <tr x-data @click="if(window.Livewire) { Livewire.navigate('{{ route('projects.show', $project) }}') } else { window.location.href = '{{ route('projects.show', $project) }}' }" class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer">
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-xs text-gray-500 dark:text-gray-400">{{ $project->key }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
                                     <div class="text-gray-800 dark:text-gray-200 font-medium">{{ $project->name }}</div>
                                     @if($project->tags->isNotEmpty())
@@ -99,7 +99,7 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $project->budget ? '₹' . number_format($project->budget, 2) : '-' }}</td>
-                                <td class="px-4 py-2.5 text-right">
+                                <td class="px-4 py-2.5 text-right" @click.stop>
                                     <div class="flex items-center justify-end gap-1">
                                         <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Project', id: {{ $project->id }} })" class="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors" title="Start Timer">
                                             <x-lucide-play class="w-4 h-4 fill-current" />

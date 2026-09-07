@@ -46,6 +46,12 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Project created successfully.');
     }
 
+    
+    public function show(Project $project)
+    {
+        return view('projects.show', compact('project'));
+    }
+
     public function edit(Project $project)
     {
         $clients = \App\Models\Client::orderBy('name')->get(); return view('projects.edit', compact('project', 'clients'));

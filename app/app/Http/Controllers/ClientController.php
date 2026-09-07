@@ -39,6 +39,12 @@ class ClientController extends Controller
         return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
+    
+    public function show(Client $client)
+    {
+        return view('clients.show', compact('client'));
+    }
+
     public function edit(Client $client)
     {
         if ($client->id === 1) { return redirect()->route('clients.index')->with('error', 'The SELF client cannot be edited.'); }
@@ -57,6 +63,7 @@ class ClientController extends Controller
         ]);
 
         $client->update($validated);
+        if (isset($validated['name'])) app(\App\Services\EntityKeyService::class)->generateClientKey($client);
         return redirect()->route('clients.index')->with('success', 'Client updated successfully.');
     }
 

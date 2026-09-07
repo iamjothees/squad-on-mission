@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
 
         // Seed SELF client
         Client::firstOrCreate(
-            ['id' => 1],
+            ['id' => 1, 'key' => 'SELF'],
             [
                 'name' => 'SELF',
                 'company' => 'Internal',
