@@ -27,8 +27,8 @@
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-16">ID</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32">Status</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Duration</th>
-                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Last Updated</th>
-                            <th class="px-4 py-3 font-semibold text-right">Assign To</th>
+                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold whitespace-nowrap w-32">Last Updated</th>
+                            <th class="px-4 py-3 font-semibold text-right w-full">Assign To</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm">
@@ -55,7 +55,7 @@
                                     @endphp
                                     {{ gmdate("H:i:s", $totalSeconds) }}
                                 </td>
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                                     {{ $timer->updated_at->diffForHumans() }}
                                 </td>
                                 <td class="px-4 py-2.5 text-right">
