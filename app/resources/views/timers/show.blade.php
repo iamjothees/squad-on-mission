@@ -24,7 +24,7 @@
                     <form action="{{ route('timers.assign', $timer) }}" method="POST" class="flex items-center gap-2">
                         @csrf
                         @method('PATCH')
-                        <x-form.select :no-create="true" name="timerable" class="w-48 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
+                        <x-form.select :no-create="true" name="timerable" wrapperClass="w-[400px]" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
                             <option value="">Select Task or Project...</option>
                             <optgroup label="Tasks">
                                 @foreach($tasks as $task)

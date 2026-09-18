@@ -24,7 +24,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
                         <label for="color" class="block font-semibold text-gray-700 dark:text-gray-300">Badge Color</label>
-                        <x-form.select id="color" name="color" :no-create="true">
+                        <x-form.select id="color" name="color" :no-create="true" class="w-full">
     <option value="">Default (Gray)</option>
     @foreach(\App\Enums\TagColor::cases() as $tagColorEnum)
         <option value="{{ $tagColorEnum->value }}" 

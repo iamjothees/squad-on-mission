@@ -1,6 +1,6 @@
-@props(['multiple' => false, 'noCreate' => false])
+@props(['multiple' => false, 'noCreate' => false, 'wrapperClass' => 'w-full'])
 
-<div wire:ignore x-data="{
+<div class="{{ $wrapperClass }}" wire:ignore x-data="{
     init() {
         let ts = new TomSelect($refs.select, {
             plugins: {!! $multiple ? "['remove_button']" : "[]" !!},
