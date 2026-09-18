@@ -28,12 +28,12 @@
                             <option value="">Select Task or Project...</option>
                             <optgroup label="Tasks">
                                 @foreach($tasks as $task)
-                                    <option value="task:{{ $task->id }}" @selected($timer->timerable_type === \App\Models\Task::class && $timer->timerable_id == $task->id)>{{ Str::limit($task->title, 50) }}</option>
+                                    <option value="task:{{ $task->id }}" @selected($timer->timerable_type === \App\Models\Task::class && $timer->timerable_id == $task->id)>{{ $task->title }}</option>
                                 @endforeach
                             </optgroup>
                             <optgroup label="Projects">
                                 @foreach($projects as $project)
-                                    <option value="project:{{ $project->id }}" @selected($timer->timerable_type === \App\Models\Project::class && $timer->timerable_id == $project->id)>{{ Str::limit($project->name, 50) }}</option>
+                                    <option value="project:{{ $project->id }}" @selected($timer->timerable_type === \App\Models\Project::class && $timer->timerable_id == $project->id)>{{ $project->name }}</option>
                                 @endforeach
                             </optgroup>
                         </x-form.select>

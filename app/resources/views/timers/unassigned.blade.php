@@ -59,22 +59,22 @@
                                     {{ $timer->updated_at->diffForHumans() }}
                                 </td>
                                 <td class="px-4 py-2.5 text-right">
-                                    <form action="{{ route('timers.assign', $timer) }}" method="POST" class="flex items-center justify-end gap-2 m-0 p-0">
+                                    <form action="{{ route('timers.assign', $timer) }}" method="POST" class="flex items-center justify-end gap-2 m-0 p-0 w-full">
                                         @csrf
                                         @method('PATCH')
-                                        <x-form.select :no-create="true" name="timerable" class="w-64 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
+                                        <div class="flex-1 text-left"><x-form.select :no-create="true" name="timerable" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
                                             <option value="">Select Task or Project...</option>
                                             <optgroup label="Tasks">
                                                 @foreach($tasks as $task)
-                                                    <option value="task:{{ $task->id }}">{{ Str::limit($task->title, 30) }}</option>
+                                                    <option value="task:{{ $task->id }}">{{ $task->title }}</option>
                                                 @endforeach
                                             </optgroup>
                                             <optgroup label="Projects">
                                                 @foreach($projects as $project)
-                                                    <option value="project:{{ $project->id }}">{{ Str::limit($project->name, 30) }}</option>
+                                                    <option value="project:{{ $project->id }}">{{ $project->name }}</option>
                                                 @endforeach
                                             </optgroup>
-                                        </x-form.select>
+                                        </x-form.select></div>
                                         <button type="submit" class="p-1.5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors" title="Assign">
                                             <x-lucide-check-square class="w-4 h-4" />
                                         </button>

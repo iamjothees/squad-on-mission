@@ -25,8 +25,24 @@
     box-shadow: none !important;
 }
 
+
+/* Dropdown Optgroup Header */
+.ts-dropdown .optgroup-header {
+    background-color: #f3f4f6 !important; /* bg-gray-100 */
+    color: #4b5563 !important; /* text-gray-600 */
+    border-bottom: 1px solid #e5e7eb !important; /* border-gray-200 */
+}
+
 @media (prefers-color-scheme: dark) {
     /* --- DARK MODE EXPLICIT FIXES --- */
+
+    /* Dropdown Optgroup Header */
+    .ts-dropdown .optgroup-header {
+        background-color: #111827 !important; /* bg-gray-900 */
+        color: #9ca3af !important; /* text-gray-400 */
+        border-bottom: 1px solid #374151 !important; /* border-gray-700 */
+    }
+
     .ts-wrapper .ts-control {
         background-color: transparent !important;
         color: #f3f4f6 !important;
@@ -74,10 +90,13 @@
     
 }
 
-/* Make single select items transparent in both modes */
+/* Make single select items flat in both modes */
 .ts-wrapper.single .ts-control > div.item {
     background-color: transparent !important;
     color: inherit !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .ts-wrapper.single .ts-control{

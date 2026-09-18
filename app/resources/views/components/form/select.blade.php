@@ -14,7 +14,10 @@
                     if (html) {
                         return '\x3Cdiv\x3E' + html + '\x3C/div\x3E';
                     }
-                    return '\x3Cdiv\x3E' + escape(data.text) + '\x3C/div\x3E';
+                    return '\x3Cdiv class=\'truncate max-w-full\'\x3E' + escape(data.text) + '\x3C/div\x3E';
+                },
+                optgroup_header: function(data, escape) {
+                    return '\x3Cdiv class=\'optgroup-header font-bold px-2 py-1\'\x3E' + escape(data.label) + '\x3C/div\x3E';
                 },
                 item: function(data, escape) {
                     let html = data.custom_html || data.customHtml || data['custom-html'];
@@ -22,7 +25,7 @@
                     if (html) {
                         return '\x3Cdiv class=\'item\'\x3E' + html + '\x3C/div\x3E';
                     }
-                    return '\x3Cdiv class=\'item\'\x3E' + escape(data.text) + '\x3C/div\x3E';
+                    return '\x3Cdiv class=\'item truncate max-w-full\'\x3E' + escape(data.text) + '\x3C/div\x3E';
                 }
             }
         });
