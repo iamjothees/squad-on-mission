@@ -1,12 +1,15 @@
 
 <x-layouts.app title="Client: {{ $client->key }}">
     <div class="max-w-3xl mx-auto w-full space-y-6">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-3">
             <a href="{{ route('clients.index') }}" wire:navigate class="p-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-md text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <x-lucide-arrow-left class="w-4 h-4" />
             </a>
             <h1 class="font-bold text-gray-800 dark:text-white text-xl">{{ $client->name }}</h1>
             <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-mono bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">{{ $client->key }}</span>
+            </div>
+            <x-timers-slideover :model="$client" />
         </div>
         
         <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-6">
