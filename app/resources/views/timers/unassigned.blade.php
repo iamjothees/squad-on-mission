@@ -89,7 +89,7 @@
                                 </table>
                 <!-- Floating Action Button -->
                 @if($timers->isNotEmpty())
-                <button type="submit" class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 rounded-full shadow-lg shadow-indigo-900/20 font-semibold text-sm transition-transform hover:scale-105 flex items-center gap-2 z-50">
+                <button type="submit" class="fixed bottom-24 right-8 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 rounded-full shadow-lg shadow-indigo-900/20 font-semibold text-sm transition-transform hover:scale-105 flex items-center gap-2 z-[90]">
                     <x-lucide-save class="w-5 h-5" />
                     <span>Save Assignments</span>
                 </button>
