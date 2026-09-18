@@ -26,6 +26,12 @@
 }
 
 
+
+/* Ensure input always has text cursor */
+.ts-control input {
+    cursor: text !important;
+}
+
 /* Dropdown Optgroup Header */
 .ts-dropdown .optgroup-header {
     background-color: #f3f4f6 !important; /* bg-gray-100 */
@@ -36,7 +42,13 @@
 @media (prefers-color-scheme: dark) {
     /* --- DARK MODE EXPLICIT FIXES --- */
 
-    /* Dropdown Optgroup Header */
+    
+/* Ensure input always has text cursor */
+.ts-control input {
+    cursor: text !important;
+}
+
+/* Dropdown Optgroup Header */
     .ts-dropdown .optgroup-header {
         background-color: #111827 !important; /* bg-gray-900 */
         color: #9ca3af !important; /* text-gray-400 */
@@ -85,6 +97,7 @@
     /* Input typing text */
     .ts-control input {
         color: #f3f4f6 !important; /* text-gray-100 */
+        cursor: text !important;
     }
 
     
@@ -112,12 +125,14 @@
 .ts-wrapper {
     background-color: #f9fafb !important; /* bg-gray-50 */
     border-color: #d1d5db !important; /* border-gray-300 */
+    cursor: pointer !important;
 }
 
 @media (prefers-color-scheme: dark) {
     .ts-wrapper {
         background-color: #111827 !important; /* bg-gray-900 */
         border-color: #374151 !important; /* border-gray-700 */
+        cursor: pointer !important;
     }
     
     .ts-wrapper .ts-control {
