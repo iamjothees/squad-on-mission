@@ -47,5 +47,6 @@ use App\Http\Controllers\Api\TimerController;
 Route::post('/api/timers/{timer}', [TimerController::class, 'update']);
 Route::post('/api/timers/{timer}/stop', [TimerController::class, 'stop']);
 Route::get('/timers/unassigned', [\App\Http\Controllers\TimerViewController::class, 'unassigned'])->name('timers.unassigned');
+Route::post('/timers/bulk-assign', [\App\Http\Controllers\TimerViewController::class, 'bulkAssign'])->name('timers.bulk-assign');
 Route::patch('/timers/{timer}/assign', [\App\Http\Controllers\TimerViewController::class, 'assign'])->name('timers.assign');
 Route::get('/timers/{timer}', [\App\Http\Controllers\TimerViewController::class, 'show'])->name('timers.show');
