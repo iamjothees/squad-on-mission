@@ -24,7 +24,7 @@
                     <form action="{{ route('timers.assign', $timer) }}" method="POST" class="flex items-center gap-2">
                         @csrf
                         @method('PATCH')
-                        <select name="timerable" class="w-48 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" required>
+                        <x-form.select :no-create="true" name="timerable" class="w-48 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
                             <option value="">Select Task or Project...</option>
                             <optgroup label="Tasks">
                                 @foreach($tasks as $task)
@@ -36,7 +36,7 @@
                                     <option value="project:{{ $project->id }}" @selected($timer->timerable_type === \App\Models\Project::class && $timer->timerable_id == $project->id)>{{ Str::limit($project->name, 50) }}</option>
                                 @endforeach
                             </optgroup>
-                        </select>
+                        </x-form.select>
                         <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors">
                             Assign
                         </button>

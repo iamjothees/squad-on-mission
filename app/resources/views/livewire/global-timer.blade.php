@@ -1,4 +1,5 @@
-<div class="fixed bottom-6 right-6 z-[9999]" wire:ignore>
+<div class="fixed bottom-6 right-6 z-[9999]" wire:ignore
+         @force-new-timer.window="$wire.forceStartNewTimer()">
     <div x-data="globalTimerData(@js($timerId), @js($initialState))" 
          
             @timer-switched.window="switchTimer($event.detail)"
@@ -40,12 +41,16 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('globalTimerData', (timerId, initialState) => ({
             timerInstance: null,
+            eventChannel: null,
             formattedTime: '00:00:00',
             isRunning: initialState.is_running,
             activeTimerId: timerId,
 
             
-            switchTimer(detail) {
+            switchTimer(detail, broadcast = true) {
+                if (broadcast && this.eventChannel) {
+                    this.eventChannel.postMessage({ type: 'switch', detail: detail });
+                }
                 this.destroy();
                 let timerId = detail.timerId;
                 this.activeTimerId = timerId;
@@ -62,6 +67,12 @@
             },
 
             init() {
+                this.eventChannel = new BroadcastChannel('global_timer_events');
+                this.eventChannel.onmessage = (event) => {
+                    if (event.data && event.data.type === 'switch') {
+                        this.switchTimer(event.data.detail, false);
+                    }
+                };
                 this.initTimer(timerId, initialState);
             },
 

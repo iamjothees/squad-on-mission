@@ -23,38 +23,38 @@
 
                     <div class="space-y-1.5 md:col-span-2">
                         <label for="project_id" class="block font-semibold text-gray-700 dark:text-gray-300">Link to Project</label>
-                        <select id="project_id" name="project_id" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
+                        <x-form.select :no-create="true" id="project_id" name="project_id" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
                             <option value="">-- No Project (Standalone Task) --</option>
                             @foreach($projects as $project)
                                 <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
                                     {{ $project->name }}
                                 </option>
                             @endforeach
-                        </select>
+                        </x-form.select>
                         @error('project_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
                         <label for="status" class="block font-semibold text-gray-700 dark:text-gray-300">Status</label>
-                        <select id="status" name="status" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
+                        <x-form.select :no-create="true" id="status" name="status" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
                             @foreach(\App\Enums\TaskStatus::cases() as $statusEnum)
                                 <option value="{{ $statusEnum->value }}" {{ old('status', 'todo') === $statusEnum->value ? 'selected' : '' }}>
                                     {{ $statusEnum->label() }}
                                 </option>
                             @endforeach
-                        </select>
+                        </x-form.select>
                         @error('status') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
                         <label for="priority" class="block font-semibold text-gray-700 dark:text-gray-300">Priority</label>
-                        <select id="priority" name="priority" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
+                        <x-form.select :no-create="true" id="priority" name="priority" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
                             @foreach(\App\Enums\TaskPriority::cases() as $priorityEnum)
                                 <option value="{{ $priorityEnum->value }}" {{ old('priority', 'medium') === $priorityEnum->value ? 'selected' : '' }}>
                                     {{ $priorityEnum->label() }}
                                 </option>
                             @endforeach
-                        </select>
+                        </x-form.select>
                         @error('priority') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
 

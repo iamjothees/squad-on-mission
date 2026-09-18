@@ -32,6 +32,9 @@ class TimerController extends Controller
         $isNowRunning = $validated['is_running'];
         $oldSeconds = $timer->accumulated_seconds;
 
+        if ($isNowRunning && $timer->completed_at) {
+            return response()->json(['success' => false, 'message' => 'Timer already completed'], 400);
+        }
         $timer->update($validated);
 
         if ($isNowRunning && !$wasRunning) {

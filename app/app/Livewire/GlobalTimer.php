@@ -108,7 +108,9 @@ class GlobalTimer extends Component
         ];
         
         // Dispatch browser event to re-initialize alpine component
+        
         $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
+        broadcast(new \App\Events\TimerSwitched(1, $this->timerId, $this->initialState));
     }
 
     
@@ -153,7 +155,61 @@ class GlobalTimer extends Component
             'last_started_at' => null,
         ];
         
+        
         $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
+        broadcast(new \App\Events\TimerSwitched(1, $this->timerId, $this->initialState));
+    }
+
+    
+    #[\Livewire\Attributes\On('force-new-timer')]
+    public function forceStartNewTimer()
+    {
+        
+        $now = floor(microtime(true) * 1000);
+        
+        $otherRunningTimers = Timer::where('is_running', true)->get();
+        foreach ($otherRunningTimers as $otherTimer) {
+            $elapsed = $otherTimer->last_started_at ? floor((floor(microtime(true) * 1000) - $otherTimer->last_started_at) / 1000) : 0;
+            $newSeconds = $otherTimer->accumulated_seconds + $elapsed;
+            $otherTimer->update([
+                'accumulated_seconds' => $newSeconds,
+                'is_running' => false,
+                'last_started_at' => null,
+            ]);
+            $openLog = $otherTimer->logs()->whereNull('stopped_at')->latest()->first();
+            if ($openLog) {
+                $openLog->update([
+                    'stopped_at' => $now,
+                    'duration_seconds' => $elapsed,
+                ]);
+            }
+            broadcast(new \App\Events\TimerUpdated($otherTimer));
+        }
+
+        $newTimer = Timer::create([
+            'user_id' => 1,
+            'timerable_type' => null,
+            'timerable_id' => null,
+            'purpose' => 'global_focus',
+            'accumulated_seconds' => 0,
+            'is_running' => true,
+            'last_started_at' => $now,
+        ]);
+        
+        $newTimer->logs()->create([
+            'started_at' => $now,
+        ]);
+        
+        $this->timerId = $newTimer->id;
+        $this->initialState = [
+            'accumulated_seconds' => 0,
+            'is_running' => true,
+            'last_started_at' => $now,
+        ];
+        
+        
+        $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
+        broadcast(new \App\Events\TimerSwitched(1, $this->timerId, $this->initialState));
     }
 
     public function render()

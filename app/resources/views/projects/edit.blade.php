@@ -24,12 +24,12 @@
 
                     <div class="space-y-1.5">
                         <label for="client_id" class="block font-semibold text-gray-700 dark:text-gray-300">Client</label>
-                        <select id="client_id" name="client_id" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
+                        <x-form.select :no-create="true" id="client_id" name="client_id" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
                             <option value="">No Client (Internal)</option>
                             @foreach($clients as $client)
                                 <option value="{{ $client->id }}" @selected(old('client_id', $project->client_id) == $client->id)>{{ $client->name }} ({{ $client->key }})</option>
                             @endforeach
-                        </select>
+                        </x-form.select>
                         @error('client_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
 
@@ -53,13 +53,13 @@
 
                     <div class="space-y-1.5 md:col-span-2">
                         <label for="status" class="block font-semibold text-gray-700 dark:text-gray-300">Status</label>
-                        <select id="status" name="status" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
+                        <x-form.select :no-create="true" id="status" name="status" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
                             @foreach(\App\Enums\ProjectStatus::cases() as $statusEnum)
                                 <option value="{{ $statusEnum->value }}" {{ old('status', $project->status?->value) === $statusEnum->value ? 'selected' : '' }}>
                                     {{ $statusEnum->label() }}
                                 </option>
                             @endforeach
-                        </select>
+                        </x-form.select>
                         @error('status') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
 

@@ -83,7 +83,7 @@ export default class Timer {
 
         // Persist to server (no polling, only on action)
         try {
-            await fetch(`/api/timers/${this.timerId}`, {
+            const response = await fetch(`/api/timers/${this.timerId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,6 +97,19 @@ export default class Timer {
                     last_started_at: this.last_started_at
                 })
             });
+            
+            if (!response.ok) {
+                // Server rejected (e.g., timer already completed)
+                this.is_running = !this.is_running;
+                this.syncState({
+                    accumulated_seconds: this.accumulated_seconds,
+                    is_running: this.is_running,
+                    last_started_at: this.last_started_at
+                }, true);
+                if (confirm("This timer was already completed in another window. Start a new timer instead?")) {
+                    window.dispatchEvent(new CustomEvent('force-new-timer'));
+                }
+            }
         } catch (error) {
             console.error('Failed to sync timer state with server:', error);
         }
@@ -121,6 +134,19 @@ export default class Timer {
                     'Accept': 'application/json'
                 }
             });
+            
+            if (!response.ok) {
+                // Server rejected (e.g., timer already completed)
+                this.is_running = !this.is_running;
+                this.syncState({
+                    accumulated_seconds: this.accumulated_seconds,
+                    is_running: this.is_running,
+                    last_started_at: this.last_started_at
+                }, true);
+                if (confirm("This timer was already completed in another window. Start a new timer instead?")) {
+                    window.dispatchEvent(new CustomEvent('force-new-timer'));
+                }
+            }
         } catch (error) {
             console.error('Failed to sync timer state with server:', error);
         }

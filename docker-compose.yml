@@ -5,8 +5,8 @@ services:
     volumes:
       - ./app:/var/www/html
     ports:
-      - 80:80
-      - 5173:5173
+      - 8030:80
+      - 8033:5173
     working_dir: /var/www/html
     networks:
       - tunnel_net
@@ -16,7 +16,7 @@ services:
     volumes:
       - ./app:/var/www/html
     ports:
-      - 8080:8080
+      - 8031:8080
     working_dir: /var/www/html
     command: php artisan reverb:start --host=0.0.0.0 --port=8080
     networks:
@@ -30,7 +30,7 @@ services:
       MYSQL_USER: som
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     ports:
-      - 3306:3306
+      - 8032:3306
     volumes:
       - db-data:/var/lib/mysql
     networks:
