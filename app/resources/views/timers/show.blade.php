@@ -37,7 +37,7 @@
                                 @endforeach
                             </optgroup>
                         </x-form.select>
-                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
                             Assign
                         </button>
                     </form>
