@@ -87,11 +87,13 @@
                         @endforelse
                     </tbody>
                                 </table>
-                <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-end">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors">
-                        Save All Assignments
-                    </button>
-                </div>
+                <!-- Floating Action Button -->
+                @if($timers->isNotEmpty())
+                <button type="submit" class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 rounded-full shadow-lg shadow-indigo-900/20 font-semibold text-sm transition-transform hover:scale-105 flex items-center gap-2 z-50">
+                    <x-lucide-save class="w-5 h-5" />
+                    <span>Save Assignments</span>
+                </button>
+                @endif
             </form>
             </div>
         </div>
