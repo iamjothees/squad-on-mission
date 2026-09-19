@@ -25,7 +25,7 @@ class TimerViewController extends Controller
     {
         $timer->load(['logs' => function ($q) {
             $q->orderBy('started_at', 'desc');
-        }, 'timerable']);
+        }, 'tasks', 'projects', 'clients']);
 
         $projects = Project::orderBy('name')->get();
         $tasks = Task::orderBy('title')->get();
