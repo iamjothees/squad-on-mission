@@ -44,6 +44,24 @@
                 </button>
             </div>
         </form>
+
+        @if(app()->environment('local'))
+            <div class="mt-8 border-t border-gray-200 dark:border-gray-800 pt-6">
+                <p class="text-xs text-center text-gray-500 mb-4 font-bold uppercase tracking-wider">One-Click Dev Login</p>
+                <div class="grid grid-cols-2 gap-3">
+                    @foreach(\App\Models\User::all() as $user)
+                        <form action="{{ route('login.post') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="email" value="{{ $user->email }}">
+                            <input type="hidden" name="password" value="password">
+                            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-50 dark:bg-gray-800/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                Login as {{ $user->name }}
+                            </button>
+                        </form>
+                    @endforeach
+                </div>
+            </div>
+        @endif
     </div>
 </body>
 </html>

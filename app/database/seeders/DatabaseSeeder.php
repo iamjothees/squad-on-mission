@@ -11,8 +11,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'System',
+            'email' => 'system@squadonmission.local',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Joe',
+            'email' => 'joe@squadonmission.local',
         ]);
 
         // Seed SELF client
