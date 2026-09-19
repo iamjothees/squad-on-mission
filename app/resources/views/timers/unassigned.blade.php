@@ -6,6 +6,13 @@
                 <h1 class="font-bold text-gray-800 dark:text-white text-lg">Unassigned Timers</h1>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Review your global focus sessions and assign them to specific projects or tasks.</p>
             </div>
+            <form action="{{ route('timers.store') }}" method="POST">
+                @csrf
+                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 bg-indigo-600 text-white hover:bg-indigo-700 h-9 px-4 py-2 gap-2 shadow-sm">
+                    <x-lucide-plus class="w-4 h-4" />
+                    Create Manual Timer
+                </button>
+            </form>
         </div>
 
         @if (session('success'))

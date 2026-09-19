@@ -188,4 +188,26 @@ class TimerViewController extends Controller
 
         return back()->with('success', 'Manual log added successfully.');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'timerable_type' => 'nullable|string',
+            'timerable_id' => 'nullable|integer',
+        ]);
+        
+        $timer = Timer::create([
+            'purpose' => 'task_tracking',
+            'is_running' => false,
+            'accumulated_seconds' => 0,
+            'timerable_type' => $request->timerable_type,
+            'timerable_id' => $request->timerable_id,
+        ]);
+
+        $message = $request->timerable_type 
+            ? 'Manual timer created and assigned successfully. You can now add logs.' 
+            : 'Manual timer created successfully. You can now assign it and add logs.';
+
+        return redirect()->route('timers.show', $timer)->with('success', $message);
+    }
 }
