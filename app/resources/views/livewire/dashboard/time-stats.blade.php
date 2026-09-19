@@ -6,11 +6,11 @@
     
     <div class="space-y-4">
         <div>
-            <div class="text-3xl font-bold text-gray-900 dark:text-white font-mono">{{ sprintf('%02d:%02d:%02d', floor($todaySeconds / 3600), floor(($todaySeconds % 3600) / 60), $todaySeconds % 60) }}</div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white font-mono">{{ \App\Support\TimeHelper::formatDuration($todaySeconds) }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">Today</div>
         </div>
         <div class="pt-4 border-t border-gray-100 dark:border-gray-800">
-            <div class="text-xl font-bold text-gray-900 dark:text-white font-mono">{{ floor($weekSeconds / 3600) . ':' . gmdate("i:s", $weekSeconds % 3600) }}</div>
+            <div class="text-xl font-bold text-gray-900 dark:text-white font-mono">{{ \App\Support\TimeHelper::formatDuration($weekSeconds) }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">This Week</div>
         </div>
     </div>

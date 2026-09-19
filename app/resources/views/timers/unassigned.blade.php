@@ -55,7 +55,7 @@
                                             : 0;
                                         $totalSeconds = $timer->accumulated_seconds + $elapsed;
                                     @endphp
-                                    {{ sprintf('%02d:%02d:%02d', floor($totalSeconds / 3600), floor(($totalSeconds % 3600) / 60), $totalSeconds % 60) }}
+                                    {{ \App\Support\TimeHelper::formatDuration($totalSeconds) }}
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                                     {{ $timer->updated_at->diffForHumans() }}

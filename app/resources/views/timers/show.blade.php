@@ -17,7 +17,7 @@
                                 : 0;
                             $totalSeconds = $timer->accumulated_seconds + $elapsed;
                         @endphp
-                        {{ sprintf('%02d:%02d:%02d', floor($totalSeconds / 3600), floor(($totalSeconds % 3600) / 60), $totalSeconds % 60) }}</p>
+                        {{ \App\Support\TimeHelper::formatDuration($totalSeconds) }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -91,12 +91,12 @@
                                 </td>
                                 <td class="px-4 py-2.5 text-right font-mono text-gray-800 dark:text-gray-200">
                                     @if($log->stopped_at)
-                                        {{ sprintf('%02d:%02d:%02d', floor($log->duration_seconds / 3600), floor(($log->duration_seconds % 3600) / 60), $log->duration_seconds % 60) }}
+                                        {{ \App\Support\TimeHelper::formatDuration($log->duration_seconds) }}
                                     @else
                                         @php
                                             $logElapsed = floor((floor(microtime(true) * 1000) - $log->started_at) / 1000);
                                         @endphp
-                                        {{ sprintf('%02d:%02d:%02d', floor($logElapsed / 3600), floor(($logElapsed % 3600) / 60), $logElapsed % 60) }}
+                                        {{ \App\Support\TimeHelper::formatDuration($logElapsed) }}
                                     @endif
                                 </td>
                             </tr>

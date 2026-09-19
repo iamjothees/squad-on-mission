@@ -6,7 +6,7 @@
          class="bg-gray-900 text-white shadow-xl rounded-full px-5 py-3 flex items-center gap-4 hover:shadow-2xl transition-all border border-gray-700">
         
         <!-- Timer Display -->
-        <a :href="'/timers/' + activeTimerId" class="font-mono text-xl font-bold tracking-wider tabular-nums w-24 text-center hover:text-indigo-400 transition-colors" x-text="formattedTime" title="View Logs">
+        <a :href="'/timers/' + activeTimerId" class="font-mono text-xl font-bold tracking-wider tabular-nums min-w-[6rem] text-center hover:text-indigo-400 transition-colors" x-text="formattedTime" title="View Logs">
             00:00:00
         </a>
 
@@ -78,13 +78,25 @@
 
 
             formatSeconds(totalSeconds) {
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = totalSeconds % 60;
+                const hoursPerDay = parseFloat('{{ config('squad.work_hours_per_day', 24) }}');
+                const secondsPerDay = hoursPerDay * 3600;
                 
-                this.formattedTime = [hours, minutes, seconds]
+                const days = Math.floor(totalSeconds / secondsPerDay);
+                const remainingSeconds = totalSeconds % secondsPerDay;
+                
+                const hours = Math.floor(remainingSeconds / 3600);
+                const minutes = Math.floor((remainingSeconds % 3600) / 60);
+                const seconds = remainingSeconds % 60;
+                
+                const timeString = [hours, minutes, seconds]
                     .map(v => v < 10 ? "0" + v : v)
                     .join(":");
+                    
+                if (days > 0) {
+                    this.formattedTime = days + "d " + timeString;
+                } else {
+                    this.formattedTime = timeString;
+                }
             },
 
             toggle() {
