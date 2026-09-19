@@ -72,24 +72,33 @@
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-16">ID</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Started At</th>
                             <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold">Stopped At</th>
-                            <th class="px-4 py-3 font-semibold w-32 text-right">Duration</th>
+                            <th class="px-4 py-3 border-r border-gray-200 dark:border-gray-800 font-semibold w-32 text-right">Duration</th>
+                            <th class="px-4 py-3 font-semibold w-16 text-center">Act</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm">
                         @forelse($timer->logs as $log)
-                            <tr class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                            <tr x-data="{ editing: false }" class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-gray-500 dark:text-gray-400">{{ $log->id }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
-                                    {{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->format('M d, Y h:i:s A') }}
+                                    <div x-show="!editing">{{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->format('M d, Y h:i:s A') }}</div>
+                                    <div x-show="editing" x-cloak>
+                                        <input type="datetime-local" step="1" form="edit-log-{{ $log->id }}" name="started_at" value="{{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->format('Y-m-d\TH:i:s') }}" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" required>
+                                    </div>
                                 </td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
-                                    @if($log->stopped_at)
-                                        {{ \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->format('M d, Y h:i:s A') }}
-                                    @else
-                                        <span class="text-green-500 italic">Running...</span>
-                                    @endif
+                                    <div x-show="!editing">
+                                        @if($log->stopped_at)
+                                            {{ \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->format('M d, Y h:i:s A') }}
+                                        @else
+                                            <span class="text-green-500 italic">Running...</span>
+                                        @endif
+                                    </div>
+                                    <div x-show="editing" x-cloak>
+                                        <input type="datetime-local" step="1" form="edit-log-{{ $log->id }}" name="stopped_at" value="{{ $log->stopped_at ? \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->format('Y-m-d\TH:i:s') : '' }}" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    </div>
                                 </td>
-                                <td class="px-4 py-2.5 text-right font-mono text-gray-800 dark:text-gray-200">
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-right font-mono text-gray-800 dark:text-gray-200">
                                     @if($log->stopped_at)
                                         {{ \App\Support\TimeHelper::formatDuration($log->duration_seconds) }}
                                     @else
@@ -98,6 +107,23 @@
                                         @endphp
                                         {{ \App\Support\TimeHelper::formatDuration($logElapsed) }}
                                     @endif
+                                </td>
+                                <td class="px-4 py-2.5 text-center">
+                                    <button type="button" x-show="!editing" @click="editing = true" class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" title="Edit Log">
+                                        <x-lucide-pencil class="w-4 h-4 mx-auto" />
+                                    </button>
+                                    <div x-show="editing" x-cloak class="flex items-center justify-center gap-2">
+                                        <form id="edit-log-{{ $log->id }}" action="{{ route('timers.logs.update', [$timer, $log]) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 transition-colors" title="Save">
+                                                <x-lucide-check class="w-4 h-4" />
+                                            </button>
+                                        </form>
+                                        <button type="button" @click="editing = false" class="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors" title="Cancel">
+                                            <x-lucide-x class="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

@@ -87,4 +87,61 @@ class TimerViewController extends Controller
         
         return back()->with('success', $count . ' timers successfully assigned!');
     }
+
+    public function updateLog(Request $request, Timer $timer, \App\Models\TimerLog $log)
+    {
+        if ($log->timer_id !== $timer->id) {
+            abort(404);
+        }
+
+        $request->validate([
+            'started_at' => 'required|date',
+            'stopped_at' => 'nullable|date|after:started_at',
+        ]);
+
+        $startedMs = strtotime($request->started_at) * 1000;
+        $stoppedMs = $request->stopped_at ? strtotime($request->stopped_at) * 1000 : null;
+        
+        // Strong logical validations
+        if ($stoppedMs && $startedMs >= $stoppedMs) {
+            return back()->with('error', 'Start time must be before stop time.');
+        }
+        
+        // Check overlaps with other logs on the same timer
+        $overlap = $timer->logs()->where('id', '!=', $log->id)
+            ->where(function ($query) use ($startedMs, $stoppedMs) {
+                // If the other log is still running, its stopped_at is null (effectively infinity)
+                if ($stoppedMs) {
+                    $query->where('started_at', '<', $stoppedMs)
+                          ->where(function ($q) use ($startedMs) {
+                              $q->where('stopped_at', '>', $startedMs)
+                                ->orWhereNull('stopped_at');
+                          });
+                } else {
+                    // New log is running (no stop time)
+                    $query->where('stopped_at', '>', $startedMs)
+                          ->orWhereNull('stopped_at');
+                }
+            })->exists();
+
+        if ($overlap) {
+            return back()->with('error', 'Log time overlaps with an existing time log.');
+        }
+
+        $duration = $stoppedMs ? floor(($stoppedMs - $startedMs) / 1000) : 0;
+
+        $log->update([
+            'started_at' => $startedMs,
+            'stopped_at' => $stoppedMs,
+            'duration_seconds' => $duration,
+        ]);
+
+        // Recalculate parent timer's accumulated_seconds
+        $totalDuration = $timer->logs()->whereNotNull('stopped_at')->sum('duration_seconds');
+        $timer->update([
+            'accumulated_seconds' => $totalDuration,
+        ]);
+
+        return back()->with('success', 'Timer log updated successfully.');
+    }
 }
