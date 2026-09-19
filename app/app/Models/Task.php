@@ -15,7 +15,7 @@ class Task extends Model
 
     public function project() { return $this->belongsTo(Project::class); }
     public function entityKeys() { return $this->morphMany(EntityKey::class, 'keyable'); }
-        public function timers() { return $this->morphMany(Timer::class, 'timerable'); }
+        public function timers() { return $this->morphToMany(Timer::class, 'timerable'); }
     
     public function getAllTimers() {
         return $this->timers()->latest('updated_at')->get();

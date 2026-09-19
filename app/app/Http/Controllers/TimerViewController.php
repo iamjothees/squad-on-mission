@@ -11,9 +11,7 @@ class TimerViewController extends Controller
 {
     public function unassigned()
     {
-        $timers = Timer::where('user_id', auth()->id())->whereNull('timerable_type')
-            ->whereNull('timerable_id')
-            ->latest('updated_at')
+        $timers = Timer::where('user_id', auth()->id())->doesntHave('tasks')->doesntHave('projects')->doesntHave('clients')->latest('updated_at')
             ->get();
             
         $projects = Project::orderBy('name')->get();
@@ -47,11 +45,19 @@ class TimerViewController extends Controller
             $type = $parts[0] === 'project' ? Project::class : Task::class;
             $id = $parts[1];
             
-            $timer->update([
-                'timerable_type' => $type,
-                'timerable_id' => $id,
-                'purpose' => 'task_tracking',
-            ]);
+            try {
+                $timer->validateHierarchyAttachments($type, $id);
+                if ($type === \App\Models\Task::class) {
+                    $timer->tasks()->syncWithoutDetaching([$id]);
+                } elseif ($type === \App\Models\Project::class) {
+                    $timer->projects()->syncWithoutDetaching([$id]);
+                } elseif ($type === \App\Models\Client::class) {
+                    $timer->clients()->syncWithoutDetaching([$id]);
+                }
+                $timer->update(['purpose' => 'task_tracking']);
+            } catch (\Exception $e) {
+                return back()->with('error', $e->getMessage());
+            }
             
             return back()->with('success', 'Timer successfully assigned!');
         }
@@ -78,12 +84,20 @@ class TimerViewController extends Controller
                 $type = $parts[0] === 'project' ? Project::class : Task::class;
                 $id = $parts[1];
                 
-                $timer->update([
-                    'timerable_type' => $type,
-                    'timerable_id' => $id,
-                    'purpose' => 'task_tracking',
-                ]);
-                $count++;
+                try {
+                    $timer->validateHierarchyAttachments($type, $id);
+                    if ($type === \App\Models\Task::class) {
+                        $timer->tasks()->syncWithoutDetaching([$id]);
+                    } elseif ($type === \App\Models\Project::class) {
+                        $timer->projects()->syncWithoutDetaching([$id]);
+                    } elseif ($type === \App\Models\Client::class) {
+                        $timer->clients()->syncWithoutDetaching([$id]);
+                    }
+                    $timer->update(['purpose' => 'task_tracking']);
+                    $count++;
+                } catch (\Exception $e) {
+                    continue; // Skip invalid bulk assignments
+                }
             }
         }
         
@@ -211,9 +225,25 @@ class TimerViewController extends Controller
             'purpose' => 'task_tracking',
             'is_running' => false,
             'accumulated_seconds' => 0,
-            'timerable_type' => $request->timerable_type,
-            'timerable_id' => $request->timerable_id,
+
         ]);
+
+        if ($request->timerable_type && $request->timerable_id) {
+            try {
+                $timer->validateHierarchyAttachments($request->timerable_type, $request->timerable_id);
+                if ($request->timerable_type === \App\Models\Task::class) {
+                    $timer->tasks()->attach($request->timerable_id);
+                } elseif ($request->timerable_type === \App\Models\Project::class) {
+                    $timer->projects()->attach($request->timerable_id);
+                } elseif ($request->timerable_type === \App\Models\Client::class) {
+                    $timer->clients()->attach($request->timerable_id);
+                }
+            } catch (\Exception $e) {
+                // If it fails, delete the timer we just created and return error
+                $timer->delete();
+                return back()->with('error', $e->getMessage());
+            }
+        }
 
         $message = $request->timerable_type 
             ? 'Manual timer created and assigned successfully. You can now add logs.' 

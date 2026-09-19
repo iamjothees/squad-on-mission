@@ -18,12 +18,14 @@ class Client extends Model
     public function getAllTimers() {
         $projectIds = $this->projects()->pluck('id');
         $taskIds = \App\Models\Task::whereIn('project_id', $projectIds)->pluck('id');
-        return \App\Models\Timer::where(function($q) use ($projectIds, $taskIds) {
-            $q->where(function($q1) use ($projectIds) {
-                $q1->where('timerable_type', \App\Models\Project::class)->whereIn('timerable_id', $projectIds);
-            })->orWhere(function($q2) use ($taskIds) {
-                $q2->where('timerable_type', \App\Models\Task::class)->whereIn('timerable_id', $taskIds);
-            });
+        return \App\Models\Timer::whereHas('projects', function($q) use ($projectIds) {
+            $q->whereIn('id', $projectIds);
+        })->orWhereHas('tasks', function($q) use ($taskIds) {
+            $q->whereIn('id', $taskIds);
+        })->orWhereHas('clients', function($q) {
+            $q->where('id', $this->id); // Include direct client timers just in case
         })->latest('updated_at')->get();
     }
+
+    public function timers() { return $this->morphToMany(Timer::class, 'timerable'); }
 }

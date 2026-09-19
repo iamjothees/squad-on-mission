@@ -18,8 +18,7 @@ class GlobalTimer extends Component
         if (!$timer) {
             $timer = Timer::create([
                 'user_id' => auth()->id(),
-                'timerable_type' => null,
-                'timerable_id' => null,
+
                 'purpose' => 'global_focus',
                 'accumulated_seconds' => 0,
                 'is_running' => false,
@@ -47,8 +46,7 @@ class GlobalTimer extends Component
         if (!$timer) {
             $timer = Timer::create([
                 'user_id' => auth()->id(),
-                'timerable_type' => $type,
-                'timerable_id' => $id,
+
                 'purpose' => 'task_tracking',
                 'accumulated_seconds' => 0,
                 'is_running' => false,
@@ -142,8 +140,7 @@ class GlobalTimer extends Component
         // Restart with a fresh global dummy timer so the UI resets (PAUSED)
         $newTimer = Timer::create([
             'user_id' => auth()->id(),
-            'timerable_type' => null,
-            'timerable_id' => null,
+
             'purpose' => 'global_focus',
             'accumulated_seconds' => 0,
             'is_running' => false,
@@ -191,8 +188,7 @@ class GlobalTimer extends Component
 
         $newTimer = Timer::create([
             'user_id' => auth()->id(),
-            'timerable_type' => null,
-            'timerable_id' => null,
+
             'purpose' => 'global_focus',
             'accumulated_seconds' => 0,
             'is_running' => true,

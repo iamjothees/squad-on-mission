@@ -5,8 +5,14 @@
                 <div>
                     <h1 class="font-bold text-gray-800 dark:text-white text-lg">
                         Timer Log for 
-                        @if($timer->timerable)
-                            <span class="text-indigo-600 dark:text-indigo-400">{{ $timer->timerable->title ?? $timer->timerable->name ?? 'Entity' }}</span>
+                        @if($timer->timerables->count() > 0)
+                            <span class="text-indigo-600 dark:text-indigo-400 flex gap-2 flex-wrap items-center">
+                                @foreach($timer->timerables as $entity)
+                                    <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-xs">
+                                        {{ class_basename($entity) }}: {{ $entity->title ?? $entity->name ?? 'Entity' }}
+                                    </span>
+                                @endforeach
+                            </span>
                         @else
                             Global Timer
                         @endif
@@ -28,12 +34,12 @@
                             <option value="">Select Task or Project...</option>
                             <optgroup label="Tasks">
                                 @foreach($tasks as $task)
-                                    <option value="task:{{ $task->id }}" @selected($timer->timerable_type === \App\Models\Task::class && $timer->timerable_id == $task->id)>{{ $task->title }}</option>
+                                    <option value="task:{{ $task->id }}" @selected($timer->tasks->contains($task->id))>{{ $task->title }}</option>
                                 @endforeach
                             </optgroup>
                             <optgroup label="Projects">
                                 @foreach($projects as $project)
-                                    <option value="project:{{ $project->id }}" @selected($timer->timerable_type === \App\Models\Project::class && $timer->timerable_id == $project->id)>{{ $project->name }}</option>
+                                    <option value="project:{{ $project->id }}" @selected($timer->projects->contains($project->id))>{{ $project->name }}</option>
                                 @endforeach
                             </optgroup>
                         </x-form.select>
@@ -41,6 +47,7 @@
                             Assign
                         </button>
                     </form>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 -ml-1">You can assign multiple entities.</span>
                     
                     @if($timer->is_running)
                         <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Currently Running</span>

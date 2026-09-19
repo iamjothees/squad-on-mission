@@ -86,7 +86,7 @@
                                             @endif
                                         </div>
                                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                            {{ $timer->timerable ? class_basename($timer->timerable_type) . ' ' . $timer->timerable->key : 'Unassigned' }}
+                                            {{ $timer->timerables->count() > 0 ? $timer->timerables->map(fn($t) => class_basename($t) . ' ' . $t->key)->join(', ') : 'Unassigned' }}
                                         </div>
                                         <div class="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">
                                             Updated {{ $timer->updated_at->diffForHumans() }}
