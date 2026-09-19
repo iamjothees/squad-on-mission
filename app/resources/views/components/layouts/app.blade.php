@@ -96,6 +96,31 @@
 
             <main class="relative flex-1 overflow-y-auto bg-gray-50/50 dark:bg-gray-900 focus:outline-none">
                 <div class="p-4 md:p-6 w-full">
+                                        @if(session('success'))
+                        <div class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded border border-green-200 dark:border-green-800/50 flex items-center gap-2">
+                            <x-lucide-check-circle class="w-4 h-4" />
+                            <span class="text-sm font-medium">{{ session('success') }}</span>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded border border-red-200 dark:border-red-800/50 flex items-center gap-2">
+                            <x-lucide-alert-circle class="w-4 h-4" />
+                            <span class="text-sm font-medium">{{ session('error') }}</span>
+                        </div>
+                    @endif
+                    @if($errors->any())
+                        <div class="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded border border-red-200 dark:border-red-800/50">
+                            <div class="flex items-center gap-2 mb-1">
+                                <x-lucide-alert-triangle class="w-4 h-4" />
+                                <span class="text-sm font-bold">Validation Error</span>
+                            </div>
+                            <ul class="list-disc list-inside text-sm ml-6">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     {{ $slot }}
                 </div>
             </main>
