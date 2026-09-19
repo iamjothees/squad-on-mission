@@ -51,4 +51,6 @@ Route::post('/timers/bulk-assign', [\App\Http\Controllers\TimerViewController::c
 Route::patch('/timers/{timer}/assign', [\App\Http\Controllers\TimerViewController::class, 'assign'])->name('timers.assign');
 Route::get('/timers/{timer}', [\App\Http\Controllers\TimerViewController::class, 'show'])->name('timers.show');
 Route::put('/timers/{timer}/logs/{log}', [\App\Http\Controllers\TimerViewController::class, 'updateLog'])->name('timers.logs.update');
+Route::post('/timers/{timer}/logs', [\App\Http\Controllers\TimerViewController::class, 'storeLog'])->name('timers.logs.store');
+
 

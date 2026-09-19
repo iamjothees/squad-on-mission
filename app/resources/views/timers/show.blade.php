@@ -63,9 +63,15 @@
         </div>
 
         <div class="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-950 p-5">
-            <h3 class="font-bold text-gray-800 dark:text-white mb-4">Chronological Logs</h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 dark:text-white">Chronological Logs</h3>
+                <button type="button" @click="$dispatch('open-add-log')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md text-xs font-medium transition-colors border border-indigo-200 dark:border-indigo-800/50">
+                    <x-lucide-plus class="w-3.5 h-3.5" />
+                    <span>Add Manual Log</span>
+                </button>
+            </div>
             
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" x-data="{ adding: false }" @open-add-log.window="adding = true">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -77,6 +83,31 @@
                         </tr>
                     </thead>
                     <tbody class="text-sm">
+                        <tr x-show="adding" x-cloak class="bg-indigo-50/50 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/50">
+                            <td class="px-4 py-2.5 border-r border-indigo-100 dark:border-indigo-900/50 font-mono text-indigo-500 dark:text-indigo-400 text-xs">NEW</td>
+                            <td class="px-4 py-2.5 border-r border-indigo-100 dark:border-indigo-900/50">
+                                <input type="datetime-local" step="1" form="add-log-form" name="started_at" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" required>
+                            </td>
+                            <td class="px-4 py-2.5 border-r border-indigo-100 dark:border-indigo-900/50">
+                                <input type="datetime-local" step="1" form="add-log-form" name="stopped_at" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" required>
+                            </td>
+                            <td class="px-4 py-2.5 border-r border-indigo-100 dark:border-indigo-900/50 text-right text-gray-500 text-xs italic">
+                                Auto-calculated
+                            </td>
+                            <td class="px-4 py-2.5 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <form id="add-log-form" action="{{ route('timers.logs.store', $timer) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" class="text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 transition-colors" title="Save">
+                                            <x-lucide-check class="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                    <button type="button" @click="adding = false" class="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors" title="Cancel">
+                                        <x-lucide-x class="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                         @forelse($timer->logs as $log)
                             <tr x-data="{ editing: false }" class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 font-mono text-gray-500 dark:text-gray-400">{{ $log->id }}</td>

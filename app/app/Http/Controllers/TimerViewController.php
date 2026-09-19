@@ -144,4 +144,48 @@ class TimerViewController extends Controller
 
         return back()->with('success', 'Timer log updated successfully.');
     }
+
+    public function storeLog(Request $request, Timer $timer)
+    {
+        $request->validate([
+            'started_at' => 'required|date',
+            'stopped_at' => 'required|date|after:started_at',
+        ]);
+
+        $startedMs = strtotime($request->started_at) * 1000;
+        $stoppedMs = strtotime($request->stopped_at) * 1000;
+        
+        if ($startedMs >= $stoppedMs) {
+            return back()->with('error', 'Start time must be before stop time.');
+        }
+        
+        // Check overlaps with other logs on the same timer
+        $overlap = $timer->logs()->where(function ($query) use ($startedMs, $stoppedMs) {
+            $query->where('started_at', '<', $stoppedMs)
+                  ->where(function ($q) use ($startedMs) {
+                      $q->where('stopped_at', '>', $startedMs)
+                        ->orWhereNull('stopped_at');
+                  });
+        })->exists();
+
+        if ($overlap) {
+            return back()->with('error', 'Log time overlaps with an existing time log.');
+        }
+
+        $duration = floor(($stoppedMs - $startedMs) / 1000);
+
+        $timer->logs()->create([
+            'started_at' => $startedMs,
+            'stopped_at' => $stoppedMs,
+            'duration_seconds' => $duration,
+        ]);
+
+        // Recalculate parent timer's accumulated_seconds
+        $totalDuration = $timer->logs()->whereNotNull('stopped_at')->sum('duration_seconds');
+        $timer->update([
+            'accumulated_seconds' => $totalDuration,
+        ]);
+
+        return back()->with('success', 'Manual log added successfully.');
+    }
 }
