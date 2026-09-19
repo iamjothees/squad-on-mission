@@ -30,7 +30,7 @@
                     <form action="{{ route('timers.assign', $timer) }}" method="POST" class="flex items-center gap-2">
                         @csrf
                         @method('PATCH')
-                        <x-form.select :no-create="true" name="timerable" wrapperClass="w-[400px]" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
+                        <x-form.select :no-create="true" :multiple="true" name="timerables[]" wrapperClass="w-[400px]" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" >
                             <option value="">Select Task or Project...</option>
                             <optgroup label="Tasks">
                                 @foreach($tasks as $task)
@@ -47,7 +47,7 @@
                             Assign
                         </button>
                     </form>
-                    <span class="text-xs text-gray-500 dark:text-gray-400 -ml-1">You can assign multiple entities.</span>
+
                     
                     @if($timer->is_running)
                         <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Currently Running</span>

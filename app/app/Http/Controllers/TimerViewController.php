@@ -37,32 +37,42 @@ class TimerViewController extends Controller
     public function assign(Request $request, Timer $timer)
     {
         $request->validate([
-            'timerable' => 'required|string',
+            'timerables' => 'nullable|array',
+            'timerables.*' => 'string',
         ]);
         
-        $parts = explode(':', $request->timerable);
-        if (count($parts) === 2) {
-            $type = $parts[0] === 'project' ? Project::class : Task::class;
-            $id = $parts[1];
-            
-            try {
-                $timer->validateHierarchyAttachments($type, $id);
-                if ($type === \App\Models\Task::class) {
-                    $timer->tasks()->syncWithoutDetaching([$id]);
-                } elseif ($type === \App\Models\Project::class) {
-                    $timer->projects()->syncWithoutDetaching([$id]);
-                } elseif ($type === \App\Models\Client::class) {
-                    $timer->clients()->syncWithoutDetaching([$id]);
+        // Detach all existing to cleanly sync the array
+        $timer->tasks()->detach();
+        $timer->projects()->detach();
+        $timer->clients()->detach();
+
+        if (empty($request->timerables)) {
+            return back()->with('success', 'Timer assignments cleared.');
+        }
+
+        foreach ($request->timerables as $timerable) {
+            $parts = explode(':', $timerable);
+            if (count($parts) === 2) {
+                $type = $parts[0] === 'project' ? Project::class : Task::class;
+                $id = $parts[1];
+                
+                try {
+                    $timer->validateHierarchyAttachments($type, $id);
+                    if ($type === \App\Models\Task::class) {
+                        $timer->tasks()->syncWithoutDetaching([$id]);
+                    } elseif ($type === \App\Models\Project::class) {
+                        $timer->projects()->syncWithoutDetaching([$id]);
+                    } elseif ($type === \App\Models\Client::class) {
+                        $timer->clients()->syncWithoutDetaching([$id]);
+                    }
+                    $timer->update(['purpose' => 'task_tracking']);
+                } catch (\Exception $e) {
+                    return back()->with('error', $e->getMessage());
                 }
-                $timer->update(['purpose' => 'task_tracking']);
-            } catch (\Exception $e) {
-                return back()->with('error', $e->getMessage());
             }
-            
-            return back()->with('success', 'Timer successfully assigned!');
         }
         
-        return back()->with('error', 'Invalid assignment data.');
+        return back()->with('success', 'Timer successfully assigned!');
     }
 
     public function bulkAssign(Request $request)
