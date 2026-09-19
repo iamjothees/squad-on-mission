@@ -54,20 +54,13 @@
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Total: {{ \App\Support\TimeHelper::formatDuration($totalSeconds) }}</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <form action="{{ route('timers.store') }}" method="POST" class="flex items-center gap-2">
-                                    @csrf
-                                    <input type="hidden" name="timerable_type" value="{{ get_class($model) }}">
-                                    <input type="hidden" name="timerable_id" value="{{ $model->id }}">
-                                    <select name="user_id" class="w-24 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                                        @foreach(\App\Models\User::orderBy('name')->get() as $user)
-                                            <option value="{{ $user->id }}" {{ auth()->id() == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md text-xs font-medium transition-colors border border-indigo-200 dark:border-indigo-800/50" title="Create Manual Timer">
-                                        <x-lucide-plus class="w-3.5 h-3.5" />
-                                        <span>Add Manual Timer</span>
-                                    </button>
-                                </form>
+                                <x-modals.manual-timer 
+                                    :timerableType="get_class($model)" 
+                                    :timerableId="$model->id"
+                                    class="px-2.5 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md text-xs font-medium border border-indigo-200 dark:border-indigo-800/50"
+                                >
+                                    Add Manual Timer
+                                </x-modals.manual-timer>
                                 <button type="button" @click="openTimers = false" class="rounded-md bg-gray-50 dark:bg-gray-950 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                     <span class="sr-only">Close panel</span>
                                     <x-lucide-x class="h-6 w-6" />

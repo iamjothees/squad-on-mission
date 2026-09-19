@@ -199,6 +199,13 @@ class TimerViewController extends Controller
             'timerable_id' => 'nullable|integer',
         ]);
         
+        $targetUserId = $request->user_id ?? auth()->id();
+        $targetUser = \App\Models\User::find($targetUserId);
+        
+        if ($targetUser && strtolower($targetUser->name) === 'system') {
+            return back()->with('error', 'The System user cannot own timers.');
+        }
+        
         $timer = Timer::create([
             'user_id' => $request->user_id ?? auth()->id(),
             'purpose' => 'task_tracking',

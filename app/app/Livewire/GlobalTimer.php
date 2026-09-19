@@ -88,6 +88,7 @@ class GlobalTimer extends Component
         }
 
         // Start this timer
+        if ($this->isSystemUser()) return;
         $now = floor(microtime(true) * 1000);
         $timer->update([
             'is_running' => true,
@@ -164,7 +165,9 @@ class GlobalTimer extends Component
     #[\Livewire\Attributes\On('force-new-timer')]
     public function forceStartNewTimer()
     {
+        if ($this->isSystemUser()) return;
         
+        if ($this->isSystemUser()) return;
         $now = floor(microtime(true) * 1000);
         
         $otherRunningTimers = Timer::where('user_id', auth()->id())->where('is_running', true)->get();

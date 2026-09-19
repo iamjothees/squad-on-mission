@@ -6,18 +6,9 @@
                 <h1 class="font-bold text-gray-800 dark:text-white text-lg">Unassigned Timers</h1>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Review your global focus sessions and assign them to specific projects or tasks.</p>
             </div>
-            <form action="{{ route('timers.store') }}" method="POST" class="flex items-center gap-2">
-                @csrf
-                <select name="user_id" class="h-9 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}" {{ auth()->id() == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 bg-indigo-600 text-white hover:bg-indigo-700 h-9 px-4 py-2 gap-2 shadow-sm">
-                    <x-lucide-plus class="w-4 h-4" />
-                    Create Manual Timer
-                </button>
-            </form>
+            <x-modals.manual-timer class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 bg-indigo-600 text-white hover:bg-indigo-700 h-9 px-4 py-2 gap-2 shadow-sm">
+                Create Manual Timer
+            </x-modals.manual-timer>
         </div>
 
         @if (session('success'))
