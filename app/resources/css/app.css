@@ -143,7 +143,7 @@
 
 
 /* --- MULTI-SELECT ITEM OVERRIDES --- */
-.ts-wrapper.multi .ts-control > div.item {
+.ts-wrapper.multi .ts-control > div[data-value] {
     background-color: #f3f4f6 !important; /* bg-gray-100 */
     color: #374151 !important; /* text-gray-700 */
     border: 1px solid #e5e7eb !important; /* border-gray-200 */
@@ -157,7 +157,7 @@
 }
 
 /* Remove button inside multi-select pill */
-.ts-wrapper.multi .ts-control > div.item .remove {
+.ts-wrapper.multi .ts-control > div[data-value] .remove {
     color: #6b7280 !important; /* text-gray-500 */
     border-left: 1px solid #d1d5db !important; /* border-gray-300 */
     padding-left: 0.25rem !important;
@@ -167,24 +167,24 @@
     justify-content: center !important;
 }
 
-.ts-wrapper.multi .ts-control > div.item .remove:hover {
+.ts-wrapper.multi .ts-control > div[data-value] .remove:hover {
     color: #111827 !important; /* text-gray-900 */
     background: transparent !important;
 }
 
 @media (prefers-color-scheme: dark) {
-    .ts-wrapper.multi .ts-control > div.item {
+    .ts-wrapper.multi .ts-control > div[data-value] {
         background-color: #1f2937 !important; /* bg-gray-800 */
         color: #d1d5db !important; /* text-gray-300 */
         border: 1px solid #374151 !important; /* border-gray-700 */
     }
     
-    .ts-wrapper.multi .ts-control > div.item .remove {
+    .ts-wrapper.multi .ts-control > div[data-value] .remove {
         color: #9ca3af !important; /* text-gray-400 */
         border-left: 1px solid #4b5563 !important; /* border-gray-600 */
     }
     
-    .ts-wrapper.multi .ts-control > div.item .remove:hover {
+    .ts-wrapper.multi .ts-control > div[data-value] .remove:hover {
         color: #f3f4f6 !important; /* text-gray-100 */
     }
 }

@@ -57,16 +57,8 @@
                 </div>
             </div>
             
-            @if(session('success'))
-                <div class="mt-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-2.5 rounded-md text-sm font-medium">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-2.5 rounded-md text-sm font-medium">
-                    {{ session('error') }}
-                </div>
-            @endif
+            
+            
         </div>
 
         <div class="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-950 p-5">
