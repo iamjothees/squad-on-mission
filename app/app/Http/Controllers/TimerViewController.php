@@ -197,6 +197,7 @@ class TimerViewController extends Controller
         ]);
         
         $timer = Timer::create([
+            'user_id' => 1,
             'purpose' => 'task_tracking',
             'is_running' => false,
             'accumulated_seconds' => 0,
