@@ -38,4 +38,9 @@ class Timer extends Model
     {
         return $this->hasMany(TimerLog::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

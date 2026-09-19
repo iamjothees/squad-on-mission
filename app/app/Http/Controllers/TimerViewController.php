@@ -11,15 +11,16 @@ class TimerViewController extends Controller
 {
     public function unassigned()
     {
-        $timers = Timer::whereNull('timerable_type')
+        $timers = Timer::where('user_id', auth()->id())->whereNull('timerable_type')
             ->whereNull('timerable_id')
             ->latest('updated_at')
             ->get();
             
         $projects = Project::orderBy('name')->get();
         $tasks = Task::orderBy('title')->get();
+        $users = \App\Models\User::orderBy('name')->get();
 
-        return view('timers.unassigned', compact('timers', 'projects', 'tasks'));
+        return view('timers.unassigned', compact('timers', 'projects', 'tasks', 'users'));
     }
 
     public function show(Timer $timer)
@@ -30,6 +31,7 @@ class TimerViewController extends Controller
 
         $projects = Project::orderBy('name')->get();
         $tasks = Task::orderBy('title')->get();
+        $users = \App\Models\User::orderBy('name')->get();
 
         return view('timers.show', compact('timer', 'projects', 'tasks'));
     }
@@ -192,12 +194,13 @@ class TimerViewController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_id' => 'nullable|exists:users,id',
             'timerable_type' => 'nullable|string',
             'timerable_id' => 'nullable|integer',
         ]);
         
         $timer = Timer::create([
-            'user_id' => 1,
+            'user_id' => $request->user_id ?? auth()->id(),
             'purpose' => 'task_tracking',
             'is_running' => false,
             'accumulated_seconds' => 0,

@@ -13,11 +13,11 @@ class GlobalTimer extends Component
     public function mount()
     {
         // For demonstration, fetch the very first timer or create a dummy one
-        $timer = Timer::where('is_running', true)->whereNull('completed_at')->latest('updated_at')->first() ?? Timer::whereNull('completed_at')->latest('updated_at')->first();
+        $timer = Timer::where('user_id', auth()->id())->where('is_running', true)->whereNull('completed_at')->latest('updated_at')->first() ?? Timer::where('user_id', auth()->id())->whereNull('completed_at')->latest('updated_at')->first();
         
         if (!$timer) {
             $timer = Timer::create([
-                'user_id' => 1,
+                'user_id' => auth()->id(),
                 'timerable_type' => null,
                 'timerable_id' => null,
                 'purpose' => 'global_focus',
@@ -39,14 +39,14 @@ class GlobalTimer extends Component
     public function startTimerFor($type, $id)
     {
         // Find or create timer for entity
-        $timer = Timer::where('timerable_type', $type)
+        $timer = Timer::where('user_id', auth()->id())->where('timerable_type', $type)
             ->where('timerable_id', $id)
             ->whereNull('completed_at')
             ->first();
             
         if (!$timer) {
             $timer = Timer::create([
-                'user_id' => 1,
+                'user_id' => auth()->id(),
                 'timerable_type' => $type,
                 'timerable_id' => $id,
                 'purpose' => 'task_tracking',
@@ -140,7 +140,7 @@ class GlobalTimer extends Component
 
         // Restart with a fresh global dummy timer so the UI resets (PAUSED)
         $newTimer = Timer::create([
-            'user_id' => 1,
+            'user_id' => auth()->id(),
             'timerable_type' => null,
             'timerable_id' => null,
             'purpose' => 'global_focus',
@@ -167,7 +167,7 @@ class GlobalTimer extends Component
         
         $now = floor(microtime(true) * 1000);
         
-        $otherRunningTimers = Timer::where('is_running', true)->get();
+        $otherRunningTimers = Timer::where('user_id', auth()->id())->where('is_running', true)->get();
         foreach ($otherRunningTimers as $otherTimer) {
             $elapsed = $otherTimer->last_started_at ? floor((floor(microtime(true) * 1000) - $otherTimer->last_started_at) / 1000) : 0;
             $newSeconds = $otherTimer->accumulated_seconds + $elapsed;
@@ -187,7 +187,7 @@ class GlobalTimer extends Component
         }
 
         $newTimer = Timer::create([
-            'user_id' => 1,
+            'user_id' => auth()->id(),
             'timerable_type' => null,
             'timerable_id' => null,
             'purpose' => 'global_focus',

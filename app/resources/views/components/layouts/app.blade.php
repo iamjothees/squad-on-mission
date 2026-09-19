@@ -87,9 +87,12 @@
                         <span class="font-semibold text-gray-800 dark:text-white text-sm tracking-wide">{{ $title ?? 'Dashboard' }}</span>
                     </div>
                     <div class="flex items-center space-x-4 text-sm">
-                        <span class="text-gray-600 dark:text-gray-400 font-medium">user@example.com</span>
+                        <span class="text-gray-600 dark:text-gray-400 font-medium">{{ auth()->user()->name ?? 'Guest' }}</span>
                         <div class="h-5 w-px bg-gray-300 dark:bg-gray-700"></div>
-                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:underline focus:outline-none transition-colors">Logout</a>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:underline focus:outline-none transition-colors">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
