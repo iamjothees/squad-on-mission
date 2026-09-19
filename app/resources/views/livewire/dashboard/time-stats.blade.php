@@ -6,7 +6,7 @@
     
     <div class="space-y-4">
         <div>
-            <div class="text-3xl font-bold text-gray-900 dark:text-white font-mono">{{ gmdate("H:i:s", $todaySeconds) }}</div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white font-mono">{{ sprintf('%02d:%02d:%02d', floor($todaySeconds / 3600), floor(($todaySeconds % 3600) / 60), $todaySeconds % 60) }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">Today</div>
         </div>
         <div class="pt-4 border-t border-gray-100 dark:border-gray-800">

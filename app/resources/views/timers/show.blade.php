@@ -17,7 +17,7 @@
                                 : 0;
                             $totalSeconds = $timer->accumulated_seconds + $elapsed;
                         @endphp
-                        {{ gmdate("H:i:s", $totalSeconds) }}</p>
+                        {{ sprintf('%02d:%02d:%02d', floor($totalSeconds / 3600), floor(($totalSeconds % 3600) / 60), $totalSeconds % 60) }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -91,12 +91,12 @@
                                 </td>
                                 <td class="px-4 py-2.5 text-right font-mono text-gray-800 dark:text-gray-200">
                                     @if($log->stopped_at)
-                                        {{ gmdate("H:i:s", $log->duration_seconds) }}
+                                        {{ sprintf('%02d:%02d:%02d', floor($log->duration_seconds / 3600), floor(($log->duration_seconds % 3600) / 60), $log->duration_seconds % 60) }}
                                     @else
                                         @php
                                             $logElapsed = floor((floor(microtime(true) * 1000) - $log->started_at) / 1000);
                                         @endphp
-                                        {{ gmdate("H:i:s", $logElapsed) }}
+                                        {{ sprintf('%02d:%02d:%02d', floor($logElapsed / 3600), floor(($logElapsed % 3600) / 60), $logElapsed % 60) }}
                                     @endif
                                 </td>
                             </tr>

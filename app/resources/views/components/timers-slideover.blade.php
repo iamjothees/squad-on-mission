@@ -7,12 +7,18 @@
         $elapsed = $t->is_running && $t->last_started_at ? floor((floor(microtime(true) * 1000) - $t->last_started_at) / 1000) : 0;
         $totalSeconds += $t->accumulated_seconds + $elapsed;
     }
+    $formatDuration = function($seconds) {
+        $h = floor($seconds / 3600);
+        $m = floor(($seconds % 3600) / 60);
+        $s = $seconds % 60;
+        return sprintf('%02d:%02d:%02d', $h, $m, $s);
+    };
 @endphp
 
 <div x-data="{ openTimers: false }" class="inline-block">
     <button @click="openTimers = true" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
         <x-lucide-clock class="w-4 h-4" />
-        <span>{{ gmdate("H:i:s", $totalSeconds) }} Logged</span>
+        <span>{{ $formatDuration($totalSeconds) }} Logged</span>
     </button>
 
     <!-- Slide-over -->
@@ -50,7 +56,7 @@
                         <div class="px-4 py-6 sm:px-6 bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
                             <div>
                                 <h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100" id="slide-over-title">Time Logs</h2>
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Total: {{ gmdate("H:i:s", $totalSeconds) }}</p>
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Total: {{ $formatDuration($totalSeconds) }}</p>
                             </div>
                             <button type="button" @click="openTimers = false" class="rounded-md bg-gray-50 dark:bg-gray-950 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                 <span class="sr-only">Close panel</span>
@@ -83,7 +89,7 @@
                                         </div>
                                     </div>
                                     <div class="font-mono text-lg text-gray-800 dark:text-gray-200 font-bold">
-                                        {{ gmdate("H:i:s", $tSec) }}
+                                        {{ $formatDuration($tSec) }}
                                     </div>
                                 </div>
                             @empty
