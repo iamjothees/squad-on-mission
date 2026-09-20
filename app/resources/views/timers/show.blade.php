@@ -8,9 +8,10 @@
                         @if($timer->timerables->count() > 0)
                             <span class="text-indigo-600 dark:text-indigo-400 flex gap-2 flex-wrap items-center">
                                 @foreach($timer->timerables as $entity)
-                                    <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-xs">
+                                    <a href="{{ route(strtolower(class_basename($entity)).'s.show', $entity) }}" target="_blank" class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-100 dark:border-indigo-800 hover:border-indigo-200 dark:hover:border-indigo-700 text-xs transition-colors cursor-pointer inline-flex items-center gap-1">
                                         {{ class_basename($entity) }}: {{ $entity->title ?? $entity->name ?? 'Entity' }}
-                                    </span>
+                                        <x-lucide-external-link class="w-3 h-3 opacity-50" />
+                                    </a>
                                 @endforeach
                             </span>
                         @else
