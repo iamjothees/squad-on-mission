@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
 
 // Clients
     Route::resource('clients', ClientController::class);
+    Route::resource('users', \App\Http\Controllers\UserController::class);
 
 // Projects
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
