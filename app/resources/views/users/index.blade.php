@@ -32,14 +32,14 @@
                                     <div class="flex items-center justify-end gap-1">
                                         @if($u->id !== 1)
                                         <a href="{{ route('users.edit', $u) }}" wire:navigate class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="Edit">
-                                            <x-lucide-pencil class="w-4 h-4">
+                                            <x-lucide-pencil class="w-4 h-4" />
                                         </a>
                                         @if($u->id !== auth()->id())
                                         <form action="{{ route('users.destroy', $u) }}" method="POST" class="inline m-0 p-0" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors" title="Delete">
-                                                <x-lucide-trash-2 class="w-4 h-4">
+                                                <x-lucide-trash-2 class="w-4 h-4" />
                                             </button>
                                         </form>
                                         @endif
