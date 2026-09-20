@@ -54,6 +54,9 @@
                     @else
                         <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">Stopped</span>
                     @endif
+                    @if($timer->timerables->count() > 1)
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Shared</span>
+                    @endif
                 </div>
             </div>
             

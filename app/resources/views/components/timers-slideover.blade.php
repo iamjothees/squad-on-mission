@@ -3,18 +3,34 @@
 @php
     $timers = $model->getAllTimers();
     $totalSeconds = 0;
+    $ownSeconds = 0;
+    $sharedSeconds = 0;
     foreach($timers as $t) {
         $elapsed = $t->is_running && $t->last_started_at ? floor((floor(microtime(true) * 1000) - $t->last_started_at) / 1000) : 0;
-        $totalSeconds += $t->accumulated_seconds + $elapsed;
+        $tSec = $t->accumulated_seconds + $elapsed;
+        $totalSeconds += $tSec;
+        
+        $isShared = $t->timerables->count() > 1;
+        if ($isShared) {
+            $sharedSeconds += $tSec;
+        } else {
+            $ownSeconds += $tSec;
+        }
     }
-    
 @endphp
 
 <div x-data="{ openTimers: false }" class="inline-block">
-    <button @click="openTimers = true" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
-        <x-lucide-clock class="w-4 h-4" />
-        <span>{{ \App\Support\TimeHelper::formatDuration($totalSeconds) }} Logged</span>
-    </button>
+    <div class="relative group inline-block">
+        <button @click="openTimers = true" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
+            <x-lucide-clock class="w-4 h-4" />
+            <span>{{ \App\Support\TimeHelper::formatDuration($totalSeconds) }} Logged</span>
+        </button>
+        <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs px-2 py-1.5 rounded shadow-lg">
+            <div class="font-medium">Own Time: {{ \App\Support\TimeHelper::formatDuration($ownSeconds) }}</div>
+            <div class="font-medium mt-0.5">Shared Time: {{ \App\Support\TimeHelper::formatDuration($sharedSeconds) }}</div>
+            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-gray-100 rotate-45"></div>
+        </div>
+    </div>
 
     <!-- Slide-over -->
     <div x-show="openTimers" 
@@ -83,6 +99,9 @@
                                                 <span class="inline-flex items-center py-0.5 px-2 rounded-md text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">Completed</span>
                                             @else
                                                 <span class="inline-flex items-center py-0.5 px-2 rounded-md text-[10px] font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">Paused</span>
+                                            @endif
+                                            @if($timer->timerables->count() > 1)
+                                                <span class="inline-flex items-center py-0.5 px-2 rounded-md text-[10px] font-semibold bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Shared</span>
                                             @endif
                                         </div>
                                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">

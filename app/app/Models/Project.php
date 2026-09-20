@@ -24,7 +24,7 @@ class Project extends Model
             $q->where('id', $this->id);
         })->orWhereHas('tasks', function($q) use ($taskIds) {
             $q->whereIn('id', $taskIds);
-        })->latest('updated_at')->get();
+        })->with(['tasks', 'projects', 'clients'])->latest('updated_at')->get();
     }
     public function getRouteKeyName() { return 'key'; }
 }

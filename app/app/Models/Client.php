@@ -24,7 +24,7 @@ class Client extends Model
             $q->whereIn('id', $taskIds);
         })->orWhereHas('clients', function($q) {
             $q->where('id', $this->id); // Include direct client timers just in case
-        })->latest('updated_at')->get();
+        })->with(['tasks', 'projects', 'clients'])->latest('updated_at')->get();
     }
 
     public function timers() { return $this->morphToMany(Timer::class, 'timerable'); }

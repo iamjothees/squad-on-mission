@@ -18,7 +18,7 @@ class Task extends Model
         public function timers() { return $this->morphToMany(Timer::class, 'timerable'); }
     
     public function getAllTimers() {
-        return $this->timers()->latest('updated_at')->get();
+        return $this->timers()->with(['tasks', 'projects', 'clients'])->latest('updated_at')->get();
     }
     public function getRouteKeyName() { return 'key'; }
 }
