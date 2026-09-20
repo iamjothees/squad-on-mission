@@ -22,8 +22,8 @@
 
             <div class="space-y-4 rounded-md shadow-sm">
                 <div>
-                    <label for="email" class="sr-only">Email address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-t-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" value="{{ old('email') }}">
+                    <label for="username" class="sr-only">Username</label>
+                    <input id="username" name="username" type="text" autocomplete="username" required class="relative block w-full appearance-none rounded-t-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Username" value="{{ old('username') }}">
                 </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
@@ -52,7 +52,7 @@
                     @foreach(\App\Models\User::all() as $user)
                         <form action="{{ route('login.post') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="email" value="{{ $user->email }}">
+                            <input type="hidden" name="username" value="{{ $user->username }}">
                             <input type="hidden" name="password" value="password">
                             <button type="submit" class="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-50 dark:bg-gray-800/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
                                 Login as {{ $user->name }}

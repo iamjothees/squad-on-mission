@@ -60,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/timers/{timer}/assign', [\App\Http\Controllers\TimerViewController::class, 'assign'])->name('timers.assign');
     Route::post('/timers', [\App\Http\Controllers\TimerViewController::class, 'store'])->name('timers.store');
     Route::get('/timers/{timer}', [\App\Http\Controllers\TimerViewController::class, 'show'])->name('timers.show');
+    
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/timers/{timer}/logs/{log}', [\App\Http\Controllers\TimerViewController::class, 'updateLog'])->name('timers.logs.update');
     Route::post('/timers/{timer}/logs', [\App\Http\Controllers\TimerViewController::class, 'storeLog'])->name('timers.logs.store');
 

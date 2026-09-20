@@ -87,7 +87,7 @@
                         <span class="font-semibold text-gray-800 dark:text-white text-sm tracking-wide">{{ $title ?? 'Dashboard' }}</span>
                     </div>
                     <div class="flex items-center space-x-4 text-sm">
-                        <span class="text-gray-600 dark:text-gray-400 font-medium">{{ auth()->user()->name ?? 'Guest' }}</span>
+                        <a href="{{ route('profile.show') }}" class="text-gray-600 dark:text-gray-400 font-medium hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline transition-colors" title="Manage Profile">{{ auth()->user()->name ?? 'Guest' }}</a>
                         <div class="h-5 w-px bg-gray-300 dark:bg-gray-700"></div>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
