@@ -29,4 +29,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function timers()
+    {
+        return $this->hasMany(Timer::class);
+    }
 }

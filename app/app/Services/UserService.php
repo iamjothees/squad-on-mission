@@ -44,6 +44,10 @@ class UserService
             throw new \Exception('Cannot delete your own user account.');
         }
         
+        if (\App\Models\Timer::where('user_id', $user->id)->exists()) {
+            throw new \Exception('Cannot delete a user who has active or logged timers.');
+        }
+        
         $user->delete();
     }
 }
