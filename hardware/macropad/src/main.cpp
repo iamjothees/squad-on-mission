@@ -35,9 +35,31 @@ String taskName = "Ready";
 long elapsedSeconds = 0;
 unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
+bool isPaired = false;
 const unsigned long SYNC_INTERVAL = 10000; // 10 seconds
 
+void showPairingScreen() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("WIFI CONNECTED");
+  display.setCursor(0, 20);
+  display.println("Waiting for setup...");
+  display.setCursor(0, 35);
+  display.println("Enter code in Profile:");
+  display.setTextSize(2);
+  display.setCursor(20, 50);
+  display.println(apiToken);
+  display.display();
+}
+
 void updateDisplay() {
+  if (!isPaired) {
+    showPairingScreen();
+    return;
+  }
+
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
@@ -84,6 +106,7 @@ void syncWithServer() {
   
   int httpCode = http.GET();
   if (httpCode == 200) {
+    isPaired = true; // Successfully authenticated!
     String payload = http.getString();
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, payload);
@@ -98,8 +121,12 @@ void syncWithServer() {
       taskName = "Parse Failed";
     }
   } else if (httpCode > 0) {
-    currentStatus = "HTTP " + String(httpCode);
-    taskName = "Server Error";
+    if (httpCode == 401) {
+      isPaired = false;
+    } else {
+      currentStatus = "HTTP " + String(httpCode);
+      taskName = "Server Error";
+    }
   } else {
     currentStatus = "NET ERR";
     taskName = "Unreachable";
@@ -142,8 +169,12 @@ void sendPostAction(String action) {
       }
     }
   } else if (httpCode > 0) {
-    currentStatus = "HTTP " + String(httpCode);
-    taskName = "Server Error";
+    if (httpCode == 401) {
+      isPaired = false;
+    } else {
+      currentStatus = "HTTP " + String(httpCode);
+      taskName = "Server Error";
+    }
   } else {
     currentStatus = "NET ERR";
     taskName = "Unreachable";
@@ -155,10 +186,12 @@ void sendPostAction(String action) {
 }
 
 void onBtn1Click() {
+  if (!isPaired) return;
   sendPostAction("/timer/toggle");
 }
 
 void onBtn1LongPress() {
+  if (!isPaired) return;
   sendPostAction("/timer/stop");
 }
 
@@ -205,17 +238,7 @@ void setup() {
     preferences.putString("code", apiToken);
   }
   
-  display.clearDisplay();
-  display.setCursor(0, 10);
-  display.println("WIFI CONNECTED");
-  display.setCursor(0, 30);
-  display.println("Pairing Code:");
-  display.setTextSize(2);
-  display.setCursor(0, 45);
-  display.println(apiToken);
-  display.display();
-  delay(5000); // Show code for 5 seconds on boot
-  display.setTextSize(1);
+  showPairingScreen();
 
   btn1.attachClick(onBtn1Click);
   btn1.attachLongPressStart(onBtn1LongPress);
@@ -236,7 +259,8 @@ void loop() {
     }
   }
 
-  if (millis() - lastSyncTime >= SYNC_INTERVAL) {
+  unsigned long currentInterval = isPaired ? SYNC_INTERVAL : 5000; // Poll every 5s while pairing
+  if (millis() - lastSyncTime >= currentInterval) {
     syncWithServer();
   }
 }
