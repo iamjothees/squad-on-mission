@@ -47,6 +47,9 @@ class PasswordResetController extends Controller
             'email', 'password', 'password_confirmation', 'token'
         ), function ($user, $password) {
             $user->password = Hash::make($password);
+            if (is_null($user->email_verified_at)) {
+                $user->email_verified_at = now();
+            }
             $user->save();
             event(new PasswordReset($user));
         });

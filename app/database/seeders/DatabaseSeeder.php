@@ -13,22 +13,25 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'System',
             'username' => 'system',
-            'email' => 'system@squadonmission.local',
-            'password' => bcrypt('password'),
+            'email' => env('SYSTEM_EMAIL', 'connect@squadonmission.local'),
+            'password' => null,
+            'email_verified_at' => null,
         ]);
 
         User::factory()->create([
             'name' => 'Joe',
             'username' => 'joe',
-            'email' => 'joe@squadonmission.local',
-            'password' => bcrypt('password'),
+            'email' => 'iamjothees@gmail.com',
+            'password' => null,
+            'email_verified_at' => null,
         ]);
 
         User::factory()->create([
             'name' => 'Gowtham',
             'username' => 'gowtham',
-            'email' => 'gowtham@squadonmission.local',
-            'password' => bcrypt('password'),
+            'email' => 'gowthamsubramanian1881@gmail.com',
+            'password' => null,
+            'email_verified_at' => null,
         ]);
 
         // Seed SELF client

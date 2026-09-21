@@ -10,6 +10,9 @@
     <div class="max-w-md w-full space-y-8 bg-white dark:bg-gray-900 p-8 rounded-xl shadow border border-gray-200 dark:border-gray-800">
         <div>
             <h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Sign in to your account</h2>
+            <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                If you were just invited, enter your username and leave the password blank to set up your account.
+            </p>
         </div>
         <form class="mt-8 space-y-6" action="{{ route('login.post') }}" method="POST">
             @csrf
@@ -27,7 +30,7 @@
                 </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-b-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password">
+                    <input id="password" name="password" type="password" autocomplete="current-password" class="relative block w-full appearance-none rounded-b-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password">
                 </div>
             </div>
 
