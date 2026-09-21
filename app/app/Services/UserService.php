@@ -19,7 +19,9 @@ class UserService
             $data['password'] = Hash::make($data['password']);
         }
         
-        return User::create($data);
+        $user = User::create($data);
+        event(new \Illuminate\Auth\Events\Registered($user));
+        return $user;
     }
 
     public function updateUser(User $user, array $data): User
