@@ -180,9 +180,18 @@ void setup() {
   display.print("Connecting WiFi...");
   display.display();
 
+  // Explicitly set to Station mode and clear old states for faster connection
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  
+  // Add a timeout just in case it hangs forever
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && attempts < 20) {
     delay(500);
+    attempts++;
   }
 
   // Generate pairing code if not exists
