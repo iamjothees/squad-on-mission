@@ -16,8 +16,8 @@ const char* apiUrl = API_URL;
 const char* apiToken = API_TOKEN;
 
 // --- Pins ---
-#define BUTTON_1_PIN 12 // Start/Pause/Stop
-#define BUTTON_2_PIN 14 // Cycle
+#define BUTTON_1_PIN 4 // Start/Pause/Stop
+#define BUTTON_2_PIN 5 // Cycle
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
@@ -117,7 +117,7 @@ void sendPostAction(String action) {
     JsonDocument doc;
     deserializeJson(doc, payload);
     
-    if (doc.containsKey("elapsed")) {
+    if (!doc["elapsed"].isNull()) {
       elapsedSeconds = doc["elapsed"];
       currentStatus = doc["status"].as<String>();
       if (currentStatus == "IDLE") {
