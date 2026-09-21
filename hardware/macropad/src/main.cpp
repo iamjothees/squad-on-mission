@@ -83,12 +83,17 @@ void syncWithServer() {
   if (httpCode > 0) {
     String payload = http.getString();
     JsonDocument doc;
-    deserializeJson(doc, payload);
+    DeserializationError error = deserializeJson(doc, payload);
     
-    isActive = doc["active"];
-    currentStatus = doc["status"].as<String>();
-    taskName = doc["task_name"].as<String>();
-    elapsedSeconds = doc["elapsed"];
+    if (!error) {
+      isActive = doc["active"];
+      currentStatus = doc["status"].as<String>();
+      taskName = doc["task_name"].as<String>();
+      elapsedSeconds = doc["elapsed"];
+    } else {
+      currentStatus = "API ERR";
+      taskName = "Server returned 500";
+    }
   }
   http.end();
   
@@ -115,9 +120,9 @@ void sendPostAction(String action) {
   if (httpCode > 0) {
     String payload = http.getString();
     JsonDocument doc;
-    deserializeJson(doc, payload);
+    DeserializationError error = deserializeJson(doc, payload);
     
-    if (!doc["elapsed"].isNull()) {
+    if (!error && !doc["elapsed"].isNull()) {
       elapsedSeconds = doc["elapsed"];
       currentStatus = doc["status"].as<String>();
       if (currentStatus == "IDLE") {

@@ -35,7 +35,7 @@ class DeviceController extends Controller
             'active' => true,
             'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
             'task_name' => $timer->purpose ?? 'General Timer',
-            'elapsed' => $timer->getElapsedSecondsAttribute()
+            'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? (now()->timestamp - $timer->last_started_at) : 0)
         ]);
     }
 
@@ -61,13 +61,13 @@ class DeviceController extends Controller
 
         if ($timer->is_running) {
             // Pause it
-            $timer->accumulated_seconds += now()->diffInSeconds($timer->last_started_at);
+            $timer->accumulated_seconds += (now()->timestamp - $timer->last_started_at);
             $timer->is_running = false;
             $timer->save();
             return response()->json(['status' => 'PAUSED', 'elapsed' => $timer->accumulated_seconds]);
         } else {
             // Resume it
-            $timer->last_started_at = now();
+            $timer->last_started_at = now()->timestamp;
             $timer->is_running = true;
             $timer->save();
             return response()->json(['status' => 'RUNNING', 'elapsed' => $timer->accumulated_seconds]);
@@ -83,7 +83,7 @@ class DeviceController extends Controller
 
         if ($timer) {
             if ($timer->is_running) {
-                $timer->accumulated_seconds += now()->diffInSeconds($timer->last_started_at);
+                $timer->accumulated_seconds += (now()->timestamp - $timer->last_started_at);
             }
             $timer->is_running = false;
             $timer->completed_at = now();
