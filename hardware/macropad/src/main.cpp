@@ -80,7 +80,7 @@ void syncWithServer() {
   http.addHeader("Authorization", String("Bearer ") + apiToken);
   
   int httpCode = http.GET();
-  if (httpCode > 0) {
+  if (httpCode == 200) {
     String payload = http.getString();
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, payload);
@@ -91,9 +91,15 @@ void syncWithServer() {
       taskName = doc["task_name"].as<String>();
       elapsedSeconds = doc["elapsed"];
     } else {
-      currentStatus = "API ERR";
-      taskName = "Server returned 500";
+      currentStatus = "JSON ERR";
+      taskName = "Parse Failed";
     }
+  } else if (httpCode > 0) {
+    currentStatus = "HTTP " + String(httpCode);
+    taskName = "Server Error";
+  } else {
+    currentStatus = "NET ERR";
+    taskName = "Unreachable";
   }
   http.end();
   
@@ -117,7 +123,7 @@ void sendPostAction(String action) {
   http.addHeader("Content-Length", "0");
   
   int httpCode = http.POST("");
-  if (httpCode > 0) {
+  if (httpCode == 200) {
     String payload = http.getString();
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, payload);
@@ -132,6 +138,12 @@ void sendPostAction(String action) {
           isActive = true;
       }
     }
+  } else if (httpCode > 0) {
+    currentStatus = "HTTP " + String(httpCode);
+    taskName = "Server Error";
+  } else {
+    currentStatus = "NET ERR";
+    taskName = "Unreachable";
   }
   http.end();
   lastSyncTime = millis();
