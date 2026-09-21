@@ -6,6 +6,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <OneButton.h>
+#include <Preferences.h>
 
 #include "secrets.h"
 
@@ -13,7 +14,9 @@
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWORD;
 const char* apiUrl = API_URL;
-const char* apiToken = API_TOKEN;
+// apiToken is now dynamically generated and read from Preferences
+String apiToken = "";
+Preferences preferences;
 
 // --- Pins ---
 #define BUTTON_1_PIN 4 // Start/Pause/Stop
@@ -181,6 +184,29 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
+
+  // Generate pairing code if not exists
+  preferences.begin("macropad", false);
+  apiToken = preferences.getString("code", "");
+  if (apiToken == "") {
+    const char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for(int i=0; i<6; i++) {
+       apiToken += charset[random(0, 36)];
+    }
+    preferences.putString("code", apiToken);
+  }
+  
+  display.clearDisplay();
+  display.setCursor(0, 10);
+  display.println("WIFI CONNECTED");
+  display.setCursor(0, 30);
+  display.println("Pairing Code:");
+  display.setTextSize(2);
+  display.setCursor(0, 45);
+  display.println(apiToken);
+  display.display();
+  delay(5000); // Show code for 5 seconds on boot
+  display.setTextSize(1);
 
   btn1.attachClick(onBtn1Click);
   btn1.attachLongPressStart(onBtn1LongPress);

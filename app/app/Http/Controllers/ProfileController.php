@@ -23,6 +23,7 @@ class ProfileController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'current_password' => ['nullable', 'required_with:password', 'current_password'],
             'password' => ['nullable', 'confirmed', Password::defaults()],
+            'macropad_token' => ['nullable', 'string', 'max:20', 'unique:users,macropad_token,'.$user->id],
         ]);
 
         $user->name = $validated['name'];
@@ -32,6 +33,9 @@ class ProfileController extends Controller
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
+        
+        // Convert to uppercase for consistency
+        $user->macropad_token = !empty($validated['macropad_token']) ? strtoupper($validated['macropad_token']) : null;
 
         $user->save();
 

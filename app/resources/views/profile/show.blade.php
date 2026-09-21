@@ -65,6 +65,21 @@
                     </div>
                 </div>
 
+                <div class="pt-8 mt-8 border-t border-gray-200 dark:border-gray-800">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Hardware Integration</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure your physical Mission Control Macropad device.</p>
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-6">
+                            <label for="macropad_token" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Macropad Pairing Code</label>
+                            <input type="text" name="macropad_token" id="macropad_token" value="{{ old('macropad_token', $user->macropad_token) }}" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase" placeholder="e.g. A1B2C3">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter the 6-character code displayed on your Macropad when it connects to Wi-Fi.</p>
+                            @error('macropad_token')
+                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <div class="pt-5 flex justify-end">
                     <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900">
                         Save Changes

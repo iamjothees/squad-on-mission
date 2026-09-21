@@ -9,15 +9,14 @@ use Illuminate\Http\Request;
 
 class DeviceController extends Controller
 {
-    private function getUser()
+    private function getUser(Request $request)
     {
-        // For this single-device setup, we assume Joe (User ID 2) is the owner.
-        return User::find(2);
+        return User::find($request->_macropad_user_id);
     }
 
     public function status(Request $request)
     {
-        $user = $this->getUser();
+        $user = $this->getUser($request);
         $timer = Timer::where('user_id', $user->id)
             ->whereNull('completed_at')
             ->first();
@@ -41,7 +40,7 @@ class DeviceController extends Controller
 
     public function toggleTimer(Request $request)
     {
-        $user = $this->getUser();
+        $user = $this->getUser($request);
         $timer = Timer::where('user_id', $user->id)
             ->whereNull('completed_at')
             ->first();
@@ -76,7 +75,7 @@ class DeviceController extends Controller
 
     public function stopTimer(Request $request)
     {
-        $user = $this->getUser();
+        $user = $this->getUser($request);
         $timer = Timer::where('user_id', $user->id)
             ->whereNull('completed_at')
             ->first();
