@@ -15,6 +15,15 @@
                     <span class="text-gray-300 dark:text-gray-700">&bull;</span>
                     <x-lucide-mail class="w-4 h-4" />
                     {{ $user->email }}
+                    @if($user->email_verified_at)
+                        <span class="ml-1 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800/50" title="Verified on {{ $user->email_verified_at->format('M d, Y') }}">
+                            <x-lucide-check-circle class="w-3 h-3 mr-1" /> Verified
+                        </span>
+                    @else
+                        <span class="ml-1 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800/50" title="Unverified">
+                            <x-lucide-clock class="w-3 h-3 mr-1" /> Pending
+                        </span>
+                    @endif
                 </div>
             </div>
             

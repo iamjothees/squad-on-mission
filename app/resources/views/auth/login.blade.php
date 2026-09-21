@@ -61,7 +61,7 @@
                         <form action="{{ route('login.post') }}" method="POST">
                             @csrf
                             <input type="hidden" name="username" value="{{ $user->username }}">
-                            <input type="hidden" name="password" value="password">
+                            <input type="hidden" name="password" value="{{ env('DEV_LOGIN_PASSWORD', 'password') }}">
                             <button type="submit" class="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-50 dark:bg-gray-800/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
                                 Login as {{ $user->name }}
                             </button>

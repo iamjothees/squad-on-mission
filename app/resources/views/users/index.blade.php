@@ -27,7 +27,20 @@
                             <tr class="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-800 dark:text-gray-200 font-medium">{{ $u->name }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $u->username }}</td>
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $u->email }}</td>
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        {{ $u->email }}
+                                        @if($u->email_verified_at)
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800/50" title="Verified on {{ $u->email_verified_at->format('M d, Y') }}">
+                                                <x-lucide-check-circle class="w-3 h-3 mr-1" /> Verified
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800/50" title="Unverified">
+                                                <x-lucide-clock class="w-3 h-3 mr-1" /> Pending
+                                            </span>
+                                        @endif
+                                    </div>
+                                </td>
                                 <td class="px-4 py-2.5 text-right">
                                     <div class="flex items-center justify-end gap-1">
                                         @if($u->id !== 1)
