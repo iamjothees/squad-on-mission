@@ -36,6 +36,7 @@ long elapsedSeconds = 0;
 unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
 bool isPaired = false;
+String pairingStatus = "Polling API...";
 const unsigned long SYNC_INTERVAL = 10000; // 10 seconds
 
 void showPairingScreen() {
@@ -44,8 +45,8 @@ void showPairingScreen() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("WIFI CONNECTED");
-  display.setCursor(0, 20);
-  display.println("Waiting for setup...");
+  display.setCursor(0, 15);
+  display.println(pairingStatus);
   display.setCursor(0, 35);
   display.println("Enter code in Profile:");
   display.setTextSize(2);
@@ -104,7 +105,12 @@ void syncWithServer() {
   http.begin(url);
   http.addHeader("Authorization", String("Bearer ") + apiToken);
   
+  Serial.println("Syncing with API: " + url);
+  Serial.println("Token: Bearer " + apiToken);
+  
   int httpCode = http.GET();
+  Serial.println("HTTP Response Code: " + String(httpCode));
+  
   if (httpCode == 200) {
     isPaired = true; // Successfully authenticated!
     String payload = http.getString();
@@ -123,13 +129,17 @@ void syncWithServer() {
   } else if (httpCode > 0) {
     if (httpCode == 401) {
       isPaired = false;
+      pairingStatus = "Not Found (401)";
     } else {
       currentStatus = "HTTP " + String(httpCode);
       taskName = "Server Error";
+      pairingStatus = "HTTP ERR: " + String(httpCode);
     }
   } else {
     currentStatus = "NET ERR";
     taskName = "Unreachable";
+    pairingStatus = "Unreachable (Check IP)";
+    Serial.println("HTTP GET failed, error: " + http.errorToString(httpCode));
   }
   http.end();
   
@@ -171,13 +181,17 @@ void sendPostAction(String action) {
   } else if (httpCode > 0) {
     if (httpCode == 401) {
       isPaired = false;
+      pairingStatus = "Not Found (401)";
     } else {
       currentStatus = "HTTP " + String(httpCode);
       taskName = "Server Error";
+      pairingStatus = "HTTP ERR: " + String(httpCode);
     }
   } else {
     currentStatus = "NET ERR";
     taskName = "Unreachable";
+    pairingStatus = "Unreachable (Check IP)";
+    Serial.println("HTTP GET failed, error: " + http.errorToString(httpCode));
   }
   http.end();
   lastSyncTime = millis();
@@ -213,6 +227,8 @@ void setup() {
   display.print("Connecting WiFi...");
   display.display();
 
+  randomSeed(analogRead(0));
+  
   // Explicitly set to Station mode and clear old states for faster connection
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
