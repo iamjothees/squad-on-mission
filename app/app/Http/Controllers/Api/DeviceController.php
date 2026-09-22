@@ -34,7 +34,7 @@ class DeviceController extends Controller
             'active' => true,
             'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
             'task_name' => $timer->purpose ?? 'General Timer',
-            'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? (now()->timestamp - $timer->last_started_at) : 0)
+            'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) : 0)
         ]);
     }
 
@@ -51,7 +51,7 @@ class DeviceController extends Controller
                 'user_id' => $user->id,
                 'purpose' => 'Quick Task',
                 'is_running' => true,
-                'last_started_at' => now(),
+                'last_started_at' => floor(microtime(true) * 1000),
                 'accumulated_seconds' => 0,
             ]);
             
@@ -60,13 +60,13 @@ class DeviceController extends Controller
 
         if ($timer->is_running) {
             // Pause it
-            $timer->accumulated_seconds += (now()->timestamp - $timer->last_started_at);
+            $timer->accumulated_seconds += floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000);
             $timer->is_running = false;
             $timer->save();
             return response()->json(['status' => 'PAUSED', 'elapsed' => $timer->accumulated_seconds]);
         } else {
             // Resume it
-            $timer->last_started_at = now()->timestamp;
+            $timer->last_started_at = floor(microtime(true) * 1000);
             $timer->is_running = true;
             $timer->save();
             return response()->json(['status' => 'RUNNING', 'elapsed' => $timer->accumulated_seconds]);
@@ -82,7 +82,7 @@ class DeviceController extends Controller
 
         if ($timer) {
             if ($timer->is_running) {
-                $timer->accumulated_seconds += (now()->timestamp - $timer->last_started_at);
+                $timer->accumulated_seconds += floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000);
             }
             $timer->is_running = false;
             $timer->completed_at = now();
