@@ -21,6 +21,7 @@ class TimerPlayButton extends Component
 
     public function checkStatus()
     {
+        \Log::info('TimerPlayButton checkStatus fired!', ['task_id' => $this->task->id]);
         $entity = $this->type::find($this->id);
         if ($entity) {
             $timer = $entity->timers()
