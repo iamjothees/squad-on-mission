@@ -37,20 +37,36 @@ class GlobalTimer extends Component
     #[\Livewire\Attributes\On('start-timer')]
     public function startTimerFor($type, $id)
     {
-        // Find or create timer for entity
-        $timer = Timer::where('user_id', auth()->id())->where('timerable_type', $type)
-            ->where('timerable_id', $id)
-            ->whereNull('completed_at')
-            ->first();
+        // Find entity
+        $entity = $type::find($id);
+        if (!$entity) return;
+
+        // Find existing timer for this entity
+        $timer = $entity->timers()->where('user_id', auth()->id())->whereNull('completed_at')->first();
             
         if (!$timer) {
             $timer = Timer::create([
                 'user_id' => auth()->id(),
-
                 'purpose' => 'task_tracking',
                 'accumulated_seconds' => 0,
                 'is_running' => false,
             ]);
+            
+            // Attach to entity securely
+            try {
+                $timer->validateHierarchyAttachments($type, $id);
+                if ($type === \App\Models\Task::class) {
+                    $timer->tasks()->attach($id);
+                } elseif ($type === \App\Models\Project::class) {
+                    $timer->projects()->attach($id);
+                } elseif ($type === \App\Models\Client::class) {
+                    $timer->clients()->attach($id);
+                }
+            } catch (\Exception $e) {
+                $timer->delete();
+                session()->flash('error', $e->getMessage());
+                return;
+            }
         }
 
         // If THIS timer is already running, do nothing!
