@@ -7,6 +7,8 @@
 #include <Adafruit_SSD1306.h>
 #include <OneButton.h>
 #include <Preferences.h>
+#include <WebSocketsClient.h>
+
 
 #include "secrets.h"
 
@@ -17,6 +19,62 @@ const char* apiUrl = API_URL;
 // apiToken is now dynamically generated and read from Preferences
 String apiToken = "";
 Preferences preferences;
+
+
+// --- WebSockets ---
+WebSocketsClient webSocket;
+int userId = -1;
+bool needsSync = false;
+unsigned long lastPingTime = 0;
+bool wsConnected = false;
+
+void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
+    switch(type) {
+        case WStype_DISCONNECTED:
+            Serial.printf("[WSc] Disconnected!\n");
+            wsConnected = false;
+            break;
+        case WStype_CONNECTED:
+            Serial.printf("[WSc] Connected to url: %s\n", payload);
+            wsConnected = true;
+            // Subscribe to channel
+            if (userId > 0) {
+                String subMsg = "{\"event\":\"pusher:subscribe\",\"data\":{\"auth\":\"\",\"channel\":\"users." + String(userId) + "\"}}";
+                webSocket.sendTXT(subMsg);
+                Serial.println("[WSc] Subscribing: " + subMsg);
+            }
+            break;
+        case WStype_TEXT:
+            Serial.printf("[WSc] get text: %s\n", payload);
+            // If it is a TimerUpdated or TimerSwitched event, trigger a sync
+            if (strstr((char*)payload, "TimerUpdated") != NULL || strstr((char*)payload, "TimerSwitched") != NULL) {
+                needsSync = true;
+            }
+            break;
+        case WStype_BIN:
+        case WStype_PING:
+        case WStype_PONG:
+        case WStype_ERROR:
+        case WStype_FRAGMENT_TEXT_START:
+        case WStype_FRAGMENT_BIN_START:
+        case WStype_FRAGMENT:
+        case WStype_FRAGMENT_FIN:
+            break;
+    }
+}
+
+void setupWebSocket() {
+    String url = String(apiUrl);
+    int hostStart = url.indexOf("://") + 3;
+    int hostEnd = url.indexOf(":", hostStart);
+    if (hostEnd == -1) hostEnd = url.indexOf("/", hostStart);
+    String wsHost = url.substring(hostStart, hostEnd);
+    
+    Serial.println("WebSocket Host: " + wsHost);
+    webSocket.begin(wsHost, 8031, "/app/local?protocol=7&client=js&version=8.3.0&flash=false");
+    webSocket.onEvent(webSocketEvent);
+    webSocket.setReconnectInterval(5000);
+}
 
 // --- Pins ---
 #define BUTTON_1_PIN 4 // Start/Pause/Stop
@@ -39,7 +97,7 @@ unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
 bool isPaired = false;
 String pairingStatus = "Polling API...";
-const unsigned long SYNC_INTERVAL = 10000; // 10 seconds
+const unsigned long SYNC_INTERVAL = 3600000; // 1 hour (relying on WebSockets now)
 
 void showPairingScreen() {
   display.clearDisplay();
@@ -143,6 +201,10 @@ void syncWithServer() {
       if (!doc["work_hours_per_day"].isNull()) {
         workHoursPerDay = doc["work_hours_per_day"];
       }
+      if (!doc["user_id"].isNull() && userId == -1) {
+          userId = doc["user_id"];
+          setupWebSocket();
+      }
     } else {
       currentStatus = "JSON ERR";
       taskName = "Parse Failed";
@@ -195,6 +257,10 @@ void sendPostAction(String action) {
       hasMultiple = doc["has_multiple"] | false;
       if (!doc["work_hours_per_day"].isNull()) {
         workHoursPerDay = doc["work_hours_per_day"];
+      }
+      if (!doc["user_id"].isNull() && userId == -1) {
+          userId = doc["user_id"];
+          setupWebSocket();
       }
       if (currentStatus == "IDLE") {
           isActive = false;
@@ -291,6 +357,21 @@ void setup() {
 void loop() {
   btn1.tick();
   btn2.tick();
+  
+  if (userId > 0) {
+      webSocket.loop();
+  }
+  
+  if (needsSync) {
+      needsSync = false;
+      syncWithServer();
+  }
+  
+  // Reverb requires ping every 30s
+  if (wsConnected && millis() - lastPingTime > 25000) {
+      webSocket.sendTXT("{\"event\":\"pusher:ping\",\"data\":{}}");
+      lastPingTime = millis();
+  }
 
   if (isActive && currentStatus == "RUNNING") {
     if (millis() - lastTickTime >= 1000) {

@@ -25,6 +25,7 @@ class DeviceController extends Controller
 
         if (!$timer) {
             return response()->json([
+                'user_id' => $user->id,
                 'active' => false,
                 'status' => 'IDLE',
                 'task_name' => 'No active timer',
@@ -45,6 +46,7 @@ class DeviceController extends Controller
         }
 
         return response()->json([
+            'user_id' => $user->id,
             'active' => true,
             'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
             'task_name' => $entityName,
