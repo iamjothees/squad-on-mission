@@ -1,13 +1,12 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <OneButton.h>
-
 #include "secrets.h"
 #include "core/TimerState.h"
 #include "services/AuthService.h"
 #include "services/WifiService.h"
 #include "services/ApiService.h"
 #include "ui/DisplayManager.h"
+#include "hardware/ButtonManager.h"
 
 // --- Pins ---
 #define BUTTON_1_PIN 4
@@ -19,9 +18,7 @@ AuthService auth;
 WifiService wifi;
 ApiService api;
 DisplayManager display;
-
-OneButton btn1(BUTTON_1_PIN, true);
-OneButton btn2(BUTTON_2_PIN, true);
+ButtonManager buttons(BUTTON_1_PIN, BUTTON_2_PIN);
 
 bool needsSync = false;
 unsigned long lastSyncTime = 0;
@@ -30,6 +27,10 @@ const unsigned long SYNC_INTERVAL = 3600000; // 1 hour
 
 void requestSync() {
     needsSync = true;
+}
+
+void globalWsEvent(WStype_t type, uint8_t * payload, size_t length) {
+    api.handleWebSocketEvent(type, payload, length, state.userId);
 }
 
 void performSync() {
@@ -82,18 +83,15 @@ void setup() {
         display.showPairingScreen(auth.getToken(), "WiFi Failed");
     }
 
-    api.begin(API_URL, auth.getToken(), requestSync);
+    api.begin(API_URL, auth.getToken(), requestSync, globalWsEvent);
 
-    btn1.attachClick(onBtn1Click);
-    btn1.attachLongPressStart(onBtn1LongPress);
-    btn2.attachClick(onBtn2Click);
+    buttons.begin(onBtn1Click, onBtn1LongPress, onBtn2Click);
 
     performSync();
 }
 
 void loop() {
-    btn1.tick();
-    btn2.tick();
+    buttons.tick();
 
     if (state.userId > 0) {
         api.tick();

@@ -15,13 +15,16 @@ private:
     std::function<void()> onSyncRequested;
 
 public:
-    void begin(const char* url, const String& token, std::function<void()> syncCallback) {
+    std::function<void(WStype_t, uint8_t *, size_t)> wsCb;
+    
+    void begin(const char* url, const String& token, std::function<void()> syncCallback, std::function<void(WStype_t, uint8_t *, size_t)> wsCallback) {
         apiUrl = url;
         apiToken = token;
         onSyncRequested = syncCallback;
+        wsCb = wsCallback;
     }
 
-    void setupWebSocket(int userId) {
+    void setupWebSocket(int userId, std::function<void(WStype_t, uint8_t *, size_t)> cbEvent) {
         String url = apiUrl;
         int hostStart = url.indexOf("://") + 3;
         int hostEnd = url.indexOf(":", hostStart);
@@ -31,10 +34,12 @@ public:
         Serial.println("WebSocket Host: " + wsHost);
         webSocket.begin(wsHost, 8031, "/app/local?protocol=7&client=js&version=8.3.0&flash=false");
         
-        webSocket.onEvent([this, userId](WStype_t type, uint8_t * payload, size_t length) {
-            this->handleWebSocketEvent(type, payload, length, userId);
-        });
+        webSocket.onEvent(cbEvent);
         webSocket.setReconnectInterval(5000);
+    }
+    
+    WebSocketsClient& getWebSocket() {
+        return webSocket;
     }
 
     void handleWebSocketEvent(WStype_t type, uint8_t * payload, size_t length, int userId) {
@@ -99,7 +104,7 @@ public:
 
                 if (!doc["user_id"].isNull() && state.userId == -1) {
                     state.userId = doc["user_id"];
-                    setupWebSocket(state.userId);
+                    setupWebSocket(state.userId, wsCb);
                 }
             } else {
                 state.currentStatus = "JSON ERR";
