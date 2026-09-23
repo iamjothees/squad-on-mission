@@ -49,6 +49,13 @@
                         </button>
                     </form>
 
+                    <form action="{{ route('timers.destroy', $timer) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this timer and all its logs?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded transition-colors" title="Delete Timer">
+                            <x-lucide-trash-2 class="w-5 h-5" />
+                        </button>
+                    </form>
                     
                     @if($timer->is_running)
                         <span class="inline-flex items-center py-0.5 px-2 rounded-md text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Currently Running</span>

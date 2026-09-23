@@ -149,16 +149,20 @@ void updateDisplay() {
     int m = (remainingSeconds % 3600) / 60;
     int s = remainingSeconds % 60;
     
+    char timeStr[9];
+    sprintf(timeStr, "%02d:%02d:%02d", h, m, s);
+    
     if (d > 0) {
-        char timeStr[15];
-        sprintf(timeStr, "%dd %02d:%02d:%02d", d, h, m, s);
-        // Smaller text if days are present to fit the screen
+        char dayStr[10];
+        sprintf(dayStr, "+ %d days", d);
         display.setTextSize(1);
-        display.setCursor(16, 42); // Centered visually
+        display.setCursor(16, 32);
+        display.print(dayStr);
+        
+        display.setTextSize(2);
+        display.setCursor(16, 46);
         display.print(timeStr);
     } else {
-        char timeStr[9];
-        sprintf(timeStr, "%02d:%02d:%02d", h, m, s);
         display.setTextSize(2);
         display.setCursor(16, 40);
         display.print(timeStr);

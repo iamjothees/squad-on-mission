@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/timers/{timer}/assign', [\App\Http\Controllers\TimerViewController::class, 'assign'])->name('timers.assign');
     Route::post('/timers', [\App\Http\Controllers\TimerViewController::class, 'store'])->name('timers.store');
     Route::get('/timers/{timer}', [\App\Http\Controllers\TimerViewController::class, 'show'])->name('timers.show');
+    Route::delete('/timers/{timer}', [\App\Http\Controllers\TimerViewController::class, 'destroy'])->name('timers.destroy');
     
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');

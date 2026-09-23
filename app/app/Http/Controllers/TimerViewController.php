@@ -241,6 +241,19 @@ class TimerViewController extends Controller
         return back()->with('success', 'Manual log added successfully.');
     }
 
+    public function destroy(Timer $timer)
+    {
+        // First stop the timer if it's running so we broadcast an update
+        if ($timer->is_running) {
+            $timer->update(['is_running' => false, 'last_started_at' => null]);
+            broadcast(new \App\Events\TimerUpdated($timer));
+        }
+        
+        $timer->delete();
+        
+        return redirect()->route('dashboard')->with('success', 'Timer deleted successfully.');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
