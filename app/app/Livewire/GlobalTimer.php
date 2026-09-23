@@ -10,6 +10,24 @@ class GlobalTimer extends Component
     public $timerId;
     public $initialState;
 
+    public function getListeners()
+    {
+        $userId = auth()->id();
+        return [
+            "echo:users.{$userId},.App\\Events\\TimerSwitched" => 'onTimerSwitched',
+        ];
+    }
+
+    public function onTimerSwitched($event)
+    {
+        // When hardware creates a new timer, update Livewire state
+        $this->timerId = $event['timerId'];
+        $this->initialState = $event['initialState'];
+        
+        // Dispatch to Alpine.js to restart its window.Timer instance
+        $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
+    }
+
     public function isSystemUser()
     {
         return auth()->check() && strtolower(auth()->user()->name) === 'system';

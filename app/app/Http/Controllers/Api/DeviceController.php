@@ -19,6 +19,8 @@ class DeviceController extends Controller
         $user = $this->getUser($request);
         $timer = Timer::where('user_id', $user->id)
             ->whereNull('completed_at')
+            ->orderByDesc('is_running')
+            ->latest('updated_at')
             ->first();
 
         if (!$timer) {
@@ -43,6 +45,8 @@ class DeviceController extends Controller
         $user = $this->getUser($request);
         $timer = Timer::where('user_id', $user->id)
             ->whereNull('completed_at')
+            ->orderByDesc('is_running')
+            ->latest('updated_at')
             ->first();
 
         if (!$timer) {
@@ -55,6 +59,12 @@ class DeviceController extends Controller
                 'accumulated_seconds' => 0,
             ]);
             
+            broadcast(new \App\Events\TimerSwitched($user->id, $timer->id, [
+                'accumulated_seconds' => 0,
+                'is_running' => true,
+                'last_started_at' => $timer->last_started_at,
+            ]));
+            
             return response()->json(['status' => 'RUNNING', 'elapsed' => 0]);
         }
 
@@ -63,12 +73,14 @@ class DeviceController extends Controller
             $timer->accumulated_seconds += floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000);
             $timer->is_running = false;
             $timer->save();
+            broadcast(new \App\Events\TimerUpdated($timer));
             return response()->json(['status' => 'PAUSED', 'elapsed' => $timer->accumulated_seconds]);
         } else {
             // Resume it
             $timer->last_started_at = floor(microtime(true) * 1000);
             $timer->is_running = true;
             $timer->save();
+            broadcast(new \App\Events\TimerUpdated($timer));
             return response()->json(['status' => 'RUNNING', 'elapsed' => $timer->accumulated_seconds]);
         }
     }
@@ -78,6 +90,8 @@ class DeviceController extends Controller
         $user = $this->getUser($request);
         $timer = Timer::where('user_id', $user->id)
             ->whereNull('completed_at')
+            ->orderByDesc('is_running')
+            ->latest('updated_at')
             ->first();
 
         if ($timer) {
