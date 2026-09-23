@@ -154,6 +154,8 @@ class TimerViewController extends Controller
             return back()->with('error', 'Log time overlaps with an existing time log.');
         }
 
+        $wasRunningLog = is_null($log->stopped_at);
+
         $duration = $stoppedMs ? floor(($stoppedMs - $startedMs) / 1000) : 0;
 
         $log->update([
@@ -164,9 +166,33 @@ class TimerViewController extends Controller
 
         // Recalculate parent timer's accumulated_seconds
         $totalDuration = $timer->logs()->whereNotNull('stopped_at')->sum('duration_seconds');
-        $timer->update([
+        
+        $timerUpdates = [
             'accumulated_seconds' => $totalDuration,
-        ]);
+        ];
+
+        // If modifying the currently active log
+        if ($wasRunningLog && $timer->is_running) {
+            if ($stoppedMs) {
+                // User manually stopped the active log
+                $timerUpdates['is_running'] = false;
+                $timerUpdates['last_started_at'] = null;
+            } else {
+                // User just shifted the start time
+                $timerUpdates['last_started_at'] = $startedMs;
+            }
+        } else if (!$wasRunningLog && !$stoppedMs) {
+            // User resumed a past log by removing stopped_at
+            if (!$timer->is_running) {
+                $timerUpdates['is_running'] = true;
+                $timerUpdates['last_started_at'] = $startedMs;
+            }
+        }
+
+        $timer->update($timerUpdates);
+        
+        // Broadcast to sync all clients (Web and Macropad)
+        broadcast(new \App\Events\TimerUpdated($timer));
 
         return back()->with('success', 'Timer log updated successfully.');
     }
