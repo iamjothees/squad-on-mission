@@ -33,7 +33,10 @@ class DeviceController extends Controller
             ]);
         }
 
-        $entity = $timer->timerables->first();
+        $timerables = $timer->timerables;
+        $entity = $timerables->first();
+        $hasMultiple = $timerables->count() > 1;
+        
         $entityName = 'General Timer';
         if ($entity) {
             $entityName = $entity->title ?? $entity->name;
@@ -45,6 +48,7 @@ class DeviceController extends Controller
             'active' => true,
             'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
             'task_name' => $entityName,
+            'has_multiple' => $hasMultiple,
             'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) : 0),
             'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
         ]);

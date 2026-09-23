@@ -34,6 +34,7 @@ String currentStatus = "IDLE";
 String taskName = "Ready";
 long elapsedSeconds = 0;
 float workHoursPerDay = 24.0;
+bool hasMultiple = false;
 unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
 bool isPaired = false;
@@ -75,7 +76,10 @@ void updateDisplay() {
 
   // Task Name
   display.setCursor(0, 15);
-  display.println(taskName);
+  display.print(taskName);
+  if (hasMultiple) {
+      display.print(" (+)");
+  }
 
   // Timer
   if (isActive) {
@@ -135,6 +139,7 @@ void syncWithServer() {
       currentStatus = doc["status"].as<String>();
       taskName = doc["task_name"].as<String>();
       elapsedSeconds = doc["elapsed"];
+      hasMultiple = doc["has_multiple"] | false;
       if (!doc["work_hours_per_day"].isNull()) {
         workHoursPerDay = doc["work_hours_per_day"];
       }
@@ -187,6 +192,7 @@ void sendPostAction(String action) {
     if (!error && !doc["elapsed"].isNull()) {
       elapsedSeconds = doc["elapsed"];
       currentStatus = doc["status"].as<String>();
+      hasMultiple = doc["has_multiple"] | false;
       if (!doc["work_hours_per_day"].isNull()) {
         workHoursPerDay = doc["work_hours_per_day"];
       }
