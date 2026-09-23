@@ -147,9 +147,7 @@
                                     <div class="flex items-center justify-end gap-1">
                                         
                                         
-                                        <button onclick="Livewire.dispatch('start-timer', { type: 'App\\Models\\Task', id: {{ $task->id }} })" class="p-1.5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded transition-colors" title="Start Timer">
-                                            <x-lucide-play class="w-4 h-4 fill-current" />
-                                        </button>
+                                        <livewire:timer-play-button :type="\App\Models\Task::class" :id="$task->id" :wire:key="'timer-play-task-'.$task->id" />
                                         
                                         <a href="{{ route('tasks.edit', $task) }}" wire:navigate class="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="Edit">
                                             <x-lucide-pencil class="w-4 h-4" />
