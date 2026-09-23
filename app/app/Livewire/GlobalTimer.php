@@ -10,6 +10,11 @@ class GlobalTimer extends Component
     public $timerId;
     public $initialState;
 
+    public function isSystemUser()
+    {
+        return auth()->check() && strtolower(auth()->user()->name) === 'system';
+    }
+
     public function mount()
     {
         // For demonstration, fetch the very first timer or create a dummy one
