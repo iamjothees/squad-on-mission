@@ -111,15 +111,38 @@ class DeviceController extends Controller
             ->first();
 
         if ($timer) {
+            $elapsed = 0;
             if ($timer->is_running) {
-                $timer->accumulated_seconds += floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000);
+                $elapsed = floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000);
+                $timer->accumulated_seconds += $elapsed;
             }
+            
             $timer->is_running = false;
+            $timer->last_started_at = null;
             $timer->completed_at = now();
             $timer->save();
+
+            $openLog = $timer->logs()->whereNull('stopped_at')->latest()->first();
+            if ($openLog) {
+                $openLog->update([
+                    'stopped_at' => floor(microtime(true) * 1000),
+                    'duration_seconds' => $elapsed,
+                ]);
+            }
+            
+            broadcast(new \App\Events\TimerUpdated($timer));
+            
+            // Create a fresh global dummy timer so the web UI resets to PAUSED properly
+            Timer::create([
+                'user_id' => $user->id,
+                'purpose' => 'global_focus',
+                'accumulated_seconds' => 0,
+                'is_running' => false,
+            ]);
         }
 
         return response()->json([
+            'user_id' => $user->id,
             'active' => false,
             'status' => 'IDLE',
             'task_name' => 'No active timer',
