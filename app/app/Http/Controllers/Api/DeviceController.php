@@ -28,7 +28,8 @@ class DeviceController extends Controller
                 'active' => false,
                 'status' => 'IDLE',
                 'task_name' => 'No active timer',
-                'elapsed' => 0
+                'elapsed' => 0,
+                'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
             ]);
         }
 
@@ -36,7 +37,8 @@ class DeviceController extends Controller
             'active' => true,
             'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
             'task_name' => $timer->purpose ?? 'General Timer',
-            'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) : 0)
+            'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) : 0),
+            'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
         ]);
     }
 

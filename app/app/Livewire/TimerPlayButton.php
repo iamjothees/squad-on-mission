@@ -44,8 +44,8 @@ class TimerPlayButton extends Component
     {
         $userId = auth()->id();
         return [
-            "echo-private:user.{$userId},.App\\Events\\TimerUpdated" => 'checkStatus',
-            "echo-private:user.{$userId},.App\\Events\\TimerSwitched" => 'checkStatus',
+            "echo:users.{$userId},.App\\Events\\TimerSwitched" => 'checkStatus',
+            "echo:users.{$userId},.TimerUpdated" => 'checkStatus',
         ];
     }
 

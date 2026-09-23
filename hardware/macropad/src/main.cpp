@@ -33,6 +33,7 @@ bool isActive = false;
 String currentStatus = "IDLE";
 String taskName = "Ready";
 long elapsedSeconds = 0;
+float workHoursPerDay = 24.0;
 unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
 bool isPaired = false;
@@ -78,16 +79,28 @@ void updateDisplay() {
 
   // Timer
   if (isActive) {
-    int h = elapsedSeconds / 3600;
-    int m = (elapsedSeconds % 3600) / 60;
-    int s = elapsedSeconds % 60;
+    long secondsPerDay = (long)(workHoursPerDay * 3600);
+    int d = elapsedSeconds / secondsPerDay;
+    long remainingSeconds = elapsedSeconds % secondsPerDay;
     
-    char timeStr[9];
-    sprintf(timeStr, "%02d:%02d:%02d", h, m, s);
+    int h = remainingSeconds / 3600;
+    int m = (remainingSeconds % 3600) / 60;
+    int s = remainingSeconds % 60;
     
-    display.setTextSize(2);
-    display.setCursor(16, 40);
-    display.print(timeStr);
+    if (d > 0) {
+        char timeStr[15];
+        sprintf(timeStr, "%dd %02d:%02d:%02d", d, h, m, s);
+        // Smaller text if days are present to fit the screen
+        display.setTextSize(1);
+        display.setCursor(16, 42); // Centered visually
+        display.print(timeStr);
+    } else {
+        char timeStr[9];
+        sprintf(timeStr, "%02d:%02d:%02d", h, m, s);
+        display.setTextSize(2);
+        display.setCursor(16, 40);
+        display.print(timeStr);
+    }
   } else {
     display.setTextSize(1);
     display.setCursor(20, 45);
@@ -122,6 +135,9 @@ void syncWithServer() {
       currentStatus = doc["status"].as<String>();
       taskName = doc["task_name"].as<String>();
       elapsedSeconds = doc["elapsed"];
+      if (!doc["work_hours_per_day"].isNull()) {
+        workHoursPerDay = doc["work_hours_per_day"];
+      }
     } else {
       currentStatus = "JSON ERR";
       taskName = "Parse Failed";
@@ -171,6 +187,9 @@ void sendPostAction(String action) {
     if (!error && !doc["elapsed"].isNull()) {
       elapsedSeconds = doc["elapsed"];
       currentStatus = doc["status"].as<String>();
+      if (!doc["work_hours_per_day"].isNull()) {
+        workHoursPerDay = doc["work_hours_per_day"];
+      }
       if (currentStatus == "IDLE") {
           isActive = false;
           taskName = "Ready";

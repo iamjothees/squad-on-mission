@@ -35,6 +35,7 @@ class TimerUpdated implements ShouldBroadcastNow
     {
         return [
             new Channel('timers.' . $this->timer->id),
+            new Channel('users.' . $this->timer->user_id),
         ];
     }
 
