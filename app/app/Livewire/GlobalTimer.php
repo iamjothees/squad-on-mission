@@ -49,10 +49,17 @@ class GlobalTimer extends Component
         }
 
         $this->timerId = $timer->id;
+        $lastTimer = \App\Models\Timer::where('user_id', auth()->id())
+            ->whereNotNull('completed_at')
+            ->latest('completed_at')
+            ->first();
+        $lastDuration = $lastTimer ? $lastTimer->accumulated_seconds : 0;
+
         $this->initialState = [
             'accumulated_seconds' => $timer->accumulated_seconds,
             'is_running' => $timer->is_running,
             'last_started_at' => $timer->last_started_at,
+            'last_duration' => $lastDuration,
         ];
     }
 
@@ -139,10 +146,17 @@ class GlobalTimer extends Component
         broadcast(new \App\Events\TimerUpdated($timer));
 
         $this->timerId = $timer->id;
+        $lastTimer = \App\Models\Timer::where('user_id', auth()->id())
+            ->whereNotNull('completed_at')
+            ->latest('completed_at')
+            ->first();
+        $lastDuration = $lastTimer ? $lastTimer->accumulated_seconds : 0;
+
         $this->initialState = [
             'accumulated_seconds' => $timer->accumulated_seconds,
             'is_running' => $timer->is_running,
             'last_started_at' => $timer->last_started_at,
+            'last_duration' => $lastDuration,
         ];
         
         // Dispatch browser event to re-initialize alpine component

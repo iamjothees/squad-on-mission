@@ -23,13 +23,20 @@ class DeviceController extends Controller
             ->latest('updated_at')
             ->first();
 
+        $lastTimer = Timer::where('user_id', $user->id)
+            ->whereNotNull('completed_at')
+            ->latest('completed_at')
+            ->first();
+        $lastDuration = $lastTimer ? $lastTimer->accumulated_seconds : 0;
+
         if (!$timer) {
             return response()->json([
                 'user_id' => $user->id,
                 'active' => false,
                 'status' => 'IDLE',
-                'task_name' => 'No active timer',
+                'task_name' => 'Ready',
                 'elapsed' => 0,
+                'last_duration' => $lastDuration,
                 'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
             ]);
         }
@@ -144,6 +151,7 @@ class DeviceController extends Controller
                 'accumulated_seconds' => 0,
                 'is_running' => false,
                 'last_started_at' => null,
+                'last_duration' => $timer->accumulated_seconds,
             ]));
             
             // Also broadcast TimerUpdated for the old timer just in case any UI needs to mark it stopped.

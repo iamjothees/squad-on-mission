@@ -6,6 +6,7 @@ export default class Timer {
         this.accumulated_seconds = initialState.accumulated_seconds || 0;
         this.is_running = initialState.is_running || false;
         this.last_started_at = initialState.last_started_at || null;
+        this.last_duration = initialState.last_duration || 0;
         
         // Callbacks
         this.onTick = onTick; // Called every second to update UI
@@ -78,7 +79,8 @@ export default class Timer {
         this.syncState({
             accumulated_seconds: this.accumulated_seconds,
             is_running: this.is_running,
-            last_started_at: this.last_started_at
+            last_started_at: this.last_started_at,
+            last_duration: this.last_duration
         }, true);
 
         // Persist to server (no polling, only on action)
@@ -123,7 +125,8 @@ export default class Timer {
         this.syncState({
             accumulated_seconds: this.accumulated_seconds,
             is_running: this.is_running,
-            last_started_at: this.last_started_at
+            last_started_at: this.last_started_at,
+            last_duration: this.last_duration
         }, true);
 
         try {

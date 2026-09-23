@@ -93,6 +93,7 @@ String taskName = "Ready";
 long elapsedSeconds = 0;
 float workHoursPerDay = 24.0;
 bool hasMultiple = false;
+long lastDuration = 0;
 unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
 bool isPaired = false;
@@ -168,9 +169,34 @@ void updateDisplay() {
         display.print(timeStr);
     }
   } else {
-    display.setTextSize(1);
-    display.setCursor(20, 45);
-    display.print("Press to Start");
+    if (lastDuration > 0) {
+        long secondsPerDay = (long)(workHoursPerDay * 3600);
+        int d = lastDuration / secondsPerDay;
+        long rem = lastDuration % secondsPerDay;
+        int h = rem / 3600;
+        int m = (rem % 3600) / 60;
+        int s = rem % 60;
+        
+        char timeStr[9];
+        sprintf(timeStr, "%02d:%02d:%02d", h, m, s);
+        
+        display.setTextSize(1);
+        display.setCursor(25, 34);
+        display.print("Last Timer:");
+        
+        display.setTextSize(1);
+        display.setCursor(40, 48);
+        if (d > 0) {
+            display.setCursor(20, 48);
+            display.print(String(d) + "d " + String(timeStr));
+        } else {
+            display.print(timeStr);
+        }
+    } else {
+        display.setTextSize(1);
+        display.setCursor(20, 45);
+        display.print("Press to Start");
+    }
   }
 
   display.display();
@@ -202,6 +228,11 @@ void syncWithServer() {
       taskName = doc["task_name"].as<String>();
       elapsedSeconds = doc["elapsed"];
       hasMultiple = doc["has_multiple"] | false;
+      if (!doc["last_duration"].isNull()) {
+          lastDuration = doc["last_duration"];
+      } else if (isActive) {
+          lastDuration = 0;
+      }
       if (!doc["work_hours_per_day"].isNull()) {
         workHoursPerDay = doc["work_hours_per_day"];
       }
@@ -259,6 +290,11 @@ void sendPostAction(String action) {
       elapsedSeconds = doc["elapsed"];
       currentStatus = doc["status"].as<String>();
       hasMultiple = doc["has_multiple"] | false;
+      if (!doc["last_duration"].isNull()) {
+          lastDuration = doc["last_duration"];
+      } else if (isActive) {
+          lastDuration = 0;
+      }
       if (!doc["work_hours_per_day"].isNull()) {
         workHoursPerDay = doc["work_hours_per_day"];
       }
