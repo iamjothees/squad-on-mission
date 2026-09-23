@@ -130,15 +130,24 @@ class DeviceController extends Controller
                 ]);
             }
             
-            broadcast(new \App\Events\TimerUpdated($timer));
-            
             // Create a fresh global dummy timer so the web UI resets to PAUSED properly
-            Timer::create([
+            $newTimer = Timer::create([
                 'user_id' => $user->id,
                 'purpose' => 'global_focus',
                 'accumulated_seconds' => 0,
                 'is_running' => false,
             ]);
+            
+            // Broadcast TimerSwitched so the frontend completely detaches from the completed timer
+            // and hooks onto the new one seamlessly.
+            broadcast(new \App\Events\TimerSwitched($user->id, $newTimer->id, [
+                'accumulated_seconds' => 0,
+                'is_running' => false,
+                'last_started_at' => null,
+            ]));
+            
+            // Also broadcast TimerUpdated for the old timer just in case any UI needs to mark it stopped.
+            broadcast(new \App\Events\TimerUpdated($timer));
         }
 
         return response()->json([
