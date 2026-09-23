@@ -52,13 +52,17 @@ class DeviceController extends Controller
             $entityName = $timer->purpose;
         }
 
+        // If dummy timer, status should be IDLE
+        $isDummy = !$timer->is_running && $timer->accumulated_seconds == 0;
+        
         return response()->json([
             'user_id' => $user->id,
-            'active' => true,
-            'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
-            'task_name' => $entityName,
+            'active' => !$isDummy,
+            'status' => $timer->is_running ? 'RUNNING' : ($isDummy ? 'IDLE' : 'PAUSED'),
+            'task_name' => $isDummy ? 'Ready' : $entityName,
             'has_multiple' => $hasMultiple,
             'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) : 0),
+            'last_duration' => $isDummy ? $lastDuration : 0,
             'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
         ]);
     }

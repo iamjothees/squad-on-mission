@@ -7,8 +7,8 @@
         
         <!-- Timer Display -->
         <div class="flex flex-col items-center justify-center -space-y-1">
-            <div x-show="!isRunning && formattedTime === '00:00:00' && window.timerInstance && window.timerInstance.last_duration > 0" x-cloak class="text-[10px] text-gray-400 font-mono tracking-tighter opacity-70" title="Last Timer">
-                Last: <span x-text="formatSecondsPure(window.timerInstance.last_duration)"></span>
+            <div x-show="!isRunning && formattedTime === '00:00:00' && timerInstance && timerInstance.last_duration > 0" x-cloak class="text-[10px] text-gray-400 font-mono tracking-tighter opacity-70" title="Last Timer">
+                Last: <span x-text="formatSecondsPure(timerInstance.last_duration)"></span>
             </div>
             <a :href="'/timers/' + activeTimerId" class="font-mono text-xl font-bold tracking-wider tabular-nums min-w-[6rem] text-center hover:text-indigo-400 transition-colors" x-text="formattedTime" title="View Logs">
                 00:00:00
