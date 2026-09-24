@@ -35,7 +35,8 @@ Route::middleware('auth')->group(function () {
 
 // Clients
     // Reports
-    Route::get('/reports', function () { return view('reports.index'); })->name('reports.index');
+    Route::get('/reports/time', function () { return view('reports.time'); })->name('reports.time');
+    Route::get('/reports/entities', function () { return view('reports.entities'); })->name('reports.entities');
 
     // Leads
     Route::get('/leads', function () { return view('leads.index'); })->name('leads.index');

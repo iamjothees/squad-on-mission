@@ -41,9 +41,13 @@
                             <x-lucide-layout-dashboard class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Dashboard
                         </a>
-                        <a href="{{ route('reports.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                        <a href="{{ route('reports.time') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-pie-chart class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
-                            Reports
+                            Time Analytics
+                        </a>
+                        <a href="{{ route('reports.entities') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-bar-chart-2 class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Focus Analytics
                         </a>
 
                         <div class="pt-4 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Workspace</div>
