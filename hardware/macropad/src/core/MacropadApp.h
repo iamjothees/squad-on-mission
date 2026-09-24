@@ -45,11 +45,12 @@ public:
             Serial.println("SSD1306 allocation failed");
             for(;;);
         }
+        renderer.showConnecting();
         
         auth.begin();
 
         wifi.begin(ssid, pass, [this]() {
-            renderer.showConnecting();
+            
         });
 
         if (wifi.isConnected()) {
@@ -128,7 +129,7 @@ private:
 
     void onBtn1Click() {
         if (!state.isPaired) return;
-        renderer.showConnecting();
+        
         api.sendAction("/timer/toggle", state);
         lastSyncTime = millis();
         lastTickTime = millis();
@@ -137,7 +138,7 @@ private:
 
     void onBtn1LongPress() {
         if (!state.isPaired) return;
-        renderer.showConnecting();
+        
         api.sendAction("/timer/stop", state);
         lastSyncTime = millis();
         lastTickTime = millis();
@@ -146,7 +147,7 @@ private:
 
     void onBtn2Click() {
         if (!state.isPaired) return;
-        renderer.showConnecting();
+        
         api.sendAction("/timer/reset", state);
         lastSyncTime = millis();
         lastTickTime = millis();
