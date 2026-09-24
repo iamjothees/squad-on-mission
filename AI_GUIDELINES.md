@@ -51,3 +51,18 @@ The platform consists of a **Web Application** (Laravel) and a physical **Missio
 
 ---
 *End of Guidelines. Act strictly within these constraints.*
+
+## 7. Docker Environment & Container Workflow
+The project runs entirely inside Docker. Do not run artisan, npm, or composer commands directly on the host machine. Instead, execute them within the correct container.
+
+- **`som` (Main Web App):** Runs the Laravel application and Vite development server.
+  - *Usage:* `docker exec -it som <command>`
+  - Run `php artisan`, `composer`, and `npm` commands here.
+  - E.g., `docker exec -it som php artisan migrate`, `docker exec -it som npm run dev`.
+  - To test backend logic using mock scripts, run: `docker exec -i som php test_script.php`.
+- **`som-reverb` (WebSockets):** Runs the Laravel Reverb server (`php artisan reverb:start`).
+  - Typically, you do not need to run commands here. It only handles WebSocket connections.
+- **`som-db` (Database):** MySQL 8.0 container.
+  - Accessible on port 3306 (mapped to 8032 on host) if direct database interaction is needed.
+
+*Note:* When analyzing logs for bugs, checking `app/storage/logs/laravel.log` via the terminal or `docker logs som` provides the best insight into Laravel backend errors.
