@@ -216,7 +216,17 @@ class DeviceController extends Controller
                 ]);
             }
 
-            broadcast(new \App\Events\TimerUpdated($timer));
+            $lastTimer = Timer::where('user_id', $user->id)
+                ->whereNotNull('completed_at')
+                ->latest('completed_at')
+                ->first();
+                
+            broadcast(new \App\Events\TimerSwitched($user->id, $timer->id, [
+                'accumulated_seconds' => 0,
+                'is_running' => $timer->is_running,
+                'last_started_at' => $timer->last_started_at,
+                'last_duration' => $lastTimer ? $lastTimer->accumulated_seconds : 0,
+            ]));
             
             return response()->json([
                 'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
