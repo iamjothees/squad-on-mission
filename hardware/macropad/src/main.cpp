@@ -6,7 +6,7 @@
 #include "services/WifiService.h"
 #include "services/ApiService.h"
 #include "services/WebSocketService.h"
-#include "ui/DisplayManager.h"
+#include <Adafruit_SSD1306.h>
 #include "ui/AppRenderer.h"
 #include <OneButton.h>
 
@@ -20,8 +20,8 @@ AuthService auth;
 WifiService wifi;
 ApiService api;
 WebSocketService ws;
-DisplayManager displayDriver;
-AppRenderer renderer(displayDriver.getDriver());
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+AppRenderer renderer(display);
 
 OneButton btn1(BUTTON_1_PIN, true);
 OneButton btn2(BUTTON_2_PIN, true);
@@ -87,7 +87,7 @@ void onBtn2Click() {
 void setup() {
     Serial.begin(115200);
 
-    if (!displayDriver.begin()) {
+    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
         Serial.println("SSD1306 allocation failed");
         for(;;);
     }
