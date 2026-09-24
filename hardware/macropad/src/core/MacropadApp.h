@@ -148,10 +148,7 @@ private:
     void onBtn2Click() {
         if (!state.isPaired) return;
         
-        api.sendAction("/timer/reset", state);
-        lastSyncTime = millis();
-        lastTickTime = millis();
-        renderer.renderState(state, true);
+        performSync();
     }
 };
 
