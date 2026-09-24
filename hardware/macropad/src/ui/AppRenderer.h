@@ -12,6 +12,7 @@ public:
 
     void showConnecting() {
         display.clearDisplay();
+        display.setTextColor(SSD1306_WHITE);
         display.setTextSize(1);
         display.setCursor(10, 30);
         display.print("Connecting WiFi...");
@@ -20,6 +21,7 @@ public:
 
     void showPairingScreen(const String& token, const String& status) {
         display.clearDisplay();
+        display.setTextColor(SSD1306_WHITE);
         display.setTextSize(1);
         display.setCursor(0, 0);
         display.println("WIFI CONNECTED");
@@ -39,6 +41,7 @@ public:
         }
 
         display.clearDisplay();
+        display.setTextColor(SSD1306_WHITE);
         display.setTextSize(1);
         
         // Status Bar
