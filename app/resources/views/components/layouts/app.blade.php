@@ -45,6 +45,14 @@
                             <x-lucide-users class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Clients
                         </a>
+                        <a href="{{ route('leads.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-user-plus class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Leads
+                        </a>
+                        <a href="{{ route('ideas.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-lightbulb class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Ideas
+                        </a>
                         <a href="{{ route('projects.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-folder class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Projects
