@@ -9,4 +9,5 @@ Route::middleware([CheckMacropadToken::class])->prefix('device')->group(function
     Route::get('/status', [DeviceController::class, 'status']);
     Route::post('/timer/toggle', [DeviceController::class, 'toggleTimer']);
     Route::post('/timer/stop', [DeviceController::class, 'stopTimer']);
+    Route::post('/timer/reset', [DeviceController::class, 'resetTimer']);
 });
