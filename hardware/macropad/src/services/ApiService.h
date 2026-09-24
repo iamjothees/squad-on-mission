@@ -39,6 +39,12 @@ public:
                     state.lastDuration = 0;
                 }
                 
+                if (!doc["last_entity_name"].isNull()) {
+                    state.lastEntityName = doc["last_entity_name"].as<String>();
+                } else {
+                    state.lastEntityName = "";
+                }
+                
                 if (!doc["work_hours_per_day"].isNull()) {
                     state.workHoursPerDay = doc["work_hours_per_day"];
                 }

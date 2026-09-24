@@ -63,11 +63,17 @@ public:
             drawTimeLarge(state.elapsedSeconds, state.workHoursPerDay);
         } else {
             if (state.lastDuration > 0) {
-                // User requested: Last Timer's Duration in large text
                 display.setTextSize(1);
-                display.setCursor(32, 28);
-                display.print("Last Timer");
-                drawTimeLarge(state.lastDuration, state.workHoursPerDay, 42); // Shift down slightly
+                display.setCursor(0, 20);
+                display.print("Last: ");
+                
+                String label = state.lastEntityName;
+                if (label.length() > 14) {
+                    label = label.substring(0, 12) + "..";
+                }
+                display.print(label);
+                
+                drawTimeLarge(state.lastDuration, state.workHoursPerDay, 40);
             } else {
                 display.setTextSize(1);
                 display.setCursor(20, 45);

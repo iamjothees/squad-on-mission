@@ -8,7 +8,9 @@ struct TimerState {
     long elapsedSeconds = 0;
     float workHoursPerDay = 24.0;
     bool hasMultiple = false;
+    
     long lastDuration = 0;
+    String lastEntityName = "";
     
     bool isPaired = false;
     String pairingStatus = "Polling API...";

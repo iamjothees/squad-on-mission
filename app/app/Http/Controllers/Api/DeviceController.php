@@ -28,6 +28,18 @@ class DeviceController extends Controller
             ->latest('completed_at')
             ->first();
         $lastDuration = $lastTimer ? $lastTimer->accumulated_seconds : 0;
+        
+        $lastEntityName = null;
+        if ($lastTimer) {
+            $lastEntity = $lastTimer->timerables->first();
+            if ($lastEntity) {
+                $lastEntityName = $lastEntity->title ?? $lastEntity->name;
+            } elseif ($lastTimer->purpose) {
+                $lastEntityName = $lastTimer->purpose;
+            } else {
+                $lastEntityName = 'General Timer';
+            }
+        }
 
         if (!$timer) {
             return response()->json([
@@ -37,6 +49,7 @@ class DeviceController extends Controller
                 'task_name' => 'Ready',
                 'elapsed' => 0,
                 'last_duration' => $lastDuration,
+                'last_entity_name' => $lastEntityName,
                 'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
             ]);
         }
@@ -63,6 +76,7 @@ class DeviceController extends Controller
             'has_multiple' => $hasMultiple,
             'elapsed' => $timer->accumulated_seconds + ($timer->is_running ? floor((floor(microtime(true) * 1000) - $timer->last_started_at) / 1000) : 0),
             'last_duration' => $isDummy ? $lastDuration : 0,
+            'last_entity_name' => $isDummy ? $lastEntityName : null,
             'work_hours_per_day' => (float) config('squad.work_hours_per_day', 24)
         ]);
     }
