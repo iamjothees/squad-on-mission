@@ -100,10 +100,16 @@ class DeviceController extends Controller
                 'accumulated_seconds' => 0,
             ]);
             
+            $lastTimer = Timer::where('user_id', $user->id)
+                ->whereNotNull('completed_at')
+                ->latest('completed_at')
+                ->first();
+                
             broadcast(new \App\Events\TimerSwitched($user->id, $timer->id, [
                 'accumulated_seconds' => 0,
                 'is_running' => true,
                 'last_started_at' => $timer->last_started_at,
+                'last_duration' => $lastTimer ? $lastTimer->accumulated_seconds : 0,
             ]));
             
             return response()->json(['status' => 'RUNNING', 'elapsed' => 0]);
@@ -183,5 +189,41 @@ class DeviceController extends Controller
             'task_name' => 'No active timer',
             'elapsed' => 0
         ]);
+    }
+
+    public function resetTimer(Request $request)
+    {
+        $user = $this->getUser($request);
+        $timer = Timer::where('user_id', $user->id)
+            ->whereNull('completed_at')
+            ->orderByDesc('is_running')
+            ->latest('updated_at')
+            ->first();
+
+        if ($timer) {
+            $timer->accumulated_seconds = 0;
+            if ($timer->is_running) {
+                $timer->last_started_at = floor(microtime(true) * 1000);
+            }
+            $timer->save();
+            
+            // Wipe logs for this timer to truly reset its history
+            $timer->logs()->delete();
+            
+            if ($timer->is_running) {
+                $timer->logs()->create([
+                    'started_at' => $timer->last_started_at,
+                ]);
+            }
+
+            broadcast(new \App\Events\TimerUpdated($timer));
+            
+            return response()->json([
+                'status' => $timer->is_running ? 'RUNNING' : 'PAUSED',
+                'elapsed' => 0
+            ]);
+        }
+
+        return response()->json(['status' => 'IDLE', 'elapsed' => 0]);
     }
 }

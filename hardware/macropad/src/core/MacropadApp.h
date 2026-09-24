@@ -145,7 +145,12 @@ private:
     }
 
     void onBtn2Click() {
-        // Cycle logic
+        if (!state.isPaired) return;
+        renderer.showConnecting();
+        api.sendAction("/timer/reset", state);
+        lastSyncTime = millis();
+        lastTickTime = millis();
+        renderer.renderState(state, true);
     }
 };
 
