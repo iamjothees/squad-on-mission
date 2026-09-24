@@ -96,13 +96,13 @@ new class extends Component
 
 <div class="space-y-6">
     <!-- Filters -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-[#1C1C1E] border border-gray-800 rounded p-4 gap-4">
-        <h3 class="text-sm font-semibold text-gray-300 flex items-center gap-2">
-            <i data-lucide="sliders" class="w-4 h-4 text-emerald-400"></i> Global Filters
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4 gap-4">
+        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 flex items-center gap-2">
+            <x-lucide-sliders class="w-4 h-4 text-emerald-500" /> Global Filters
         </h3>
         <div class="flex items-center gap-2 w-full md:w-auto">
             <label class="text-xs text-gray-500">User:</label>
-            <select wire:model.live="selectedUserId" class="bg-[#2C2C2E] border border-gray-700 text-gray-200 text-sm rounded px-3 py-1.5 focus:outline-none focus:border-indigo-500">
+            <select wire:model.live="selectedUserId" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-800 dark:text-gray-200 text-sm rounded px-3 py-1.5 focus:outline-none focus:border-indigo-500">
                 <option value="all">All Users</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -112,14 +112,14 @@ new class extends Component
     </div>
 
     <!-- Custom Comparison Tool -->
-    <div class="bg-[#1C1C1E] border border-gray-800 rounded p-6">
+    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <h3 class="text-sm font-semibold text-gray-300 flex items-center gap-2">
-                <i data-lucide="git-compare" class="w-4 h-4 text-pink-400"></i> Custom Comparison
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                <x-lucide-git-compare class="w-4 h-4 text-pink-500" /> Custom Comparison
             </h3>
             
             <div class="flex items-center gap-2">
-                <select wire:model.live="basePeriod" class="bg-[#2C2C2E] border border-gray-700 text-gray-200 text-xs rounded px-2 py-1 focus:outline-none focus:border-indigo-500">
+                <select wire:model.live="basePeriod" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-800 dark:text-gray-200 text-xs rounded px-2 py-1 focus:outline-none focus:border-indigo-500">
                     <option value="this_week">This Week</option>
                     <option value="last_week">Last Week</option>
                     <option value="2_weeks_ago">2 Weeks Ago</option>
@@ -128,7 +128,7 @@ new class extends Component
                     <option value="last_month">Last Month</option>
                 </select>
                 <span class="text-gray-500 text-xs">vs</span>
-                <select wire:model.live="comparePeriod" class="bg-[#2C2C2E] border border-gray-700 text-gray-200 text-xs rounded px-2 py-1 focus:outline-none focus:border-indigo-500">
+                <select wire:model.live="comparePeriod" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-800 dark:text-gray-200 text-xs rounded px-2 py-1 focus:outline-none focus:border-indigo-500">
                     <option value="this_week">This Week</option>
                     <option value="last_week">Last Week</option>
                     <option value="2_weeks_ago">2 Weeks Ago</option>
@@ -147,10 +147,10 @@ new class extends Component
         <div class="space-y-4 max-w-3xl mx-auto">
             <div class="flex flex-col gap-1">
                 <div class="flex justify-between text-sm">
-                    <span class="text-gray-200 font-medium">{{ $this->getLabelForPeriod($basePeriod) }}</span>
-                    <span class="font-bold text-gray-200 tabular-nums">{{ $this->formatTime($timeData['custom_base']) }}</span>
+                    <span class="text-gray-800 dark:text-gray-200 font-medium">{{ $this->getLabelForPeriod($basePeriod) }}</span>
+                    <span class="font-bold text-gray-800 dark:text-gray-200 tabular-nums">{{ $this->formatTime($timeData['custom_base']) }}</span>
                 </div>
-                <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
                     <div class="bg-pink-500 h-2.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['custom_base'], $customMax) }}%"></div>
                 </div>
             </div>
@@ -158,9 +158,9 @@ new class extends Component
             <div class="flex flex-col gap-1">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-500">{{ $this->getLabelForPeriod($comparePeriod) }}</span>
-                    <span class="text-gray-400 tabular-nums">{{ $this->formatTime($timeData['custom_compare']) }}</span>
+                    <span class="text-gray-600 dark:text-gray-400 tabular-nums">{{ $this->formatTime($timeData['custom_compare']) }}</span>
                 </div>
-                <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
                     <div class="bg-gray-600 h-2.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['custom_compare'], $customMax) }}%"></div>
                 </div>
             </div>
@@ -174,9 +174,9 @@ new class extends Component
     </div>
 
     <!-- Quick Overviews -->
-    <div class="bg-[#1C1C1E] border border-gray-800 rounded p-6">
-        <h3 class="text-sm font-semibold text-gray-300 mb-6 flex items-center gap-2">
-            <i data-lucide="clock" class="w-4 h-4 text-indigo-400"></i> Standard Pulse
+    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2">
+            <x-lucide-clock class="w-4 h-4 text-indigo-500" /> Standard Pulse
         </h3>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -186,14 +186,14 @@ new class extends Component
                 $todayP = $this->getChangePercentage($timeData['today'], $timeData['yesterday']);
             @endphp
             <div class="space-y-4">
-                <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-800 pb-2">Daily</h4>
+                <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-2">Daily</h4>
                 
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between text-xs">
-                        <span class="text-gray-300">Today</span>
-                        <span class="font-bold text-gray-200 tabular-nums">{{ $this->formatTime($timeData['today']) }}</span>
+                        <span class="text-gray-800 dark:text-gray-800 dark:text-gray-200">Today</span>
+                        <span class="font-bold text-gray-800 dark:text-gray-200 tabular-nums">{{ $this->formatTime($timeData['today']) }}</span>
                     </div>
-                    <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['today'], $todayMax) }}%"></div>
                     </div>
                 </div>
@@ -201,9 +201,9 @@ new class extends Component
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-500">Yesterday</span>
-                        <span class="text-gray-400 tabular-nums">{{ $this->formatTime($timeData['yesterday']) }}</span>
+                        <span class="text-gray-600 dark:text-gray-400 tabular-nums">{{ $this->formatTime($timeData['yesterday']) }}</span>
                     </div>
-                    <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-gray-600 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['yesterday'], $todayMax) }}%"></div>
                     </div>
                 </div>
@@ -221,14 +221,14 @@ new class extends Component
                 $weekP = $this->getChangePercentage($timeData['this_week'], $timeData['last_week']);
             @endphp
             <div class="space-y-4">
-                <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-800 pb-2">Weekly</h4>
+                <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-2">Weekly</h4>
                 
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between text-xs">
-                        <span class="text-gray-300">This Week</span>
-                        <span class="font-bold text-gray-200 tabular-nums">{{ $this->formatTime($timeData['this_week']) }}</span>
+                        <span class="text-gray-800 dark:text-gray-800 dark:text-gray-200">This Week</span>
+                        <span class="font-bold text-gray-800 dark:text-gray-200 tabular-nums">{{ $this->formatTime($timeData['this_week']) }}</span>
                     </div>
-                    <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['this_week'], $weekMax) }}%"></div>
                     </div>
                 </div>
@@ -236,9 +236,9 @@ new class extends Component
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-500">Last Week</span>
-                        <span class="text-gray-400 tabular-nums">{{ $this->formatTime($timeData['last_week']) }}</span>
+                        <span class="text-gray-600 dark:text-gray-400 tabular-nums">{{ $this->formatTime($timeData['last_week']) }}</span>
                     </div>
-                    <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-gray-600 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['last_week'], $weekMax) }}%"></div>
                     </div>
                 </div>
@@ -256,14 +256,14 @@ new class extends Component
                 $monthP = $this->getChangePercentage($timeData['this_month'], $timeData['last_month']);
             @endphp
             <div class="space-y-4">
-                <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-800 pb-2">Monthly</h4>
+                <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-2">Monthly</h4>
                 
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between text-xs">
-                        <span class="text-gray-300">This Month</span>
-                        <span class="font-bold text-gray-200 tabular-nums">{{ $this->formatTime($timeData['this_month']) }}</span>
+                        <span class="text-gray-800 dark:text-gray-800 dark:text-gray-200">This Month</span>
+                        <span class="font-bold text-gray-800 dark:text-gray-200 tabular-nums">{{ $this->formatTime($timeData['this_month']) }}</span>
                     </div>
-                    <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['this_month'], $monthMax) }}%"></div>
                     </div>
                 </div>
@@ -271,9 +271,9 @@ new class extends Component
                 <div class="flex flex-col gap-1">
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-500">Last Month</span>
-                        <span class="text-gray-400 tabular-nums">{{ $this->formatTime($timeData['last_month']) }}</span>
+                        <span class="text-gray-600 dark:text-gray-400 tabular-nums">{{ $this->formatTime($timeData['last_month']) }}</span>
                     </div>
-                    <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-gray-600 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($timeData['last_month'], $monthMax) }}%"></div>
                     </div>
                 </div>

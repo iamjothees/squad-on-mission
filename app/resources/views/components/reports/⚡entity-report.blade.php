@@ -104,11 +104,11 @@ new class extends Component
 
 <div class="space-y-6">
     <!-- Filters -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#1C1C1E] border border-gray-800 rounded p-4 gap-4">
-        <h3 class="text-sm font-semibold text-gray-300 flex items-center gap-2">
-            <i data-lucide="filter" class="w-4 h-4 text-emerald-400"></i> Period Selection
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4 gap-4">
+        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 flex items-center gap-2">
+            <x-lucide-filter class="w-4 h-4 text-emerald-500" /> Period Selection
         </h3>
-        <select wire:model.live="reportPeriod" class="bg-[#2C2C2E] border border-gray-700 text-gray-200 text-sm rounded px-3 py-1.5 focus:outline-none focus:border-indigo-500">
+        <select wire:model.live="reportPeriod" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-800 dark:text-gray-200 text-sm rounded px-3 py-1.5 focus:outline-none focus:border-indigo-500">
             <option value="today">Today (vs Yesterday)</option>
             <option value="this_week">This Week (vs Last Week)</option>
             <option value="this_month">This Month (vs Last Month)</option>
@@ -117,9 +117,9 @@ new class extends Component
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Projects -->
-        <div class="bg-[#1C1C1E] border border-gray-800 rounded p-6">
-            <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-800 pb-3 mb-4 flex items-center gap-2">
-                <i data-lucide="folder" class="w-4 h-4 text-indigo-400"></i> Top Projects
+        <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+            <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-3 mb-4 flex items-center gap-2">
+                <x-lucide-folder class="w-4 h-4 text-indigo-500" /> Top Projects
             </h4>
             
             <div class="space-y-6">
@@ -131,13 +131,13 @@ new class extends Component
                     @endphp
                     <div class="flex flex-col gap-1">
                         <div class="flex justify-between items-end mb-1">
-                            <span class="text-gray-200 text-sm font-medium truncate pr-4">{{ $name }}</span>
+                            <span class="text-gray-800 dark:text-gray-200 text-sm font-medium truncate pr-4">{{ $name }}</span>
                             <div class="text-right flex flex-col items-end">
-                                <span class="text-gray-300 font-bold tabular-nums">{{ $this->formatTime($secs) }}</span>
+                                <span class="text-gray-800 dark:text-gray-800 dark:text-gray-200 font-bold tabular-nums">{{ $this->formatTime($secs) }}</span>
                                 <span class="text-[10px] {{ $delta >= 0 ? 'text-green-500' : 'text-red-500' }}">{{ $delta > 0 ? '+' : '' }}{{ $delta }}% vs prev</span>
                             </div>
                         </div>
-                        <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                        <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                             <div class="bg-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($secs, $maxProject) }}%"></div>
                         </div>
                     </div>
@@ -148,9 +148,9 @@ new class extends Component
         </div>
 
         <!-- Tasks -->
-        <div class="bg-[#1C1C1E] border border-gray-800 rounded p-6">
-            <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-800 pb-3 mb-4 flex items-center gap-2">
-                <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i> Top Tasks
+        <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+            <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-3 mb-4 flex items-center gap-2">
+                <x-lucide-check-square class="w-4 h-4 text-emerald-500" /> Top Tasks
             </h4>
             
             <div class="space-y-6">
@@ -162,13 +162,13 @@ new class extends Component
                     @endphp
                     <div class="flex flex-col gap-1">
                         <div class="flex justify-between items-end mb-1">
-                            <span class="text-gray-200 text-sm font-medium truncate pr-4">{{ $name }}</span>
+                            <span class="text-gray-800 dark:text-gray-200 text-sm font-medium truncate pr-4">{{ $name }}</span>
                             <div class="text-right flex flex-col items-end">
-                                <span class="text-gray-300 font-bold tabular-nums">{{ $this->formatTime($secs) }}</span>
+                                <span class="text-gray-800 dark:text-gray-800 dark:text-gray-200 font-bold tabular-nums">{{ $this->formatTime($secs) }}</span>
                                 <span class="text-[10px] {{ $delta >= 0 ? 'text-green-500' : 'text-red-500' }}">{{ $delta > 0 ? '+' : '' }}{{ $delta }}% vs prev</span>
                             </div>
                         </div>
-                        <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                        <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                             <div class="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $this->getWidthPercentage($secs, $maxTask) }}%"></div>
                         </div>
                     </div>
@@ -179,9 +179,9 @@ new class extends Component
         </div>
         
         <!-- Clients -->
-        <div class="bg-[#1C1C1E] border border-gray-800 rounded p-6 md:col-span-2">
-            <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-800 pb-3 mb-4 flex items-center gap-2">
-                <i data-lucide="users" class="w-4 h-4 text-purple-400"></i> Top Clients
+        <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6 md:col-span-2">
+            <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-3 mb-4 flex items-center gap-2">
+                <x-lucide-users class="w-4 h-4 text-purple-500" /> Top Clients
             </h4>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -191,9 +191,9 @@ new class extends Component
                         $prevSecs = $prevClients[$name] ?? 0;
                         $delta = $this->getChangePercentage($secs, $prevSecs);
                     @endphp
-                    <div class="bg-[#2C2C2E] border border-gray-700 rounded p-3 relative overflow-hidden group">
+                    <div class="bg-gray-50/50 dark:bg-gray-900/50 border border-gray-700 rounded p-3 relative overflow-hidden group">
                         <div class="flex justify-between items-start mb-3 relative z-10">
-                            <span class="text-gray-200 text-xs font-medium truncate pr-2">{{ $name }}</span>
+                            <span class="text-gray-800 dark:text-gray-200 text-xs font-medium truncate pr-2">{{ $name }}</span>
                             <div class="flex flex-col items-end">
                                 <span class="text-purple-400 text-xs font-bold tabular-nums">{{ $this->formatTime($secs) }}</span>
                                 <span class="text-[9px] {{ $delta >= 0 ? 'text-green-500' : 'text-red-500' }} mt-0.5">{{ $delta > 0 ? '+' : '' }}{{ $delta }}%</span>
