@@ -37,11 +37,16 @@ export default class Timer {
         this.is_running = newState.is_running;
         this.last_started_at = newState.last_started_at;
         
+        if (newState.last_duration !== undefined) {
+            this.last_duration = newState.last_duration;
+        }
+        
         if (broadcast) {
             this.broadcastChannel.postMessage({
                 accumulated_seconds: this.accumulated_seconds,
                 is_running: this.is_running,
-                last_started_at: this.last_started_at
+                last_started_at: this.last_started_at,
+                last_duration: this.last_duration
             });
         }
         
@@ -118,9 +123,11 @@ export default class Timer {
     }
 
     async stop() {
+        let finalDuration = this.getCurrentSeconds();
         this.accumulated_seconds = 0;
         this.is_running = false;
         this.last_started_at = null;
+        this.last_duration = finalDuration;
 
         this.syncState({
             accumulated_seconds: this.accumulated_seconds,
@@ -130,7 +137,7 @@ export default class Timer {
         }, true);
 
         try {
-            await fetch(`/api/timers/${this.timerId}/stop`, {
+            const response = await fetch(`/api/timers/${this.timerId}/stop`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

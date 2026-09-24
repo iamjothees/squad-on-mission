@@ -118,8 +118,28 @@ class TimerController extends Controller
             ]);
         }
 
+        $finalDuration = $oldSeconds + ($lastStartedAt ? floor((floor(microtime(true) * 1000) - $lastStartedAt) / 1000) : 0);
+        
+        $newTimer = \App\Models\Timer::create([
+            'user_id' => $timer->user_id,
+            'purpose' => 'global_focus',
+            'accumulated_seconds' => 0,
+            'is_running' => false,
+        ]);
+
+        broadcast(new \App\Events\TimerSwitched($timer->user_id, $newTimer->id, [
+            'accumulated_seconds' => 0,
+            'is_running' => false,
+            'last_started_at' => null,
+            'last_duration' => $finalDuration,
+        ]));
+        
         broadcast(new TimerUpdated($timer));
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'timerId' => $newTimer->id,
+            'last_duration' => $finalDuration
+        ]);
     }
 }

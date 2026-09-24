@@ -200,10 +200,15 @@ class GlobalTimer extends Component
         ]);
         
         $this->timerId = $newTimer->id;
+        $lastTimer = Timer::where('user_id', auth()->id())
+            ->whereNotNull('completed_at')
+            ->latest('completed_at')
+            ->first();
         $this->initialState = [
             'accumulated_seconds' => 0,
             'is_running' => false,
             'last_started_at' => null,
+            'last_duration' => $lastTimer ? $lastTimer->accumulated_seconds : 0,
         ];
         
         
@@ -253,10 +258,15 @@ class GlobalTimer extends Component
         ]);
         
         $this->timerId = $newTimer->id;
+        $lastTimer = Timer::where('user_id', auth()->id())
+            ->whereNotNull('completed_at')
+            ->latest('completed_at')
+            ->first();
         $this->initialState = [
             'accumulated_seconds' => 0,
             'is_running' => true,
             'last_started_at' => $now,
+            'last_duration' => $lastTimer ? $lastTimer->accumulated_seconds : 0,
         ];
         
         
