@@ -36,6 +36,7 @@
                         <span class="font-bold text-gray-800 dark:text-white tracking-tight truncate">{{ config('app.name') }}</span>
                     </div>
                     <nav class="flex-1 p-2 space-y-0.5 bg-gray-50 dark:bg-gray-900">
+                        <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Overview</div>
                         <a href="/" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-layout-dashboard class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Dashboard
@@ -44,19 +45,8 @@
                             <x-lucide-pie-chart class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Reports
                         </a>
-                        <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Workspace</div>
-                        <a href="{{ route('clients.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
-                            <x-lucide-users class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
-                            Clients
-                        </a>
-                        <a href="{{ route('leads.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
-                            <x-lucide-user-plus class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
-                            Leads
-                        </a>
-                        <a href="{{ route('ideas.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
-                            <x-lucide-lightbulb class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
-                            Ideas
-                        </a>
+
+                        <div class="pt-4 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Workspace</div>
                         <a href="{{ route('projects.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-folder class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Projects
@@ -65,22 +55,36 @@
                             <x-lucide-check-square class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Tasks
                         </a>
+                        <a href="{{ route('timers.unassigned') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-clock class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Unassigned
+                        </a>
+
+                        <div class="pt-4 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">CRM & Network</div>
+                        <a href="{{ route('leads.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-user-plus class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Leads
+                        </a>
+                        <a href="{{ route('clients.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-users class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Clients
+                        </a>
+
+                        <div class="pt-4 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Knowledge</div>
+                        <a href="{{ route('ideas.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
+                            <x-lucide-lightbulb class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
+                            Ideas
+                        </a>
                         <a href="{{ route('tags.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-tag class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Tags
                         </a>
                         
-                        <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Reports</div>
-                        <a href="{{ route('timers.unassigned') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
-                            <x-lucide-clock class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
-                            Unassigned
-                        </a>
-                        <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">System</div>
+                        <div class="pt-4 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">System</div>
                         <a href="{{ route('users.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-user-cog class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Users
                         </a>
-
                     </nav>
                 </div>
         </aside>
