@@ -8,7 +8,7 @@
 #include "services/WebSocketService.h"
 #include "ui/DisplayManager.h"
 #include "ui/AppRenderer.h"
-#include "hardware/HardwareButton.h"
+#include <OneButton.h>
 
 // --- Pins ---
 #define BUTTON_1_PIN 4
@@ -23,8 +23,8 @@ WebSocketService ws;
 DisplayManager displayDriver;
 AppRenderer renderer(displayDriver.getDriver());
 
-HardwareButton btn1(BUTTON_1_PIN);
-HardwareButton btn2(BUTTON_2_PIN);
+OneButton btn1(BUTTON_1_PIN, true);
+OneButton btn2(BUTTON_2_PIN, true);
 
 bool needsSync = false;
 bool wsInitialized = false;
@@ -106,9 +106,9 @@ void setup() {
 
     api.begin(API_URL, auth.getToken());
     
-    btn1.onSingleClick(onBtn1Click);
-    btn1.onLongPress(onBtn1LongPress);
-    btn2.onSingleClick(onBtn2Click);
+    btn1.attachClick(onBtn1Click);
+    btn1.attachLongPressStart(onBtn1LongPress);
+    btn2.attachClick(onBtn2Click);
 
     performSync();
 }
