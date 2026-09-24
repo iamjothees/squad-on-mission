@@ -2,76 +2,17 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include <WebSocketsClient.h>
 #include "../core/TimerState.h"
 
 class ApiService {
 private:
     String apiUrl;
     String apiToken;
-    WebSocketsClient webSocket;
-    bool wsConnected = false;
-    unsigned long lastPingTime = 0;
-    std::function<void()> onSyncRequested;
 
 public:
-    std::function<void(WStype_t, uint8_t *, size_t)> wsCb;
-    
-    void begin(const char* url, const String& token, std::function<void()> syncCallback, std::function<void(WStype_t, uint8_t *, size_t)> wsCallback) {
+    void begin(const char* url, const String& token) {
         apiUrl = url;
         apiToken = token;
-        onSyncRequested = syncCallback;
-        wsCb = wsCallback;
-    }
-
-    void setupWebSocket(int userId, std::function<void(WStype_t, uint8_t *, size_t)> cbEvent) {
-        String url = apiUrl;
-        int hostStart = url.indexOf("://") + 3;
-        int hostEnd = url.indexOf(":", hostStart);
-        if (hostEnd == -1) hostEnd = url.indexOf("/", hostStart);
-        String wsHost = url.substring(hostStart, hostEnd);
-        
-        Serial.println("WebSocket Host: " + wsHost);
-        webSocket.begin(wsHost, 8031, "/app/local?protocol=7&client=js&version=8.3.0&flash=false");
-        
-        webSocket.onEvent(cbEvent);
-        webSocket.setReconnectInterval(5000);
-    }
-    
-    WebSocketsClient& getWebSocket() {
-        return webSocket;
-    }
-
-    void handleWebSocketEvent(WStype_t type, uint8_t * payload, size_t length, int userId) {
-        switch(type) {
-            case WStype_DISCONNECTED:
-                wsConnected = false;
-                break;
-            case WStype_CONNECTED:
-                wsConnected = true;
-                if (userId > 0) {
-                    String subMsg = "{\"event\":\"pusher:subscribe\",\"data\":{\"auth\":\"\",\"channel\":\"users." + String(userId) + "\"}}";
-                    webSocket.sendTXT(subMsg);
-                }
-                break;
-            case WStype_TEXT:
-                if (strstr((char*)payload, "TimerUpdated") != NULL || strstr((char*)payload, "TimerSwitched") != NULL) {
-                    if (onSyncRequested) onSyncRequested();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    void tick() {
-        webSocket.loop();
-        
-        // Reverb requires ping every 30s
-        if (wsConnected && millis() - lastPingTime > 25000) {
-            webSocket.sendTXT("{\"event\":\"pusher:ping\",\"data\":{}}");
-            lastPingTime = millis();
-        }
     }
 
     void syncStatus(TimerState& state) {
@@ -104,7 +45,6 @@ public:
 
                 if (!doc["user_id"].isNull() && state.userId == -1) {
                     state.userId = doc["user_id"];
-                    setupWebSocket(state.userId, wsCb);
                 }
             } else {
                 state.currentStatus = "JSON ERR";

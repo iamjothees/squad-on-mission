@@ -5,8 +5,10 @@
 #include "services/AuthService.h"
 #include "services/WifiService.h"
 #include "services/ApiService.h"
+#include "services/WebSocketService.h"
 #include "ui/DisplayManager.h"
-#include "hardware/ButtonManager.h"
+#include "ui/AppRenderer.h"
+#include "hardware/HardwareButton.h"
 
 // --- Pins ---
 #define BUTTON_1_PIN 4
@@ -17,10 +19,15 @@ TimerState state;
 AuthService auth;
 WifiService wifi;
 ApiService api;
-DisplayManager display;
-ButtonManager buttons(BUTTON_1_PIN, BUTTON_2_PIN);
+WebSocketService ws;
+DisplayManager displayDriver;
+AppRenderer renderer(displayDriver.getDriver());
+
+HardwareButton btn1(BUTTON_1_PIN);
+HardwareButton btn2(BUTTON_2_PIN);
 
 bool needsSync = false;
+bool wsInitialized = false;
 unsigned long lastSyncTime = 0;
 unsigned long lastTickTime = 0;
 const unsigned long SYNC_INTERVAL = 3600000; // 1 hour
@@ -30,33 +37,47 @@ void requestSync() {
 }
 
 void globalWsEvent(WStype_t type, uint8_t * payload, size_t length) {
-    api.handleWebSocketEvent(type, payload, length, state.userId);
+    ws.handleEvent(type, payload, length);
+}
+
+void onWebSocketMessage(String payload) {
+    if (payload.indexOf("TimerUpdated") > 0 || payload.indexOf("TimerSwitched") > 0) {
+        requestSync();
+    }
 }
 
 void performSync() {
     if (!wifi.isConnected()) return;
+    
     api.syncStatus(state);
+    
+    // Initialize WebSockets once we have a valid User ID from the API
+    if (state.userId > 0 && !wsInitialized) {
+        ws.begin(API_URL, state.userId, onWebSocketMessage, globalWsEvent);
+        wsInitialized = true;
+    }
+
     lastSyncTime = millis();
     lastTickTime = millis();
-    display.render(state, true);
+    renderer.renderState(state, true);
 }
 
 void onBtn1Click() {
     if (!state.isPaired) return;
-    display.showConnecting(); // Use as loading screen
+    renderer.showConnecting();
     api.sendAction("/timer/toggle", state);
     lastSyncTime = millis();
     lastTickTime = millis();
-    display.render(state, true);
+    renderer.renderState(state, true);
 }
 
 void onBtn1LongPress() {
     if (!state.isPaired) return;
-    display.showConnecting(); // Use as loading screen
+    renderer.showConnecting();
     api.sendAction("/timer/stop", state);
     lastSyncTime = millis();
     lastTickTime = millis();
-    display.render(state, true);
+    renderer.renderState(state, true);
 }
 
 void onBtn2Click() {
@@ -66,7 +87,7 @@ void onBtn2Click() {
 void setup() {
     Serial.begin(115200);
 
-    if (!display.begin()) {
+    if (!displayDriver.begin()) {
         Serial.println("SSD1306 allocation failed");
         for(;;);
     }
@@ -74,27 +95,30 @@ void setup() {
     auth.begin();
 
     wifi.begin(WIFI_SSID, WIFI_PASSWORD, []() {
-        display.showConnecting();
+        renderer.showConnecting();
     });
 
     if (wifi.isConnected()) {
-        display.showPairingScreen(auth.getToken(), "Polling API...");
+        renderer.showPairingScreen(auth.getToken(), "Polling API...");
     } else {
-        display.showPairingScreen(auth.getToken(), "WiFi Failed");
+        renderer.showPairingScreen(auth.getToken(), "WiFi Failed");
     }
 
-    api.begin(API_URL, auth.getToken(), requestSync, globalWsEvent);
-
-    buttons.begin(onBtn1Click, onBtn1LongPress, onBtn2Click);
+    api.begin(API_URL, auth.getToken());
+    
+    btn1.onSingleClick(onBtn1Click);
+    btn1.onLongPress(onBtn1LongPress);
+    btn2.onSingleClick(onBtn2Click);
 
     performSync();
 }
 
 void loop() {
-    buttons.tick();
+    btn1.tick();
+    btn2.tick();
 
-    if (state.userId > 0) {
-        api.tick();
+    if (wsInitialized) {
+        ws.tick();
     }
 
     if (needsSync) {
@@ -106,7 +130,7 @@ void loop() {
         if (millis() - lastTickTime >= 1000) {
             state.elapsedSeconds++;
             lastTickTime = millis();
-            display.render(state, wifi.isConnected());
+            renderer.renderState(state, wifi.isConnected());
         }
     }
 
