@@ -34,6 +34,12 @@ Route::middleware('auth')->group(function () {
 
 
 // Clients
+    // Leads
+    Route::get('/leads', function () { return view('leads.index'); })->name('leads.index');
+
+    // Ideas
+    Route::get('/ideas', function () { return view('ideas.index'); })->name('ideas.index');
+
     Route::resource('clients', ClientController::class);
     Route::resource('users', \App\Http\Controllers\UserController::class);
 
