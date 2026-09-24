@@ -1,10 +1,11 @@
 #pragma once
 #include <Arduino.h>
 #include <WiFi.h>
+#include <functional>
 
 class WifiService {
 public:
-    bool begin(const char* ssid, const char* password, void (*onConnecting)()) {
+    bool begin(const char* ssid, const char* password, std::function<void()> onConnecting) {
         WiFi.mode(WIFI_STA);
         WiFi.disconnect();
         delay(100);
