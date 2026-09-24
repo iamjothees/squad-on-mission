@@ -1,3 +1,30 @@
+
+    <div class="flex justify-end">
+        <button type="button" @click="showModal = true" class="bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-700 dark:hover:bg-white transition-colors shadow-sm">
+            + New Idea
+        </button>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div x-show="showModal" style="display: none;" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 transition-opacity" @click="showModal = false"></div>
+    
+    <!-- Modal Panel -->
+    <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl w-full max-w-3xl pointer-events-auto flex flex-col max-h-[90vh]" @click.stop>
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">{{ $editingId ? 'Edit Idea' : 'Dump Idea' }}</h3>
+                <button type="button" @click="showModal = false; $wire.resetForm()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                    <x-lucide-x class="w-5 h-5" />
+                </button>
+            </div>
+            
+            <!-- Body -->
+            <div class="p-6 overflow-y-auto">
+                
+            </div>
+        </div>
+    </div>
 <?php
 
 use Livewire\Component;
@@ -12,6 +39,8 @@ new class extends Component
     public $status = 'new';
     
     public $editingId = null;
+    public $showModal = false;
+    public $showModal = false;
     
     public function mount() {
         $this->loadIdeas();
@@ -44,6 +73,7 @@ new class extends Component
         }
         
         $this->resetForm();
+        $this->showModal = false;
         $this->loadIdeas();
     }
     
@@ -71,9 +101,32 @@ new class extends Component
 };
 ?>
 
-<div class="space-y-6">
-    <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4">
-        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 mb-4">{{ $editingId ? 'Edit Idea' : 'Dump a Crazy Idea' }}</h3>
+<div class="space-y-6" x-data="{ showModal: @entangle('showModal') }">
+    
+    <div class="flex justify-end">
+        <button type="button" @click="showModal = true" class="bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-700 dark:hover:bg-white transition-colors shadow-sm">
+            + New Idea
+        </button>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div x-show="showModal" style="display: none;" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 transition-opacity" @click="showModal = false"></div>
+    
+    <!-- Modal Panel -->
+    <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl w-full max-w-3xl pointer-events-auto flex flex-col max-h-[90vh]" @click.stop>
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">{{ $editingId ? 'Edit Idea' : 'Dump a Crazy Idea' }}</h3>
+                <button type="button" @click="showModal = false; $wire.resetForm()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                    <x-lucide-x class="w-5 h-5" />
+                </button>
+            </div>
+            
+            <!-- Body -->
+            <div class="p-6 overflow-y-auto">
+                <div class="">
+        
         <form wire:submit="save" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="md:col-span-3">
                 <input type="text" wire:model="title" placeholder="What's the idea?" class="w-full bg-gray-50/50 dark:bg-gray-900/50 border border-gray-700 rounded px-3 py-2 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500" required>
@@ -93,7 +146,7 @@ new class extends Component
             </div>
             <div class="md:col-span-4 flex justify-end gap-2">
                 @if($editingId)
-                    <button type="button" wire:click="resetForm" class="px-3 py-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 transition-colors">Cancel</button>
+                    <button type="button" @click="showModal = false; $wire.resetForm()" class="px-3 py-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 transition-colors">Cancel</button>
                 @endif
                 <button type="submit" class="bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-white px-4 py-1.5 rounded text-xs font-medium transition-colors">
                     {{ $editingId ? 'Update Idea' : 'Save Idea' }}
@@ -102,7 +155,11 @@ new class extends Component
         </form>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    
+            </div>
+        </div>
+    </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @forelse($ideas as $idea)
             <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors group">
                 <div class="flex justify-between items-start mb-2">
