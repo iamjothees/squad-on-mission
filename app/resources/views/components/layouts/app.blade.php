@@ -40,7 +40,7 @@
                             <x-lucide-layout-dashboard class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Dashboard
                         </a>
-                        <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Modules</div>
+                        <div class="pt-2 pb-1 px-3 text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">Workspace</div>
                         <a href="{{ route('clients.index') }}" wire:navigate class="flex items-center px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-800 focus:outline-none transition-colors">
                             <x-lucide-users class="w-4 h-4 mr-3 text-gray-500 dark:text-gray-400" />
                             Clients
