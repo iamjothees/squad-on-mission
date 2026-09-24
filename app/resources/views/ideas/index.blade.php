@@ -1,15 +1,13 @@
-<x-layouts.app>
-    <x-slot name="header">
+<x-layouts.app title="Ideas">
+    <div class="flex flex-col gap-5">
+        <!-- Page Header -->
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-lg text-gray-200 leading-tight">
-                {{ __('Idea Board') }}
-            </h2>
+            <div>
+                <h1 class="font-bold text-gray-800 dark:text-white text-lg">Ideas</h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dump and organize your crazy ideas, brainstorms, and someday-projects.</p>
+            </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <livewire:idea-board />
-        </div>
+        <livewire:idea-board />
     </div>
 </x-layouts.app>

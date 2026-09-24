@@ -84,8 +84,8 @@ new class extends Component
 ?>
 
 <div class="space-y-6">
-    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4">
-        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 mb-4">{{ $editingId ? 'Edit Lead' : 'New Lead' }}</h3>
+    <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4">
+        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ $editingId ? 'Edit Lead' : 'New Lead' }}</h3>
         <form wire:submit="save" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
                 <label class="block text-xs text-gray-500 mb-1">Name *</label>
@@ -132,8 +132,8 @@ new class extends Component
         </form>
     </div>
 
-    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded overflow-x-auto">
-        <table class="w-full text-left text-sm whitespace-nowrap">
+    <div class="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-950">
+        <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-50/50 dark:bg-gray-900/50 text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800 text-xs">
                     <th class="px-4 py-2 font-medium">Name</th>
@@ -147,14 +147,14 @@ new class extends Component
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800/50">
                 @forelse($leads as $lead)
                     <tr class="hover:bg-gray-50 dark:bg-gray-900 transition-colors">
-                        <td class="px-4 py-3 text-gray-800 dark:text-gray-200 font-medium">
+                        <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-800 dark:text-gray-200 font-medium">
                             {{ $lead->name }}
                             @if($lead->notes)
                                 <div class="text-[10px] text-gray-500 mt-0.5 truncate max-w-xs" title="{{ $lead->notes }}">{{ $lead->notes }}</div>
                             @endif
                         </td>
-                        <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ $lead->company ?: '-' }}</td>
-                        <td class="px-4 py-3 text-gray-600 dark:text-gray-400">
+                        <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">{{ $lead->company ?: '-' }}</td>
+                        <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-400">
                             <div class="flex flex-col gap-0.5">
                                 @if($lead->email)<span class="text-xs">{{ $lead->email }}</span>@endif
                                 @if($lead->phone)<span class="text-xs">{{ $lead->phone }}</span>@endif

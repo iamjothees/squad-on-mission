@@ -72,7 +72,7 @@ new class extends Component
 ?>
 
 <div class="space-y-6">
-    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4">
+    <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4">
         <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 mb-4">{{ $editingId ? 'Edit Idea' : 'Dump a Crazy Idea' }}</h3>
         <form wire:submit="save" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="md:col-span-3">
@@ -104,7 +104,7 @@ new class extends Component
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @forelse($ideas as $idea)
-            <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors group">
+            <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors group">
                 <div class="flex justify-between items-start mb-2">
                     <h4 class="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight group-hover:text-indigo-400 transition-colors">{{ $idea->title }}</h4>
                     <span class="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider whitespace-nowrap ml-2

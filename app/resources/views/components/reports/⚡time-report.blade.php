@@ -96,7 +96,7 @@ new class extends Component
 
 <div class="space-y-6">
     <!-- Filters -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4 gap-4">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4 gap-4">
         <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 flex items-center gap-2">
             <x-lucide-sliders class="w-4 h-4 text-emerald-500" /> Global Filters
         </h3>
@@ -112,7 +112,7 @@ new class extends Component
     </div>
 
     <!-- Custom Comparison Tool -->
-    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+    <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 flex items-center gap-2">
                 <x-lucide-git-compare class="w-4 h-4 text-pink-500" /> Custom Comparison
@@ -174,7 +174,7 @@ new class extends Component
     </div>
 
     <!-- Quick Overviews -->
-    <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+    <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-6">
         <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2">
             <x-lucide-clock class="w-4 h-4 text-indigo-500" /> Standard Pulse
         </h3>

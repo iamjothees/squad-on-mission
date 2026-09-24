@@ -104,7 +104,7 @@ new class extends Component
 
 <div class="space-y-6">
     <!-- Filters -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-4 gap-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-4 gap-4">
         <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-800 dark:text-gray-200 flex items-center gap-2">
             <x-lucide-filter class="w-4 h-4 text-emerald-500" /> Period Selection
         </h3>
@@ -117,7 +117,7 @@ new class extends Component
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Projects -->
-        <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+        <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-6">
             <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-3 mb-4 flex items-center gap-2">
                 <x-lucide-folder class="w-4 h-4 text-indigo-500" /> Top Projects
             </h4>
@@ -148,7 +148,7 @@ new class extends Component
         </div>
 
         <!-- Tasks -->
-        <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6">
+        <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-6">
             <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-3 mb-4 flex items-center gap-2">
                 <x-lucide-check-square class="w-4 h-4 text-emerald-500" /> Top Tasks
             </h4>
@@ -179,7 +179,7 @@ new class extends Component
         </div>
         
         <!-- Clients -->
-        <div class="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-200 dark:border-gray-800 shadow-sm rounded p-6 md:col-span-2">
+        <div class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-6 md:col-span-2">
             <h4 class="text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200 dark:border-gray-800 pb-3 mb-4 flex items-center gap-2">
                 <x-lucide-users class="w-4 h-4 text-purple-500" /> Top Clients
             </h4>

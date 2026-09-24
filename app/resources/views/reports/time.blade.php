@@ -1,15 +1,13 @@
 <x-layouts.app title="Time Analytics">
-    <x-slot name="header">
+    <div class="flex flex-col gap-5">
+        <!-- Page Header -->
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-lg text-gray-200 leading-tight">
-                {{ __('Time Analytics') }}
-            </h2>
+            <div>
+                <h1 class="font-bold text-gray-800 dark:text-white text-lg">Time Analytics</h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Deep dive into exactly where your hours are being invested.</p>
+            </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <livewire:reports.time-report />
-        </div>
+        <livewire:reports.time-report />
     </div>
 </x-layouts.app>

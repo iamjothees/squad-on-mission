@@ -1,15 +1,13 @@
-<x-layouts.app>
-    <x-slot name="header">
+<x-layouts.app title="Leads">
+    <div class="flex flex-col gap-5">
+        <!-- Page Header -->
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-lg text-gray-200 leading-tight">
-                {{ __('Leads') }}
-            </h2>
+            <div>
+                <h1 class="font-bold text-gray-800 dark:text-white text-lg">Leads</h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Manage and track your potential clients and incoming opportunities.</p>
+            </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <livewire:lead-manager />
-        </div>
+        <livewire:lead-manager />
     </div>
 </x-layouts.app>
