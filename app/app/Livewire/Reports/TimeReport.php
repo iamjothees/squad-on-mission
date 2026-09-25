@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Reports;
 
-use App\Models\Timer;
+use App\Models\TimerLog;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
 
@@ -51,11 +51,12 @@ class TimeReport extends Component
 
     private function getPeriodSeconds($start, $end)
     {
-        $query = Timer::whereNotNull('completed_at')
-            ->whereBetween('started_at', [$start, $end]);
+        $query = TimerLog::whereBetween('started_at', [$start->timestamp, $end->timestamp]);
             
         if ($this->userId !== 'all') {
-            $query->where('user_id', $this->userId);
+            $query->whereHas('timer', function($q) {
+                $q->where('user_id', $this->userId);
+            });
         }
         
         return $query->sum('duration_seconds');

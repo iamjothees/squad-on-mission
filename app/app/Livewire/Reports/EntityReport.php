@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Reports;
 
-use App\Models\Timer;
+use App\Models\TimerLog;
 use Livewire\Component;
 
 class EntityReport extends Component
@@ -47,41 +47,49 @@ class EntityReport extends Component
             default => now()->subWeek()->endOfWeek(),
         };
 
-        $baseTimers = Timer::whereNotNull('completed_at')->whereBetween('started_at', [$start, $end])->with(['task', 'project', 'client'])->get();
-        $prevTimers = Timer::whereNotNull('completed_at')->whereBetween('started_at', [$prevStart, $prevEnd])->with(['task', 'project', 'client'])->get();
+        $baseLogs = TimerLog::whereBetween('started_at', [$start->timestamp, $end->timestamp])->with(['timer.tasks', 'timer.projects', 'timer.clients'])->get();
+        $prevLogs = TimerLog::whereBetween('started_at', [$prevStart->timestamp, $prevEnd->timestamp])->with(['timer.tasks', 'timer.projects', 'timer.clients'])->get();
         
-        $topTasks = $this->aggregateEntities($baseTimers, $prevTimers, 'task');
-        $topProjects = $this->aggregateEntities($baseTimers, $prevTimers, 'project');
-        $topClients = $this->aggregateEntities($baseTimers, $prevTimers, 'client');
+        $topTasks = $this->aggregateEntities($baseLogs, $prevLogs, 'tasks');
+        $topProjects = $this->aggregateEntities($baseLogs, $prevLogs, 'projects');
+        $topClients = $this->aggregateEntities($baseLogs, $prevLogs, 'clients');
 
         return view('livewire.reports.entity-report', compact('topTasks', 'topProjects', 'topClients'));
     }
     
-    private function aggregateEntities($baseTimers, $prevTimers, $relation)
+    private function aggregateEntities($baseLogs, $prevLogs, $relation)
     {
         $current = [];
         $previous = [];
+        $entityNames = [];
         
-        foreach ($baseTimers as $t) {
-            if ($t->$relation) {
-                $id = $t->$relation->id;
-                $current[$id] = ($current[$id] ?? 0) + $t->duration_seconds;
+        foreach ($baseLogs as $log) {
+            if ($log->timer && $log->timer->$relation) {
+                foreach ($log->timer->$relation as $entity) {
+                    $id = $entity->id;
+                    $current[$id] = ($current[$id] ?? 0) + $log->duration_seconds;
+                    $entityNames[$id] = $entity->name ?? $entity->title;
+                }
             }
         }
         
-        foreach ($prevTimers as $t) {
-            if ($t->$relation) {
-                $id = $t->$relation->id;
-                $previous[$id] = ($previous[$id] ?? 0) + $t->duration_seconds;
+        foreach ($prevLogs as $log) {
+            if ($log->timer && $log->timer->$relation) {
+                foreach ($log->timer->$relation as $entity) {
+                    $id = $entity->id;
+                    $previous[$id] = ($previous[$id] ?? 0) + $log->duration_seconds;
+                    if (!isset($entityNames[$id])) {
+                        $entityNames[$id] = $entity->name ?? $entity->title;
+                    }
+                }
             }
         }
         
         $results = [];
         foreach ($current as $id => $seconds) {
             $prevSecs = $previous[$id] ?? 0;
-            $entity = $baseTimers->firstWhere($relation . '.id', $id)->$relation;
             $results[] = [
-                'name' => $entity->name ?? $entity->title,
+                'name' => $entityNames[$id],
                 'seconds' => $seconds,
                 'prev_seconds' => $prevSecs,
                 'delta_percent' => $prevSecs > 0 ? round((($seconds - $prevSecs) / $prevSecs) * 100) : 100
