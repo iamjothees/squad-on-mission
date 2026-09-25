@@ -1,131 +1,131 @@
 <div class="fixed bottom-6 right-6 z-[9999]" wire:ignore
-         @force-new-timer.window="$wire.forceStartNewTimer()">
-    <div x-data="globalTimerData(@js($timerId), @js($initialState))" 
-         
-            @timer-switched.window="switchTimer($event.detail)"
-         class="bg-gray-900 text-white shadow-xl rounded-full px-5 py-3 flex items-center gap-4 hover:shadow-2xl transition-all border border-gray-700">
-        
-        <!-- Timer Display -->
-        <div class="flex flex-col items-center justify-center -space-y-1">
-            <div x-show="!isRunning && formattedTime === '00:00:00' && timerInstance && timerInstance.last_duration > 0" x-cloak class="text-[10px] text-gray-400 font-mono tracking-tighter opacity-70" title="Last Timer">
-                Last: <span x-text="formatSecondsPure(timerInstance.last_duration)"></span>
-            </div>
-            <a :href="'/timers/' + activeTimerId" class="font-mono text-xl font-bold tracking-wider tabular-nums min-w-[6rem] text-center hover:text-indigo-400 transition-colors" x-text="formattedTime" title="View Logs">
-                00:00:00
-            </a>
-        </div>
+ @force-new-timer.window="$wire.forceStartNewTimer()">
+ <div x-data="globalTimerData(@js($timerId), @js($initialState))" 
+ 
+ @timer-switched.window="switchTimer($event.detail)"
+ class="bg-gray-900 text-white shadow-xl rounded-full px-5 py-3 flex items-center gap-4 hover:shadow-2xl transition-all border border-gray-700">
+ 
+ <!-- Timer Display -->
+ <div class="flex flex-col items-center justify-center -space-y-1">
+ <div x-show="!isRunning && formattedTime === '00:00:00' && timerInstance && timerInstance.last_duration > 0" x-cloak class="text-[10px] text-gray-400 font-mono tracking-tighter opacity-70" title="Last Timer">
+ Last: <span x-text="formatSecondsPure(timerInstance.last_duration)"></span>
+ </div>
+ <a :href="'/timers/' + activeTimerId" class="font-mono text-xl font-bold tracking-wider tabular-nums min-w-[6rem] text-center hover:text-indigo-400 transition-colors" x-text="formattedTime" title="View Logs">
+ 00:00:00
+ </a>
+ </div>
 
-        <!-- Divider -->
-        <div class="w-px h-6 bg-gray-700"></div>
+ <!-- Divider -->
+ <div class="w-px h-6 bg-gray-700"></div>
 
-        <div class="flex items-center gap-2">
-            <!-- Play/Pause Button -->
-            <button @click="toggle" 
-                    class="w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400"
-                    :class="isRunning ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'">
-                
-                <!-- Play Icon -->
-                <x-lucide-play x-show="!isRunning" class="w-5 h-5 ml-0.5 fill-current" />
-                
-                <!-- Pause Icon -->
-                <x-lucide-pause x-show="isRunning" class="w-5 h-5 fill-current" style="display: none;" />
-            </button>
+ <div class="flex items-center gap-2">
+ <!-- Play/Pause Button -->
+ <button @click="toggle" 
+ class="w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400"
+ :class="isRunning ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'">
+ 
+ <!-- Play Icon -->
+ <x-lucide-play x-show="!isRunning" class="w-5 h-5 ml-0.5 fill-current" />
+ 
+ <!-- Pause Icon -->
+ <x-lucide-pause x-show="isRunning" class="w-5 h-5 fill-current" style="display: none;" />
+ </button>
 
-            <!-- Stop Button -->
-            <button wire:click="stopTimer" 
-                    x-show="formattedTime !== '00:00:00' || isRunning"
-                    class="w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400 bg-red-500 hover:bg-red-600 text-white" style="display: none;">
-                <x-lucide-square class="w-4 h-4 fill-current" />
-            </button>
-        </div>
-    </div>
+ <!-- Stop Button -->
+ <button wire:click="stopTimer" 
+ x-show="formattedTime !== '00:00:00' || isRunning"
+ class="w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400 bg-red-500 hover:bg-red-600 text-white" style="display: none;">
+ <x-lucide-square class="w-4 h-4 fill-current" />
+ </button>
+ </div>
+ </div>
 </div>
 
 @once
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('globalTimerData', (timerId, initialState) => ({
-            timerInstance: null,
-            eventChannel: null,
-            formattedTime: '00:00:00',
-            isRunning: initialState.is_running,
-            activeTimerId: timerId,
+ document.addEventListener('alpine:init', () => {
+ Alpine.data('globalTimerData', (timerId, initialState) => ({
+ timerInstance: null,
+ eventChannel: null,
+ formattedTime: '00:00:00',
+ isRunning: initialState.is_running,
+ activeTimerId: timerId,
 
-            
-            switchTimer(detail, broadcast = true) {
-                if (broadcast && this.eventChannel) {
-                    this.eventChannel.postMessage({ type: 'switch', detail: detail });
-                }
-                this.destroy();
-                let timerId = detail.timerId;
-                this.activeTimerId = timerId;
-                let initialState = detail.initialState;
-                this.isRunning = initialState.is_running;
-                this.initTimer(timerId, initialState);
-            },
-            
-            initTimer(timerId, initialState) {
-                this.timerInstance = new window.Timer(timerId, initialState, (seconds, isRunning) => {
-                    this.isRunning = isRunning;
-                    this.formatSeconds(seconds);
-                });
-            },
+ 
+ switchTimer(detail, broadcast = true) {
+ if (broadcast && this.eventChannel) {
+ this.eventChannel.postMessage({ type: 'switch', detail: detail });
+ }
+ this.destroy();
+ let timerId = detail.timerId;
+ this.activeTimerId = timerId;
+ let initialState = detail.initialState;
+ this.isRunning = initialState.is_running;
+ this.initTimer(timerId, initialState);
+ },
+ 
+ initTimer(timerId, initialState) {
+ this.timerInstance = new window.Timer(timerId, initialState, (seconds, isRunning) => {
+ this.isRunning = isRunning;
+ this.formatSeconds(seconds);
+ });
+ },
 
-            init() {
-                this.eventChannel = new BroadcastChannel('global_timer_events');
-                this.eventChannel.onmessage = (event) => {
-                    if (event.data && event.data.type === 'switch') {
-                        this.switchTimer(event.data.detail, false);
-                    }
-                };
-                this.initTimer(timerId, initialState);
-            },
+ init() {
+ this.eventChannel = new BroadcastChannel('global_timer_events');
+ this.eventChannel.onmessage = (event) => {
+ if (event.data && event.data.type === 'switch') {
+ this.switchTimer(event.data.detail, false);
+ }
+ };
+ this.initTimer(timerId, initialState);
+ },
 
 
-            formatSecondsPure(totalSeconds) {
-                if (!totalSeconds) return '00:00:00';
-                const hoursPerDay = parseFloat('{{ config('squad.work_hours_per_day', 24) }}');
-                const secondsPerDay = hoursPerDay * 3600;
-                
-                const days = Math.floor(totalSeconds / secondsPerDay);
-                const remainingSeconds = totalSeconds % secondsPerDay;
-                
-                const hours = Math.floor(remainingSeconds / 3600);
-                const minutes = Math.floor((remainingSeconds % 3600) / 60);
-                const seconds = remainingSeconds % 60;
-                
-                const timeString = [hours, minutes, seconds]
-                    .map(v => v < 10 ? "0" + v : v)
-                    .join(":");
-                    
-                if (days > 0) {
-                    return days + "d " + timeString;
-                } else {
-                    return timeString;
-                }
-            },
-            
-            formatSeconds(totalSeconds) {
-                this.formattedTime = this.formatSecondsPure(totalSeconds);
-            },
+ formatSecondsPure(totalSeconds) {
+ if (!totalSeconds) return '00:00:00';
+ const hoursPerDay = parseFloat('{{ config('squad.work_hours_per_day', 24) }}');
+ const secondsPerDay = hoursPerDay * 3600;
+ 
+ const days = Math.floor(totalSeconds / secondsPerDay);
+ const remainingSeconds = totalSeconds % secondsPerDay;
+ 
+ const hours = Math.floor(remainingSeconds / 3600);
+ const minutes = Math.floor((remainingSeconds % 3600) / 60);
+ const seconds = remainingSeconds % 60;
+ 
+ const timeString = [hours, minutes, seconds]
+ .map(v => v < 10 ?"0" + v : v)
+ .join(":");
+ 
+ if (days > 0) {
+ return days +"d" + timeString;
+ } else {
+ return timeString;
+ }
+ },
+ 
+ formatSeconds(totalSeconds) {
+ this.formattedTime = this.formatSecondsPure(totalSeconds);
+ },
 
-            toggle() {
-                this.timerInstance.toggle();
-                this.isRunning = this.timerInstance.is_running;
-            },
+ toggle() {
+ this.timerInstance.toggle();
+ this.isRunning = this.timerInstance.is_running;
+ },
 
-            stop() {
-                this.timerInstance.stop();
-                this.isRunning = false;
-                this.formatSeconds(0);
-            },
+ stop() {
+ this.timerInstance.stop();
+ this.isRunning = false;
+ this.formatSeconds(0);
+ },
 
-            destroy() {
-                if (this.timerInstance) {
-                    this.timerInstance.destroy();
-                }
-            }
-        }));
-    });
+ destroy() {
+ if (this.timerInstance) {
+ this.timerInstance.destroy();
+ }
+ }
+ }));
+ });
 </script>
 @endonce

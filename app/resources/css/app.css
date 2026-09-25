@@ -1,5 +1,54 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --border: #DDDAD8;
+  --fg: #1C1917;
+  --fg-muted: #78716C;
+  --accent: #BA4E12;
+  --accent-fg: #FFFFFF;
+  --sidebar: #F1EEEB;
+  --sidebar-fg: #57534E;
+  --sidebar-fg-strong: #1C1917;
+  --sidebar-border: #E2DEDA;
+  --sidebar-active: #E2DEDA;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #0B0A0A;
+  --surface: #17151A;
+  --border: #33303B;
+  --fg: #F5F3F0;
+  --fg-muted: #A8A29E;
+  --accent: #DD6C26;
+  --accent-fg: #FFFFFF;
+  --sidebar: #17151A;
+  --sidebar-fg: #C9C4BE;
+  --sidebar-fg-strong: #FFFFFF;
+  --sidebar-border: #33303B;
+  --sidebar-active: #2A2730;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-fg: var(--sidebar-fg);
+  --color-sidebar-fg-strong: var(--sidebar-fg-strong);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-active: var(--sidebar-active);
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
