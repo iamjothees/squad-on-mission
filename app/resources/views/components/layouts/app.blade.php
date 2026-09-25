@@ -39,7 +39,7 @@
 
  <div class="flex flex-col flex-1 h-0 overflow-y-auto w-full">
  <div class="flex items-center gap-2 h-14 px-4 border-b border-sidebar-border shrink-0 bg-sidebar">
- <img src="{{ asset('assets/fav.png') }}" alt="{{ config('app.name') }} Logo" class="h-8 w-auto">
+ <img src="{{ asset('assets/fav.png') }}" alt="{{ config('app.name') }} Logo" class="h-8 w-auto invert dark:invert-0">
  <span class="font-bold text-sidebar-fg tracking-tight truncate">{{ config('app.name') }}</span>
  </div>
  <nav class="flex-1 p-2 space-y-0.5 bg-sidebar">
