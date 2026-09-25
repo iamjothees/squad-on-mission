@@ -117,15 +117,15 @@
  <div class="flex items-center space-x-4 text-sm">
  <a href="{{ route('profile.show') }}" class="text-sidebar-fg-muted font-medium hover:text-accent hover:underline transition-colors" title="Manage Profile">{{ auth()->user()->name ?? 'Guest' }}</a>
                             <div class="h-5 w-px bg-sidebar-border"></div>
-                            <div x-data="{ theme: localStorage.getItem('admin-theme') || 'system' }" class="flex items-center">
+                            <div x-data="{ adminTheme: localStorage.getItem('admin-theme') || 'system' }" class="flex items-center">
                                 <button @click="
-                                    theme = { 'light': 'dark', 'dark': 'system', 'system': 'light' }[theme];
-                                    theme === 'system' ? localStorage.removeItem('admin-theme') : localStorage.setItem('admin-theme', theme);
-                                    document.documentElement.classList.toggle('dark', theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
-                                " class="text-sidebar-fg-muted hover:text-sidebar-fg transition-colors w-7 h-7 rounded flex items-center justify-center" :title="'Theme: ' + theme.charAt(0).toUpperCase() + theme.slice(1)">
-                                    <span x-show="theme === 'light'" ><x-lucide-sun class="w-4 h-4" /></span>
-                                    <span x-show="theme === 'dark'" ><x-lucide-moon class="w-4 h-4" /></span>
-                                    <span x-show="theme === 'system'" ><x-lucide-monitor class="w-4 h-4" /></span>
+                                    adminTheme = { 'light': 'dark', 'dark': 'system', 'system': 'light' }[adminTheme || 'system'] || 'light';
+                                    adminTheme === 'system' ? localStorage.removeItem('admin-theme') : localStorage.setItem('admin-theme', adminTheme);
+                                    document.documentElement.classList.toggle('dark', adminTheme === 'dark' || (adminTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
+                                " class="text-sidebar-fg-muted hover:text-sidebar-fg transition-colors w-7 h-7 rounded flex items-center justify-center" :title="'Theme: ' + String(adminTheme || 'system').charAt(0).toUpperCase() + String(adminTheme || 'system').slice(1)">
+                                    <span x-show="adminTheme === 'light'" ><x-lucide-sun class="w-4 h-4" /></span>
+                                    <span x-show="adminTheme === 'dark'" ><x-lucide-moon class="w-4 h-4" /></span>
+                                    <span x-show="adminTheme === 'system'" ><x-lucide-monitor class="w-4 h-4" /></span>
                                 </button>
                             </div>
                             <div class="h-5 w-px bg-sidebar-border"></div>
