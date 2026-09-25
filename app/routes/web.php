@@ -34,15 +34,22 @@ Route::middleware('auth')->group(function () {
 
 
 // Clients
+     
+
+     
+
+     
+
+    
     // Reports
-    Route::get('/reports/time', function () { return view('reports.time'); })->name('reports.time');
-    Route::get('/reports/entities', function () { return view('reports.entities'); })->name('reports.entities');
+    Route::get('/reports/time', [\App\Http\Controllers\ReportController::class, 'time'])->name('reports.time');
+    Route::get('/reports/entities', [\App\Http\Controllers\ReportController::class, 'entities'])->name('reports.entities');
 
     // Leads
-    Route::get('/leads', function () { return view('leads.index'); })->name('leads.index');
-
+    Route::resource('leads', \App\Http\Controllers\LeadController::class);
+    
     // Ideas
-    Route::get('/ideas', function () { return view('ideas.index'); })->name('ideas.index');
+    Route::resource('ideas', \App\Http\Controllers\IdeaController::class);
 
     Route::resource('clients', ClientController::class);
     Route::resource('users', \App\Http\Controllers\UserController::class);
