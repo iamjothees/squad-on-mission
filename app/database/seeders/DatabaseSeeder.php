@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'System',
             'username' => 'system',
-            'email' => env('SYSTEM_EMAIL', 'connect@squadonmission.local'),
+            'email' => env('SYSTEM_EMAIL', 'connect@byteandbrand.online'),
             'password' => null,
             'email_verified_at' => null,
         ]);
