@@ -1,0 +1,50 @@
+services:
+  app:
+    container_name: som-prod
+    image: iamjothees/som:latest
+    networks:
+      - tunnel_net
+    restart: unless-stopped
+    volumes:
+      - ./.env:/var/www/html/.env
+
+  reverb:
+    container_name: som-prod-reverb
+    image: iamjothees/som:latest
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    networks:
+      - tunnel_net
+    restart: unless-stopped
+    volumes:
+      - ./.env:/var/www/html/.env
+
+  db:
+    container_name: som-prod-db
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - tunnel_net
+
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: som-prod_cloudflared_tunnel
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run
+    networks:
+      - tunnel_net
+
+networks:
+  tunnel_net:
+    driver: bridge
+
+volumes:
+  db-data:

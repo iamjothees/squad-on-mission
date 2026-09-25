@@ -1,0 +1,28 @@
+FROM iamjothees/laravel-image:php8.5
+
+# Setup Node.js
+ENV NVM_DIR="/usr/local/nvm"
+RUN source $NVM_DIR/nvm.sh \
+    && nvm install 22 \
+    && nvm alias default 22 \
+    && nvm use default
+
+ENV PATH="/usr/local/nvm/versions/node/v22.23.2/bin:${PATH}"
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy application files into the image
+COPY ./app /var/www/html
+
+# Install PHP dependencies (production optimized)
+RUN composer install --no-dev --optimize-autoloader
+
+# Install Node dependencies and build assets
+RUN npm install && npm run build
+
+# Set correct permissions for Laravel (Assuming www-data is the web server user)
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
+
+EXPOSE 80
+EXPOSE 8080

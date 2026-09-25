@@ -1,0 +1,30 @@
+.git
+.gitignore
+.dockerignore
+.DS_Store
+.idea/
+.vscode/
+README.md
+docs/
+hardware/
+
+# ⚠️ CRITICAL: Never bake local environment files into the image!
+app/.env
+app/.env.*
+app/.env.backup
+!app/.env.example
+
+# Ignore local dependencies (the Dockerfile runs composer/npm install fresh)
+app/vendor/
+app/node_modules/
+
+# Ignore local frontend builds (the Dockerfile runs npm run build fresh)
+app/public/build/
+app/public/hot
+
+# Ignore local storage logs/cache
+app/storage/*.key
+app/storage/logs/*.log
+app/storage/framework/cache/data/*
+app/storage/framework/sessions/*
+app/storage/framework/views/*

@@ -40,7 +40,7 @@ services:
   #   container_name: cloudflared_tunnel
   #   restart: unless-stopped
   #   environment:
-  #     - TUNNEL_TOKEN=eyJhIjoiMzgxY2JmZTc2ZWFhMGRhNjY3YjdjZWEyYjdlNGIwNTIiLCJ0IjoiMDkxN2UzNjMtNDNkNS00Zjg0LWJhNjAtNGRlYTk1ZDY1YzUzIiwicyI6IlpUaGtZV0ZrTkdZdE1tSTNOUzAwTkRoa0xUZ3lOVFV0TVRVd05qVmxaVFkzTnpkaCJ9
+  #     - TUNNEL_TOKEN=
   #   command: tunnel --no-autoupdate run
   #   networks:
   #     - tunnel_net
