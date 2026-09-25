@@ -46,7 +46,7 @@
                                         @if(!$lead->email && !$lead->phone)-@endif
                                     </div>
                                 </td>
-                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-green-600 dark:text-green-400">{{ $lead->value ? '$'.number_format($lead->value, 2) : '-' }}</td>
+                                <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50 text-green-600 dark:text-green-400">{{ $lead->value ? '₹'.number_format($lead->value, 2) : '-' }}</td>
                                 <td class="px-4 py-2.5 border-r border-gray-100 dark:border-gray-800/50">
                                     <span class="inline-flex items-center py-0.5 px-2 rounded-md text-[10px] font-semibold uppercase tracking-wider
                                         @if($lead->status === 'new') bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400

@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="space-y-1.5">
-                        <label for="value" class="block font-semibold text-gray-700 dark:text-gray-300">Estimated Value ($)</label>
+                        <label for="value" class="block font-semibold text-gray-700 dark:text-gray-300">Estimated Value (₹)</label>
                         <input type="number" step="0.01" id="value" name="value" value="{{ old('value', $lead->value) }}" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 transition-shadow">
                         @error('value') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
