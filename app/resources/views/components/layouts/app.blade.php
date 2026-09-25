@@ -116,7 +116,30 @@
  </div>
  <div class="flex items-center space-x-4 text-sm">
  <a href="{{ route('profile.show') }}" class="text-sidebar-fg-muted font-medium hover:text-accent hover:underline transition-colors" title="Manage Profile">{{ auth()->user()->name ?? 'Guest' }}</a>
- <div class="h-5 w-px bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="h-5 w-px bg-sidebar-border"></div>
+                            <div x-data="{ 
+                                theme: localStorage.getItem('admin-theme') || 'system',
+                                cycleTheme() {
+                                    const next = { 'light': 'dark', 'dark': 'system', 'system': 'light' };
+                                    this.theme = next[this.theme];
+                                    if (this.theme === 'system') {
+                                        localStorage.removeItem('admin-theme');
+                                    } else {
+                                        localStorage.setItem('admin-theme', this.theme);
+                                    }
+                                    
+                                    let isDark = this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                                    document.documentElement.classList.toggle('dark', isDark);
+                                }
+                            }" class="flex items-center">
+                                <button @click="cycleTheme" class="text-sidebar-fg-muted hover:text-sidebar-fg transition-colors rounded p-1 flex items-center justify-center" :title="'Theme: ' + theme.charAt(0).toUpperCase() + theme.slice(1)">
+                                    <span x-show="theme === 'light'" style="display: none;"><x-lucide-sun class="w-4 h-4" /></span>
+                                    <span x-show="theme === 'dark'" style="display: none;"><x-lucide-moon class="w-4 h-4" /></span>
+                                    <span x-show="theme === 'system'" style="display: none;"><x-lucide-monitor class="w-4 h-4" /></span>
+                                </button>
+                            </div>
+                            <div class="h-5 w-px bg-sidebar-border"></div>
+                            
  <form action="{{ route('logout') }}" method="POST" class="inline">
  @csrf
  <button type="submit" class="text-sidebar-fg-muted hover:text-sidebar-fg hover:underline focus:outline-none transition-colors">Logout</button>
