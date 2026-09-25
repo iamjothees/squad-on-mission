@@ -22,7 +22,7 @@
  x-transition.opacity.duration.300ms
  class="fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm md:hidden" 
  @click="sidebarOpen = false"
- style="display: none;"
+ 
  aria-hidden="true"></div>
 
  <!-- Sidebar -->
@@ -30,7 +30,7 @@
  class="fixed inset-y-0 left-0 z-50 flex flex-col w-52 transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:flex md:flex-shrink-0 border-r border-sidebar-border bg-sidebar">
  
  <!-- Close button for mobile -->
- <div class="absolute top-0 right-0 -mr-12 pt-2 md:hidden" x-show="sidebarOpen" style="display: none;">
+ <div class="absolute top-0 right-0 -mr-12 pt-2 md:hidden" x-show="sidebarOpen" >
  <button @click="sidebarOpen = false" type="button" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
  <span class="sr-only">Close sidebar</span>
  <x-lucide-x class="w-6 h-6 text-white" />
@@ -117,25 +117,15 @@
  <div class="flex items-center space-x-4 text-sm">
  <a href="{{ route('profile.show') }}" class="text-sidebar-fg-muted font-medium hover:text-accent hover:underline transition-colors" title="Manage Profile">{{ auth()->user()->name ?? 'Guest' }}</a>
                             <div class="h-5 w-px bg-sidebar-border"></div>
-                            <div x-data="{ 
-                                theme: localStorage.getItem('admin-theme') || 'system',
-                                cycleTheme() {
-                                    const next = { 'light': 'dark', 'dark': 'system', 'system': 'light' };
-                                    this.theme = next[this.theme];
-                                    if (this.theme === 'system') {
-                                        localStorage.removeItem('admin-theme');
-                                    } else {
-                                        localStorage.setItem('admin-theme', this.theme);
-                                    }
-                                    
-                                    let isDark = this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                                    document.documentElement.classList.toggle('dark', isDark);
-                                }
-                            }" class="flex items-center">
-                                <button @click="cycleTheme" class="text-sidebar-fg-muted hover:text-sidebar-fg transition-colors rounded p-1 flex items-center justify-center" :title="'Theme: ' + theme.charAt(0).toUpperCase() + theme.slice(1)">
-                                    <span x-show="theme === 'light'" style="display: none;"><x-lucide-sun class="w-4 h-4" /></span>
-                                    <span x-show="theme === 'dark'" style="display: none;"><x-lucide-moon class="w-4 h-4" /></span>
-                                    <span x-show="theme === 'system'" style="display: none;"><x-lucide-monitor class="w-4 h-4" /></span>
+                            <div x-data="{ theme: localStorage.getItem('admin-theme') || 'system' }" class="flex items-center">
+                                <button @click="
+                                    theme = { 'light': 'dark', 'dark': 'system', 'system': 'light' }[theme];
+                                    theme === 'system' ? localStorage.removeItem('admin-theme') : localStorage.setItem('admin-theme', theme);
+                                    document.documentElement.classList.toggle('dark', theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches));
+                                " class="text-sidebar-fg-muted hover:text-sidebar-fg transition-colors w-7 h-7 rounded flex items-center justify-center" :title="'Theme: ' + theme.charAt(0).toUpperCase() + theme.slice(1)">
+                                    <span x-show="theme === 'light'" ><x-lucide-sun class="w-4 h-4" /></span>
+                                    <span x-show="theme === 'dark'" ><x-lucide-moon class="w-4 h-4" /></span>
+                                    <span x-show="theme === 'system'" ><x-lucide-monitor class="w-4 h-4" /></span>
                                 </button>
                             </div>
                             <div class="h-5 w-px bg-sidebar-border"></div>

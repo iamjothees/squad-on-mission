@@ -164,3 +164,7 @@
     background-color: var(--accent) !important;
     border-left-color: transparent !important;
 }
+/* Alpine JS Cloak */
+[x-cloak] {
+    display: none !important;
+}
