@@ -66,94 +66,56 @@
 
 /* TomSelect Tailwind & Dark Mode Overrides */
 
-/* --- BASE TAILWIND FIXES --- */
 .ts-wrapper .ts-control {
     background-color: transparent !important;
     border: none !important;
     padding: 0 !important;
     box-shadow: none !important;
+    color: var(--fg) !important;
 }
 
-
-
-/* Ensure input always has text cursor */
 .ts-control input {
     cursor: text !important;
+    color: var(--fg) !important;
 }
 
-/* Dropdown Optgroup Header */
 .ts-dropdown .optgroup-header {
-    background: #f3f4f6 !important; /* bg-gray-100 */
+    background-color: var(--surface) !important;
     box-shadow: none !important;
-    color: #4b5563 !important; /* text-gray-600 */
-    border-bottom: 1px solid #e5e7eb !important; /* border-gray-200 */
+    color: var(--fg-muted) !important;
+    border-bottom: 1px solid var(--border) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-    /* --- DARK MODE EXPLICIT FIXES --- */
-
-    
-/* Ensure input always has text cursor */
-.ts-control input {
-    cursor: text !important;
+.ts-dropdown {
+    background-color: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+    color: var(--fg) !important;
+    z-index: 9999 !important;
 }
 
-/* Dropdown Optgroup Header */
-    .ts-dropdown .optgroup-header {
-        background-color: #111827 !important; /* bg-gray-900 */
-        color: #9ca3af !important; /* text-gray-400 */
-        border-bottom: 1px solid #374151 !important; /* border-gray-700 */
-    }
-
-    .ts-wrapper .ts-control {
-        background-color: transparent !important;
-        color: #f3f4f6 !important;
-    }
-
-    /* Selected Tags (Items) in Dark Mode */
-    .ts-wrapper .ts-control > div.item {
-        background-color: #374151 !important; /* bg-gray-700 */
-        color: #f3f4f6 !important; /* text-gray-100 */
-        border: 1px solid #4b5563 !important; /* border-gray-600 */
-        border-radius: 0.375rem !important;
-    }
-
-    /* Dropdown Container */
-    .ts-dropdown {
-        background-color: #1f2937 !important; /* bg-gray-800 */
-        border: 1px solid #374151 !important; /* border-gray-700 */
-        border-radius: 0.375rem !important;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
-        color: #f3f4f6 !important;
-    }
-
-    /* Dropdown Options */
-    .ts-dropdown .option,
-    .ts-dropdown .create,
-    .ts-dropdown .no-results {
-        color: #d1d5db !important; /* text-gray-300 */
-        background-color: transparent !important;
-    }
-
-    /* Dropdown Options Hover/Active */
-    .ts-dropdown .option:hover,
-    .ts-dropdown .option.active,
-    .ts-dropdown .create:hover,
-    .ts-dropdown .create.active {
-        background-color: #374151 !important; /* bg-gray-700 */
-        color: #ffffff !important;
-    }
-
-    /* Input typing text */
-    .ts-control input {
-        color: #f3f4f6 !important; /* text-gray-100 */
-        cursor: text !important;
-    }
-
-    
+.ts-dropdown .option,
+.ts-dropdown .create,
+.ts-dropdown .no-results {
+    color: var(--fg) !important;
+    background-color: transparent !important;
 }
 
-/* Make single select items flat in both modes */
+.ts-dropdown .option:hover,
+.ts-dropdown .option.active,
+.ts-dropdown .create:hover,
+.ts-dropdown .create.active {
+    background-color: var(--accent) !important;
+    color: var(--accent-fg) !important;
+}
+
+.ts-wrapper {
+    background-color: var(--bg) !important;
+    border-color: var(--border) !important;
+    cursor: pointer !important;
+}
+
 .ts-wrapper.single .ts-control > div.item {
     background-color: transparent !important;
     color: inherit !important;
@@ -162,55 +124,32 @@
     margin: 0 !important;
 }
 
-.ts-wrapper.single .ts-control{
+.ts-wrapper.single .ts-control {
     background-image: none !important;
 }
 
-/* Fix dropdown parent body positioning z-index */
-.ts-dropdown {
-    z-index: 9999 !important;
-}
-
-/* Force wrapper to be correct colors and override any TomSelect injected inline styles */
-.ts-wrapper {
-    background-color: #f9fafb !important; /* bg-gray-50 */
-    border-color: #d1d5db !important; /* border-gray-300 */
-    cursor: pointer !important;
-}
-
-@media (prefers-color-scheme: dark) {
-    .ts-wrapper {
-        background-color: #111827 !important; /* bg-gray-900 */
-        border-color: #374151 !important; /* border-gray-700 */
-        cursor: pointer !important;
-    }
-    
-    .ts-wrapper .ts-control {
-        background-color: transparent !important;
-        color: #f3f4f6 !important;
-    }
-}
-
-
 /* --- MULTI-SELECT ITEM OVERRIDES --- */
-.ts-wrapper.multi .ts-control .item, .ts-wrapper.multi .ts-control > div, .ts-wrapper.multi.plugin-remove_button .item {
-    background: #f3f4f6 !important; /* bg-gray-100 */
+.ts-wrapper.multi .ts-control .item, 
+.ts-wrapper.multi .ts-control > div, 
+.ts-wrapper.multi.plugin-remove_button .item {
+    background-color: var(--surface) !important;
     box-shadow: none !important;
-    color: #374151 !important; /* text-gray-700 */
-    border: 1px solid #e5e7eb !important; /* border-gray-200 */
+    color: var(--fg) !important;
+    border: 1px solid var(--border) !important;
     border-radius: 0.25rem !important;
-    font-size: 0.75rem !important; /* text-xs */
-    padding: 0.125rem 0.5rem !important; /* py-0.5 px-2 */
-    margin: 0.125rem !important; /* small margin between pills */
+    font-size: 0.75rem !important;
+    padding: 0.125rem 0.5rem !important;
+    margin: 0.125rem !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 0.25rem !important;
 }
 
-/* Remove button inside multi-select pill */
-.ts-wrapper.multi .ts-control .item .remove, .ts-wrapper.multi .ts-control > div .remove, .ts-wrapper.multi.plugin-remove_button .item .remove {
-    color: #6b7280 !important; /* text-gray-500 */
-    border-left: 1px solid #d1d5db !important; /* border-gray-300 */
+.ts-wrapper.multi .ts-control .item .remove, 
+.ts-wrapper.multi .ts-control > div .remove, 
+.ts-wrapper.multi.plugin-remove_button .item .remove {
+    color: var(--fg-muted) !important;
+    border-left: 1px solid var(--border) !important;
     padding-left: 0.25rem !important;
     margin-left: 0.25rem !important;
     display: inline-flex !important;
@@ -218,25 +157,10 @@
     justify-content: center !important;
 }
 
-.ts-wrapper.multi .ts-control .item .remove:hover, .ts-wrapper.multi .ts-control > div .remove:hover, .ts-wrapper.multi.plugin-remove_button .item .remove:hover {
-    color: #111827 !important; /* text-gray-900 */
-    background: transparent !important;
-}
-
-@media (prefers-color-scheme: dark) {
-    .ts-wrapper.multi .ts-control .item, .ts-wrapper.multi .ts-control > div, .ts-wrapper.multi.plugin-remove_button .item {
-        background: #1f2937 !important; /* bg-gray-800 */
-        box-shadow: none !important;
-        color: #d1d5db !important; /* text-gray-300 */
-        border: 1px solid #374151 !important; /* border-gray-700 */
-    }
-    
-    .ts-wrapper.multi .ts-control .item .remove, .ts-wrapper.multi .ts-control > div .remove, .ts-wrapper.multi.plugin-remove_button .item .remove {
-        color: #9ca3af !important; /* text-gray-400 */
-        border-left: 1px solid #4b5563 !important; /* border-gray-600 */
-    }
-    
-    .ts-wrapper.multi .ts-control .item .remove:hover, .ts-wrapper.multi .ts-control > div .remove:hover, .ts-wrapper.multi.plugin-remove_button .item .remove:hover {
-        color: #f3f4f6 !important; /* text-gray-100 */
-    }
+.ts-wrapper.multi .ts-control .item .remove:hover, 
+.ts-wrapper.multi .ts-control > div .remove:hover, 
+.ts-wrapper.multi.plugin-remove_button .item .remove:hover {
+    color: var(--accent-fg) !important;
+    background-color: var(--accent) !important;
+    border-left-color: transparent !important;
 }
