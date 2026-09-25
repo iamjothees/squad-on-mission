@@ -33,7 +33,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Password::defaults()],
+            // Password removed on creation to force setup via email
+            'password' => ['nullable'],
         ]);
 
         $this->userService->createUser($validated);

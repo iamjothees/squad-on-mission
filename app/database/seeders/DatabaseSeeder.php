@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->create([
+        User::create([
             'name' => 'System',
             'username' => 'system',
             'email' => env('SYSTEM_EMAIL', 'connect@squadonmission.local'),
@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => null,
         ]);
 
-        User::factory()->create([
+        User::create([
             'name' => 'Joe',
             'username' => 'joe',
             'email' => 'iamjothees@gmail.com',
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => null,
         ]);
 
-        User::factory()->create([
+        User::create([
             'name' => 'Gowtham',
             'username' => 'gowtham',
             'email' => 'gowthamsubramanian1881@gmail.com',

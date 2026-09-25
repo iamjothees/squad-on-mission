@@ -25,8 +25,8 @@
 
             <div class="space-y-4 rounded-md shadow-sm">
                 <div>
-                    <label for="username" class="sr-only">Username</label>
-                    <input id="username" name="username" type="text" autocomplete="username" required class="relative block w-full appearance-none rounded-t-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Username" value="{{ old('username') }}">
+                    <label for="username" class="sr-only">Email or Username</label>
+                    <input id="username" name="username" type="text" autocomplete="username" required class="relative block w-full appearance-none rounded-t-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email or Username" value="{{ old('username') }}">
                 </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
