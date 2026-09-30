@@ -7,13 +7,15 @@
  <link rel="icon" href="{{ asset('assets/fav.png') }}" type="image/png">
  @vite(['resources/css/app.css', 'resources/js/app.js'])
  @livewireStyles
- <script>
- (function () {
- var preference = localStorage.getItem('admin-theme') ?? 'system';
- var dark = preference === 'dark' || (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
- document.documentElement.classList.toggle('dark', dark);
- })();
- </script>
+     <script>
+        function applyAdminTheme() {
+            var preference = localStorage.getItem('admin-theme') ?? 'system';
+            var dark = preference === 'dark' || (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', dark);
+        }
+        applyAdminTheme();
+        document.addEventListener('livewire:navigated', applyAdminTheme);
+    </script>
 </head>
  <body x-data="{ sidebarOpen: false }" class="h-full font-sans antialiased text-fg bg-bg flex overflow-hidden leading-snug">
  

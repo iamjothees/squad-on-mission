@@ -5,13 +5,15 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Verify Email - Squad on Mission</title>
  @vite(['resources/css/app.css'])
- <script>
- (function () {
- var preference = localStorage.getItem('admin-theme') ?? 'system';
- var dark = preference === 'dark' || (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
- document.documentElement.classList.toggle('dark', dark);
- })();
- </script>
+     <script>
+        function applyAdminTheme() {
+            var preference = localStorage.getItem('admin-theme') ?? 'system';
+            var dark = preference === 'dark' || (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', dark);
+        }
+        applyAdminTheme();
+        document.addEventListener('livewire:navigated', applyAdminTheme);
+    </script>
 </head>
 <body class="h-full flex items-center justify-center bg-bg px-4 sm:px-6 lg:px-8">
  <div class="max-w-md w-full space-y-8 bg-surface p-8 rounded-xl shadow border border-border">
