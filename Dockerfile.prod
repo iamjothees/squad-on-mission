@@ -15,6 +15,20 @@ WORKDIR /var/www/html
 # Copy application files into the image
 COPY ./app /var/www/html
 
+# Accept frontend build arguments
+ARG VITE_APP_NAME="Squad on Mission"
+ARG VITE_REVERB_APP_KEY
+ARG VITE_REVERB_HOST
+ARG VITE_REVERB_PORT=443
+ARG VITE_REVERB_SCHEME="https"
+
+# Expose them to Vite during the build
+ENV VITE_APP_NAME=$VITE_APP_NAME
+ENV VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY
+ENV VITE_REVERB_HOST=$VITE_REVERB_HOST
+ENV VITE_REVERB_PORT=$VITE_REVERB_PORT
+ENV VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
+
 # Install PHP dependencies (production optimized)
 RUN composer install --no-dev --optimize-autoloader
 

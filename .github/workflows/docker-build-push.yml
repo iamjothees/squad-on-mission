@@ -47,6 +47,9 @@ jobs:
           context: .
           file: ./Dockerfile.prod
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            VITE_REVERB_APP_KEY=${{ secrets.VITE_REVERB_APP_KEY }}
+            VITE_REVERB_HOST=ws-manage.byteandbrand.online
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
