@@ -13,6 +13,7 @@ app/.env
 app/.env.*
 app/.env.backup
 !app/.env.example
+!app/.env.production
 
 # Ignore local dependencies (the Dockerfile runs composer/npm install fresh)
 app/vendor/

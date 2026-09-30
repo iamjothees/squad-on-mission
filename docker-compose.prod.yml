@@ -42,6 +42,23 @@ services:
     networks:
       - tunnel_net
 
+  watchtower:
+    image: containrrr/watchtower
+    container_name: som-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Required if your Docker Hub repository is private
+      - ~/.docker/config.json:/config.json
+    environment:
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      # Replace this with your Slack, Discord, Telegram, or Email webhook URL
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_WEBHOOK_URL}
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_REVIVE_STOPPED=true
+      - WATCHTOWER_CLEANUP=true
+    command: --interval 60 som-prod som-prod-reverb
+
 networks:
   tunnel_net:
     driver: bridge
