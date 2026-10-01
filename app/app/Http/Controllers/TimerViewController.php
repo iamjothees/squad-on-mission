@@ -134,9 +134,8 @@ class TimerViewController extends Controller
         }
         
         // Check overlaps with other logs on the same timer
-        $overlap = $timer->logs()->where('id', '!=', $log->id)
+        $overlappingLog = $timer->logs()->where('id', '!=', $log->id)
             ->where(function ($query) use ($startedMs, $stoppedMs) {
-                // If the other log is still running, its stopped_at is null (effectively infinity)
                 if ($stoppedMs) {
                     $query->where('started_at', '<', $stoppedMs)
                           ->where(function ($q) use ($startedMs) {
@@ -144,14 +143,16 @@ class TimerViewController extends Controller
                                 ->orWhereNull('stopped_at');
                           });
                 } else {
-                    // New log is running (no stop time)
                     $query->where('stopped_at', '>', $startedMs)
                           ->orWhereNull('stopped_at');
                 }
-            })->exists();
+            })->first();
 
-        if ($overlap) {
-            return back()->with('error', 'Log time overlaps with an existing time log.');
+        if ($overlappingLog) {
+            $debugStr = "Overlap with Log #{$overlappingLog->id}. ";
+            $debugStr .= "New: [$startedMs -> " . ($stoppedMs ?? 'NULL') . "]. ";
+            $debugStr .= "Existing: [{$overlappingLog->started_at} -> " . ($overlappingLog->stopped_at ?? 'NULL') . "].";
+            return back()->with('error', 'Log time overlaps with an existing time log. DEBUG: ' . $debugStr);
         }
 
         $wasRunningLog = is_null($log->stopped_at);
@@ -212,16 +213,19 @@ class TimerViewController extends Controller
         }
         
         // Check overlaps with other logs on the same timer
-        $overlap = $timer->logs()->where(function ($query) use ($startedMs, $stoppedMs) {
+        $overlappingLog = $timer->logs()->where(function ($query) use ($startedMs, $stoppedMs) {
             $query->where('started_at', '<', $stoppedMs)
                   ->where(function ($q) use ($startedMs) {
                       $q->where('stopped_at', '>', $startedMs)
                         ->orWhereNull('stopped_at');
                   });
-        })->exists();
+        })->first();
 
-        if ($overlap) {
-            return back()->with('error', 'Log time overlaps with an existing time log.');
+        if ($overlappingLog) {
+            $debugStr = "Overlap with Log #{$overlappingLog->id}. ";
+            $debugStr .= "New: [$startedMs -> $stoppedMs]. ";
+            $debugStr .= "Existing: [{$overlappingLog->started_at} -> " . ($overlappingLog->stopped_at ?? 'NULL') . "].";
+            return back()->with('error', 'Log time overlaps with an existing time log. DEBUG: ' . $debugStr);
         }
 
         $duration = floor(($stoppedMs - $startedMs) / 1000);
