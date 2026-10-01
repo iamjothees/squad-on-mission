@@ -150,9 +150,18 @@
  @endif
  </td>
  <td class="px-4 py-2.5 text-center">
- <button type="button" x-show="!editing" @click="editing = true" class="text-gray-400 hover:text-accent transition-colors" title="Edit Log">
- <x-lucide-pencil class="w-4 h-4 mx-auto" />
+ <div x-show="!editing" class="flex items-center justify-center gap-3">
+ <button type="button" @click="editing = true" class="text-gray-400 hover:text-accent transition-colors" title="Edit Log">
+ <x-lucide-pencil class="w-4 h-4" />
  </button>
+ <form action="{{ route('timers.logs.destroy', [$timer, $log]) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to permanently delete this timer log? This will deduct the time from your total and cannot be undone.');">
+ @csrf
+ @method('DELETE')
+ <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors" title="Delete Log">
+ <x-lucide-trash-2 class="w-4 h-4" />
+ </button>
+ </form>
+ </div>
  <div x-show="editing" x-cloak class="flex items-center justify-center gap-2">
  <form id="edit-log-{{ $log->id }}" action="{{ route('timers.logs.update', [$timer, $log]) }}" method="POST" class="inline">
  @csrf

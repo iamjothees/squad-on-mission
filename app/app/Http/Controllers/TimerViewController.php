@@ -300,4 +300,35 @@ class TimerViewController extends Controller
 
         return redirect()->route('timers.show', $timer)->with('success', $message);
     }
+
+    public function destroyLog(Request $request, Timer $timer, \App\Models\TimerLog $log)
+    {
+        if ($log->timer_id !== $timer->id) {
+            abort(404);
+        }
+
+        $wasRunningLog = is_null($log->stopped_at);
+
+        $log->delete();
+
+        // Recalculate parent timer's accumulated_seconds
+        $totalDuration = $timer->logs()->whereNotNull('stopped_at')->sum('duration_seconds');
+        
+        $timerUpdates = [
+            'accumulated_seconds' => $totalDuration,
+        ];
+
+        // If deleting the currently active log
+        if ($wasRunningLog && $timer->is_running) {
+            $timerUpdates['is_running'] = false;
+            $timerUpdates['last_started_at'] = null;
+        }
+
+        $timer->update($timerUpdates);
+        
+        // Broadcast to sync all clients (Web and Macropad)
+        broadcast(new \App\Events\TimerUpdated($timer));
+
+        return back()->with('success', 'Timer log deleted successfully.');
+    }
 }

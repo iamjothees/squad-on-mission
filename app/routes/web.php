@@ -95,6 +95,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/timers/{timer}/logs/{log}', [\App\Http\Controllers\TimerViewController::class, 'updateLog'])->name('timers.logs.update');
     Route::post('/timers/{timer}/logs', [\App\Http\Controllers\TimerViewController::class, 'storeLog'])->name('timers.logs.store');
+    Route::delete('/timers/{timer}/logs/{log}', [\App\Http\Controllers\TimerViewController::class, 'destroyLog'])->name('timers.logs.destroy');
 
 
 
