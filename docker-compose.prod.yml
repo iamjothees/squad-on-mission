@@ -5,6 +5,8 @@ services:
     networks:
       - tunnel_net
     restart: unless-stopped
+    environment:
+      - TZ=${TZ:-Asia/Kolkata}
     volumes:
       - ./.env:/var/www/html/.env
 
@@ -23,6 +25,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
+      TZ: ${TZ:-Asia/Kolkata}
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
