@@ -122,21 +122,21 @@
  <tr x-data="{ editing: false }" class="border-b border-border/50 hover:bg-surface dark:hover:bg-gray-900 transition-colors">
  <td class="px-4 py-2.5 border-r border-border/50 font-mono text-fg-muted">{{ $log->id }}</td>
  <td class="px-4 py-2.5 border-r border-border/50 text-fg-muted">
- <div x-show="!editing">{{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->format('M d, Y h:i:s A') }}</div>
+ <div x-show="!editing">{{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->timezone(config('app.timezone'))->format('M d, Y h:i:s A') }}</div>
  <div x-show="editing" x-cloak>
- <input type="datetime-local" step="1" form="edit-log-{{ $log->id }}" name="started_at" value="{{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->format('Y-m-d\TH:i:s') }}" class="w-full bg-surface border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-accent" required>
+ <input type="datetime-local" step="1" form="edit-log-{{ $log->id }}" name="started_at" value="{{ \Carbon\Carbon::createFromTimestampMs($log->started_at)->timezone(config('app.timezone'))->format('Y-m-d\TH:i:s') }}" class="w-full bg-surface border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-accent" required>
  </div>
  </td>
  <td class="px-4 py-2.5 border-r border-border/50 text-fg-muted">
  <div x-show="!editing">
  @if($log->stopped_at)
- {{ \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->format('M d, Y h:i:s A') }}
+ {{ \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->timezone(config('app.timezone'))->format('M d, Y h:i:s A') }}
  @else
  <span class="text-green-500 italic">Running...</span>
  @endif
  </div>
  <div x-show="editing" x-cloak>
- <input type="datetime-local" step="1" form="edit-log-{{ $log->id }}" name="stopped_at" value="{{ $log->stopped_at ? \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->format('Y-m-d\TH:i:s') : '' }}" class="w-full bg-surface border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-accent">
+ <input type="datetime-local" step="1" form="edit-log-{{ $log->id }}" name="stopped_at" value="{{ $log->stopped_at ? \Carbon\Carbon::createFromTimestampMs($log->stopped_at)->timezone(config('app.timezone'))->format('Y-m-d\TH:i:s') : '' }}" class="w-full bg-surface border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-accent">
  </div>
  </td>
  <td class="px-4 py-2.5 border-r border-border/50 text-right font-mono text-fg">
