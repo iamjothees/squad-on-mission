@@ -1,7 +1,7 @@
 services:
   app:
-    container_name: som
-    image: som:latest
+    container_name: mm
+    image: mm:latest
     volumes:
       - ./app:/var/www/html
     ports:
@@ -11,8 +11,8 @@ services:
     networks:
       - tunnel_net
   reverb:
-    container_name: som-reverb
-    image: som:latest
+    container_name: mm-reverb
+    image: mm:latest
     volumes:
       - ./app:/var/www/html
     ports:
@@ -26,8 +26,8 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: som
-      MYSQL_USER: som
+      MYSQL_DATABASE: mm
+      MYSQL_USER: mm
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     ports:
       - 8032:3306
