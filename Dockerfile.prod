@@ -16,7 +16,7 @@ WORKDIR /var/www/html
 COPY ./app /var/www/html
 
 # Accept frontend build arguments
-ARG VITE_APP_NAME="Squad on Mission"
+ARG VITE_APP_NAME="Manager Mangalam"
 ARG VITE_REVERB_APP_KEY
 ARG VITE_REVERB_HOST
 ARG VITE_REVERB_PORT=443

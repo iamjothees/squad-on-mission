@@ -1,9 +1,9 @@
-# Squad on Mission - AI Agent Guidelines
+# Manager Mangalam - AI Agent Guidelines
 
-Welcome to the **Squad on Mission** repository. This document serves as a comprehensive guide for all AI agents, LLMs, and coding assistants working on this project. Please read and adhere to these principles, architectural rules, and design philosophies before making any modifications.
+Welcome to the **Manager Mangalam** repository. This document serves as a comprehensive guide for all AI agents, LLMs, and coding assistants working on this project. Please read and adhere to these principles, architectural rules, and design philosophies before making any modifications.
 
 ## 1. Project Overview & Scope
-**Squad on Mission** is a hybrid platform serving as a:
+**Manager Mangalam** is a hybrid platform serving as a:
 - Freelance career progress tracker
 - Productivity and Time Tracker
 - Digital Book / Knowledge Base

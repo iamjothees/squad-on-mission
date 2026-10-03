@@ -22,7 +22,7 @@ services:
     networks:
       - tunnel_net
   db:
-    container_name: som-db
+    container_name: mm-db
     image: mysql:8.0
     restart: unless-stopped
     environment:

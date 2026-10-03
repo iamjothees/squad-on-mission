@@ -1,7 +1,7 @@
 services:
   app:
-    container_name: som-prod
-    image: iamjothees/som:latest
+    container_name: mm-prod
+    image: iamjothees/mm:latest
     networks:
       - tunnel_net
     restart: unless-stopped
@@ -11,8 +11,8 @@ services:
       - ./.env:/var/www/html/.env
 
   reverb:
-    container_name: som-prod-reverb
-    image: iamjothees/som:latest
+    container_name: mm-prod-reverb
+    image: iamjothees/mm:latest
     command: php artisan reverb:start --host=0.0.0.0 --port=8080
     networks:
       - tunnel_net
@@ -21,7 +21,7 @@ services:
       - ./.env:/var/www/html/.env
 
   db:
-    container_name: som-prod-db
+    container_name: mm-prod-db
     image: mysql:8.0
     restart: unless-stopped
     environment:
@@ -37,7 +37,7 @@ services:
 
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: som-prod_cloudflared_tunnel
+    container_name: mm-prod_cloudflared_tunnel
     restart: unless-stopped
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
@@ -47,7 +47,7 @@ services:
 
   watchtower:
     image: containrrr/watchtower
-    container_name: som-watchtower
+    container_name: mm-watchtower
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -60,7 +60,7 @@ services:
       - WATCHTOWER_INCLUDE_STOPPED=true
       - WATCHTOWER_REVIVE_STOPPED=true
       - WATCHTOWER_CLEANUP=true
-    command: --interval 60 som-prod som-prod-reverb
+    command: --interval 60 mm-prod mm-prod-reverb
 
 networks:
   tunnel_net:

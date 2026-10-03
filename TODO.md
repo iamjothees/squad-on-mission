@@ -5,3 +5,6 @@ SELF NOTE:
 4. Allow a way to store crazy ideas to build 
 5. Cycle button in Macropad.
 6. Tags
+
+
+set up a daily cron job on your PC to run docker image prune -a -f in production server
