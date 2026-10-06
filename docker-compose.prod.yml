@@ -3,27 +3,28 @@ services:
     container_name: mm-prod
     image: iamjothees/mm:latest
     networks:
-      - tunnel_net
-    restart: unless-stopped
+      - mm_internal
+      - proxy_net
+    restart: always
     environment:
       - TZ=${TZ:-Asia/Kolkata}
     volumes:
       - ./.env:/var/www/html/.env
-
   reverb:
     container_name: mm-prod-reverb
     image: iamjothees/mm:latest
     command: php artisan reverb:start --host=0.0.0.0 --port=8080
     networks:
-      - tunnel_net
-    restart: unless-stopped
+      - mm_internal
+      - proxy_net
+    restart: always
     volumes:
       - ./.env:/var/www/html/.env
 
   db:
     container_name: mm-prod-db
     image: mysql:8.0
-    restart: unless-stopped
+    restart: always
     environment:
       TZ: ${TZ:-Asia/Kolkata}
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -33,22 +34,12 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     networks:
-      - tunnel_net
-
-  cloudflare-tunnel:
-    image: cloudflare/cloudflared:latest
-    container_name: mm-prod_cloudflared_tunnel
-    restart: unless-stopped
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    command: tunnel --no-autoupdate run
-    networks:
-      - tunnel_net
+      - mm_internal
 
   watchtower:
     image: containrrr/watchtower
     container_name: mm-watchtower
-    restart: unless-stopped
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       # Required if your Docker Hub repository is private
@@ -63,8 +54,10 @@ services:
     command: --interval 60 mm-prod mm-prod-reverb
 
 networks:
-  tunnel_net:
+  mm_internal:
     driver: bridge
+  proxy_net:
+    external: true
 
 volumes:
   db-data:
