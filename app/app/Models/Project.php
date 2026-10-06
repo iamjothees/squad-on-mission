@@ -21,9 +21,9 @@ class Project extends Model
     public function getAllTimers() {
         $taskIds = $this->tasks()->pluck('id');
         return \App\Models\Timer::whereHas('projects', function($q) {
-            $q->where('id', $this->id);
+            $q->where('projects.id', $this->id);
         })->orWhereHas('tasks', function($q) use ($taskIds) {
-            $q->whereIn('id', $taskIds);
+            $q->whereIn('tasks.id', $taskIds);
         })->with(['tasks', 'projects', 'clients'])->latest('updated_at')->get();
     }
     public function getRouteKeyName() { return 'key'; }

@@ -162,7 +162,7 @@ class GlobalTimer extends Component
         // Dispatch browser event to re-initialize alpine component
         
         $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
-        broadcast(new \App\Events\TimerSwitched(1, $this->timerId, $this->initialState));
+        broadcast(new \App\Events\TimerSwitched(auth()->id(), $this->timerId, $this->initialState));
     }
 
     
@@ -213,7 +213,7 @@ class GlobalTimer extends Component
         
         
         $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
-        broadcast(new \App\Events\TimerSwitched(1, $this->timerId, $this->initialState));
+        broadcast(new \App\Events\TimerSwitched(auth()->id(), $this->timerId, $this->initialState));
     }
 
     
@@ -271,7 +271,7 @@ class GlobalTimer extends Component
         
         
         $this->dispatch('timer-switched', timerId: $this->timerId, initialState: $this->initialState);
-        broadcast(new \App\Events\TimerSwitched(1, $this->timerId, $this->initialState));
+        broadcast(new \App\Events\TimerSwitched(auth()->id(), $this->timerId, $this->initialState));
     }
 
     public function render()

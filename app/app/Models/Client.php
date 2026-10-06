@@ -19,11 +19,11 @@ class Client extends Model
         $projectIds = $this->projects()->pluck('id');
         $taskIds = \App\Models\Task::whereIn('project_id', $projectIds)->pluck('id');
         return \App\Models\Timer::whereHas('projects', function($q) use ($projectIds) {
-            $q->whereIn('id', $projectIds);
+            $q->whereIn('projects.id', $projectIds);
         })->orWhereHas('tasks', function($q) use ($taskIds) {
-            $q->whereIn('id', $taskIds);
+            $q->whereIn('tasks.id', $taskIds);
         })->orWhereHas('clients', function($q) {
-            $q->where('id', $this->id); // Include direct client timers just in case
+            $q->where('clients.id', $this->id); // Include direct client timers just in case
         })->with(['tasks', 'projects', 'clients'])->latest('updated_at')->get();
     }
 
